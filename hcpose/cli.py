@@ -78,6 +78,8 @@ def build_parser() -> argparse.ArgumentParser:
     a.add_argument("--recalibrate", action="store_true", default=None)
     a.add_argument("--output", "-o", help="write the skeletons with engagement labels to this JSONL")
     a.add_argument("--every", type=float, default=10.0, help="timeline step in seconds (default 10)")
+    a.add_argument("--fps", type=float, help="use frame index / FPS as time (for files saved before timestamps "
+                   "were video time, e.g. runs with --no-sync)")
 
     sub.add_parser("doctor", help="check the installation")
     return ap
@@ -204,7 +206,10 @@ def cmd_analyze(args) -> int:
                 raise ValueError(f"{args.jsonl}: no header line (was it written by hcpose run --save-json?)")
             persons = [Person(p.get("track_id"), p["score"], p["class_id"], p["label"], p["box"],
                               np.asarray(p["keypoints"], dtype=np.float32).reshape(-1, 3)) for p in d["persons"]]
-            res = FrameResult(d["i"], d["t"], d["w"], d["h"], persons)
+            t = d["i"] / args.fps if args.fps else d["t"]
+            if args.fps:
+                d["t"] = round(t, 4)
+            res = FrameResult(d["i"], t, d["w"], d["h"], persons)
             c = an.update(res)
             if out:
                 out.write(json.dumps({**d, "persons": [p.to_dict() for p in persons], **res.extra}) + "\n")

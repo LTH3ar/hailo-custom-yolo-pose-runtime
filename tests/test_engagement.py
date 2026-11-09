@@ -66,6 +66,13 @@ def test_features_basic():
     assert feat(yaw=0.6).yaw == pytest.approx(0.6, abs=1e-5)
     assert feat(yaw=-0.6).yaw == pytest.approx(-0.6, abs=1e-5)
     assert feat(yaw=1.0).yaw > 0.8 and feat(yaw=-1.0).yaw < -0.8  # one-ear fallback keeps the sign
+    # one low-confidence ear on a frontal face must not read as a turned head
+    # (on the real upper_body_n output one ear is below 0.5 in ~96% of detections)
+    p = synth_person(600, 400, 100)
+    p.keypoints[3, 2] = 0.1
+    assert abs(compute(p.keypoints, p.box, IDX, 0.5).yaw) < 0.05
+    p.keypoints[3, 2], p.keypoints[4, 2] = 0.8, 0.1
+    assert abs(compute(p.keypoints, p.box, IDX, 0.5).yaw) < 0.05
     assert feat(down=0.8).head_height < feat().head_height - 0.4
     assert feat(body=0.6).torso_ratio < 0.7 * feat().torso_ratio
     assert feat(face=False).face_hidden

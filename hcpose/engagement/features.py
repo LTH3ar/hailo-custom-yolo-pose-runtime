@@ -32,6 +32,9 @@ NAMES = (
 # typical head geometry; this brings the eye-based fallback to ear units.
 # Worth re-fitting on real data (fit ear-yaw vs eye-yaw where both are visible).
 EYE_TO_EAR_UNITS = 2.4
+# Half the ear-to-ear distance relative to the person's scale (shoulder width),
+# used when only one ear is visible.
+HALF_HEAD_WIDTH = 0.35
 
 
 class KeypointIndex:
@@ -112,11 +115,15 @@ def compute(kp: np.ndarray, box: Sequence[float], index: KeypointIndex, thr: flo
     if nose is not None and lear is not None and rear is not None and abs(lear[0] - rear[0]) > 1e-3:
         mid = (lear[0] + rear[0]) / 2
         f.yaw = float(np.clip((nose[0] - mid) / (abs(lear[0] - rear[0]) / 2), -1.5, 1.5))
-    elif have_face and (lear is None) != (rear is None):
-        # one ear hidden: the head is turned far enough that the camera sees one side.
-        # Student's left ear visible -> turned to their right -> nose toward image-left.
-        sign = -1.0 if lear is not None else 1.0
-        f.yaw = float(sign * np.clip(max(1.0, abs(eye_yaw) if eye_yaw is not None else 0.0), 1.0, 1.5))
+    elif nose is not None and (lear is None) != (rear is None):
+        # One ear below threshold. On real model output this is the common case, not
+        # only for turned heads (one ear is often low-confidence on a frontal face), so
+        # estimate the ear midpoint from the visible ear and the expected half head
+        # width instead of assuming a full turn. The student's left ear sits on the
+        # image-right of the head center.
+        half = HALF_HEAD_WIDTH * scale
+        center = lear[0] - half if lear is not None else rear[0] + half
+        f.yaw = float(np.clip((nose[0] - center) / half, -1.5, 1.5))
     elif eye_yaw is not None:
         f.yaw = float(np.clip(eye_yaw, -1.5, 1.5))
 
