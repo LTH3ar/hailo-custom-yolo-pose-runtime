@@ -42,6 +42,10 @@ ap.add_argument("--out", help="export the final model here (JSON)")
 ap.add_argument("--det-thr", type=float, default=0.3, help="detection confidence for students (default 0.3)")
 ap.add_argument("--kpt-thr", type=float, default=0.5)
 ap.add_argument("--name", default="scb", help="model name stored in the JSON")
+ap.add_argument("--save-cv", metavar="NPZ",
+                help="save every family's out-of-fold predictions + labels + metrics (for ROC curves, tables in a report)")
+ap.add_argument("--save-models", metavar="DIR",
+                help="also fit logistic regression and the MLP on all data and pickle them here (for the record)")
 args = ap.parse_args()
 
 IDX = KeypointIndex(UPPER_BODY13_NAMES)
@@ -125,7 +129,7 @@ families = {
                                          MLPClassifier((64, 32), max_iter=300, early_stopping=True, random_state=0)),
 }
 print(f"\n{'model':24} {'AUC':>6} {'within-img AUC':>15} {'bal. acc':>9}  (5-fold, grouped by lesson)")
-cv = {}
+cv, oofs = {}, {}
 for name, make in families.items():
     oof = np.zeros(len(y))
     for tr, te in GroupKFold(n_splits=5).split(X, y, groups):
@@ -134,6 +138,7 @@ for name, make in families.items():
         oof[te] = m.predict_proba(X[te])[:, 1]
     # MLP has no class weights: compare at the prevalence-matched threshold for balanced accuracy
     thr = 0.5 if "MLP" not in name else np.quantile(oof, 1 - y.mean())
+    oofs[name] = oof
     cv[name] = {"auc": roc_auc_score(y, oof), "within_image_auc": within_image_auc(oof),
                 "balanced_acc": balanced_accuracy_score(y, oof >= thr)}
     print(f"{name:24} {cv[name]['auc']:6.3f} {cv[name]['within_image_auc']:15.3f} {cv[name]['balanced_acc']:8.1%}")
@@ -141,6 +146,30 @@ for name, make in families.items():
         print("   per behavior, share predicted distracted:",
               ", ".join(f"{c} {np.mean(oof[labels == c] >= 0.5):.0%}" for c in
                         ["read", "write", "hand-raising", "TurnHead", "BowHead", "discuss"] if (labels == c).any()))
+
+if args.save_cv:
+    import json
+
+    np.savez_compressed(
+        args.save_cv, y=y, labels=labels, groups=groups, images=imgs, mixed_image=mixed,
+        feature_names=np.array(FEATURE_NAMES), X=X,
+        **{f"oof_{k.split(' ')[0].lower().replace('-', '_')}": v for k, v in oofs.items()},
+    )
+    Path(args.save_cv).with_suffix(".json").write_text(json.dumps(
+        {"poses": args.poses, "det_thr": args.det_thr, "students": int(len(y)),
+         "lesson_groups": int(len(set(groups))), "metrics": cv}, indent=1))
+    print(f"\nsaved out-of-fold predictions to {args.save_cv} and metrics to {Path(args.save_cv).with_suffix('.json')}")
+
+if args.save_models:
+    import pickle
+
+    d = Path(args.save_models)
+    d.mkdir(parents=True, exist_ok=True)
+    for name, make in families.items():
+        m = make().fit(X, y)
+        fn = d / (name.split(" ")[0].lower().replace("-", "_") + ".pkl")
+        pickle.dump({"model": m, "feature_names": FEATURE_NAMES, "sklearn": __import__("sklearn").__version__}, open(fn, "wb"))
+        print(f"saved {fn}")
 
 if args.out:
     t0 = time.time()

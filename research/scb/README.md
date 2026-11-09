@@ -57,6 +57,12 @@ The classifier takes the keypoints and pose cues computed by `hcpose.engagement.
 
 `classifier: auto` (the default) picks that file up. `--classifier none` uses the rules.
 
+**For the report:**
+- `--save-cv cv_m.npz` keeps every family's out-of-fold predictions, the labels, the lesson groups and the feature matrix, plus a `.json` with the metrics. Every table, ROC curve or confusion matrix can be redrawn from them without retraining.
+- `--save-models DIR` also fits and pickles the logistic regression and the MLP.
+
+Everything uses fixed seeds, so rerunning the script reproduces the same numbers.
+
 Stand-in yolov8n-pose, FP32, threshold 0.3, 22,674 students:
 
 | Model | AUC | Within-image AUC | Balanced accuracy |
