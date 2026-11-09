@@ -14,7 +14,7 @@ Nothing about the model is hard-coded. The keypoint count, class count, strides,
 
 ## Install
 
-Requirements: Raspberry Pi 5, Hailo AI HAT+ (Hailo-8 or 8L), Raspberry Pi OS 64-bit (Bookworm or newer) with the Hailo stack installed:
+Requirements: Raspberry Pi 5, Hailo AI HAT+ (Hailo-8 or 8L), Raspberry Pi OS 64-bit (tested on Debian 13 "trixie" with `hailo-all` 5.1.1, HailoRT 4.23, TAPPAS 5.1; Bookworm should also work) with the Hailo stack installed:
 
 ```bash
 sudo apt update && sudo apt install hailo-all && sudo reboot
@@ -84,17 +84,63 @@ Put the HEF anywhere (`models/` is git-ignored for `.hef`). Optionally add a **s
 
 Coordinates are pixels in the processed frame (`w`×`h`). Boxes and keypoints are always the decoder's own output; the tracker only supplies `track_id` (`hailotracker` in gst, a simple IoU tracker in python). In the gst engine a person seen for the first time has `track_id: null` until `hailotracker` confirms the track (about 1–2 frames). `hailotracker` replaces boxes with Kalman-smoothed ones, which also moves the box-relative keypoints, so hcpose reads the detections before the tracker and only takes the ids from after it.
 
-## Building on it (part 2: engagement analysis)
+## Engagement analysis (focused / distracted)
+
+Turns each student's skeleton into **focused**, **distracted** or **unknown**, and the class into a live percentage ("65% distracted, 17 of 20 students counted"). It uses keypoints only, so no images are stored.
+
+```bash
+# live, both labels and percentage on screen, camera at the front-left of the room
+./hcpose.sh run models/upper_body_s.hef --input usb --engagement --camera-position left \
+    --calibration ~/room_A.json
+
+# teacher-facing screen without per-student labels
+./hcpose.sh run models/upper_body_s.hef --input usb --engagement --display class
+
+# all settings in a file
+./hcpose.sh run models/upper_body_s.hef --input usb --engagement configs/engagement.yaml
+
+# offline: replay a skeleton file recorded with --save-json (no Hailo needed)
+./hcpose.sh analyze skeletons.jsonl -o labelled.jsonl --camera-position left
+```
+
+**How it decides** (`hcpose/engagement/`):
+
+1. **Seats instead of track ids.** Seated students barely move, so each detection is matched to a seat by position. This is robust to tracker id switches and to students disappearing behind others for a moment.
+2. **Cues from the pose**, normalized by the student's own size:
+   - head turned away from that seat's attentive direction
+   - face hidden while the shoulders are visible (turned around)
+   - head down
+   - torso rotated
+   - hand at the face
+
+   A raised hand always counts as focused. Strong cues decide alone; weak cues (head down, torso, hand at face) need a second cue, because writing notes also looks like "head down".
+3. **Attentive baseline per seat.** Each seat learns its own "looking at the board" pose from its first `calibration_seconds` of observation (median, so glances don't matter). Until then the seat's running history and the room's typical direction are used. That works with a camera at the front center, front-left or front-right, without telling it where. `--camera-position` adds a check against a class that is mostly distracted from the very start. `--calibration room.json` saves what was learned for that classroom and loads it next time; use `--recalibrate` after moving the camera.
+4. **Decisions over time.** The per-frame score is smoothed and switches state with hysteresis: distracted after about 2.5 s, focused again after about 1.5 s. A glance doesn't flip a student. Students without usable keypoints for 2 s are **unknown** and left out of the percentage.
+5. **Class percentage** is distracted ÷ (focused + distracted), averaged over the last 5 s on screen. The count of students included is always shown with it.
+
+Settings, with explanations: [`configs/engagement.yaml`](configs/engagement.yaml). The `--display` switch is `students | class | both | none`; `class` deliberately shows no per-student state.
+
+With `--save-json`, each person gets `"engagement": {"seat", "state", "score", "reason", "calibrated"}` and each frame gets a `"class"` block. In the gst engine the on-screen box color comes from `hailooverlay`'s palette: green is focused, red is distracted, white is unknown.
+
+**Assumptions.** These are worth stating in the thesis:
+- During the first minute or two, most students mostly look toward the board, unless `--camera-position` is set.
+- "Head down" can't separate writing from a phone; that's why it has a lower weight.
+- The rules are a baseline. A learned classifier trained on labelled data is the next step.
+
+## Building on it
 
 ```python
 from hcpose.api import run
+from hcpose.engagement import EngagementAnalyzer, load_settings
+from hcpose.presets import UPPER_BODY13_NAMES
 
 def on_frame(result, frame):          # frame is None with the gst engine
+    print(result.extra.get("class"))  # class stats when engagement is enabled
     for p in result.persons:
-        nose, l_sh, r_sh = p.keypoints[0], p.keypoints[5], p.keypoints[6]
-        ...
+        print(p.engagement)           # seat, state, score, reason
 
-run("models/upper_body_n.hef", source="/dev/video0", on_frame=on_frame, display=False)
+an = EngagementAnalyzer(load_settings("configs/engagement.yaml"), UPPER_BODY13_NAMES)
+run("models/upper_body_n.hef", source="/dev/video0", on_frame=on_frame, engagement=an, display=False)
 ```
 
 ## What changed vs. the old `custom_pose_estimation` patch in the hailo-apps fork
@@ -116,7 +162,13 @@ g++ -std=c++17 -O2 $(pkg-config --cflags hailo-tappas-core) \
 .venv/bin/python -m pytest -q tests
 ```
 
-The fixture is the raw head output of the official `yolov8n-pose` on Ultralytics' `bus.jpg`. The NumPy decoder matches Ultralytics' own decode+NMS exactly. The C++ post-process matches the NumPy decoder for float32, uint8/uint16-quantized, sigmoid-in-HEF, shuffled-order and 13-keypoint variants, and for the letterbox mapping. `tests/check_gst_pipeline.py` runs the generated GStreamer pipeline end-to-end on a machine without Hailo using stand-in elements.
+The fixture is the raw head output of the official `yolov8n-pose` on Ultralytics' `bus.jpg`. The NumPy decoder matches Ultralytics' own decode+NMS exactly. The C++ post-process matches the NumPy decoder for float32, uint8/uint16-quantized, sigmoid-in-HEF, shuffled-order and 13-keypoint variants, and for the letterbox mapping. `tests/check_gst_pipeline.py` runs the generated GStreamer pipeline end-to-end on a machine without Hailo using stand-in elements. `tests/check_gst_engagement.py` does the same with a fake `hailo` bindings module that feeds a synthetic class through the engagement path: re-labelling for the overlay, the class text and the JSONL. `tests/test_engagement.py` covers the rules on synthetic classrooms:
+- turning away, glances, each cue
+- corner cameras
+- most of the class distracted
+- calibration save/load and recovering from a bad calibration
+- occlusion
+- the `analyze` command
 
 ## Troubleshooting
 

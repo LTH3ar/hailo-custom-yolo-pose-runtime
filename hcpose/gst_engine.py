@@ -58,6 +58,7 @@ class GstRunner:
         camera_raw: bool = False,
         callbacks: Optional[List[FrameCallback]] = None,
         show_fps: bool = True,
+        engagement=None,
     ):
         import gi
 
@@ -77,8 +78,15 @@ class GstRunner:
         self.sync = sync if sync is not None else (self.kind == "file" and display and not output)
         self.batch_size = batch_size
         self.tracker, self.overlay, self.camera_raw = tracker, overlay, camera_raw
-        self.callbacks = callbacks or []
+        self.callbacks = list(callbacks or [])
+        # engagement analysis runs first so the JSONL writer / user callbacks see its labels
+        self.engagement = engagement
+        self.display_mode = engagement.s.display if engagement else "none"
+        if engagement:
+            self.callbacks.insert(0, engagement)
         self.fps_counter = FpsCounter() if show_fps else None
+        self._text_overlay = None
+        self._text_last = None
         self.frame_index = 0
         self._raw_dets: deque = deque(maxlen=64)  # (pts, persons) snapshots taken before hailotracker
         self.t_start = None
@@ -106,6 +114,10 @@ class GstRunner:
             )
         if missing:
             raise RuntimeError(f"missing GStreamer elements: {missing}. Is hailo-all installed? Run `hcpose doctor`.")
+
+        self.has_textoverlay = Gst.ElementFactory.find("textoverlay") is not None
+        if self.display_mode in ("class", "both") and overlay and (display or output) and not self.has_textoverlay:
+            log.warning("textoverlay element missing (gstreamer1.0-plugins-base pango); class percentage shown in the console only")
 
         if self.callbacks:
             try:
@@ -163,7 +175,13 @@ class GstRunner:
             )
         post += f"identity name=meta_tap ! {_q('meta_q')} ! "
         if self.overlay and (self.display or self.output):
-            post += f"hailooverlay name=overlay qos=false ! {_q('overlay_q')} ! "
+            show_conf = "false" if self.display_mode != "none" else "true"
+            post += f"hailooverlay name=overlay show-confidence={show_conf} qos=false ! {_q('overlay_q')} ! "
+            if self.display_mode in ("class", "both") and self.has_textoverlay:
+                post += (
+                    'textoverlay name=class_text text="Engagement: starting..." valignment=top halignment=left '
+                    'font-desc="Sans Bold 16" shaded-background=true ! '
+                )
 
         sinks = []
         if self.display:
@@ -199,17 +217,65 @@ class GstRunner:
         self.frame_index += 1
         n = 0
         if self.callbacks:
+            # media time (PTS) so durations like "distracted for 2.5 s" mean video seconds,
+            # also when a file is processed faster than real time
+            t = buf.pts / self.Gst.SECOND if buf.pts != self.Gst.CLOCK_TIME_NONE else now - self.t_start
             raw = self._pop_raw(buf.pts) if self.tracker else None
-            result = self._extract(buf, idx, now - self.t_start, raw)
+            result = self._extract(buf, idx, t, raw)
             n = len(result.persons)
             for cb in self.callbacks:
                 try:
                     cb(result, None)
                 except Exception as e:  # never kill the pipeline from user code
                     log.exception("frame callback failed: %s", e)
+            if self.engagement and self.display_mode != "none" and self.overlay and (self.display or self.output):
+                try:
+                    self._annotate(buf, result)
+                except Exception as e:
+                    log.exception("engagement overlay failed: %s", e)
         if self.fps_counter:
-            self.fps_counter.tick(f"persons: {n}" if self.callbacks else "")
+            extra = f"persons: {n}" if self.callbacks else ""
+            if self.engagement:
+                extra = self.engagement.class_text()
+            self.fps_counter.tick(extra)
         return self.Gst.PadProbeReturn.OK
+
+    # colors come from hailooverlay's class-id palette: 1 green, 0 red, 18 white
+    _STATE_CLASS = {"focused": 1, "distracted": 0, "unknown": 18}
+
+    def _annotate(self, buf, result) -> None:
+        """Re-label the detections hailooverlay is about to draw with the engagement state."""
+        hailo = self._hailo
+        if self.display_mode in ("class", "both") and self._text_overlay is not None:
+            txt = self.engagement.class_text()
+            if txt != self._text_last:
+                self._text_overlay.set_property("text", txt)
+                self._text_last = txt
+        roi = hailo.get_roi_from_buffer(buf)
+        W, H = self.width, self.height
+        by_id = {p.track_id: p for p in result.persons if p.track_id is not None}
+        for det in roi.get_objects_typed(hailo.HAILO_DETECTION):
+            b = det.get_bbox()
+            ids = det.get_objects_typed(hailo.HAILO_UNIQUE_ID)
+            person = by_id.get(int(ids[0].get_id())) if ids else None
+            if person is None:
+                box = [b.xmin() * W, b.ymin() * H, (b.xmin() + b.width()) * W, (b.ymin() + b.height()) * H]
+                best = max(result.persons, key=lambda p: self._iou(p.box, box), default=None)
+                if best is not None and self._iou(best.box, box) >= 0.5:
+                    person = best
+            eng = person.engagement if person is not None and person.engagement else None
+            state = eng["state"] if eng else "unknown"
+            if self.display_mode == "class":
+                cls, label = 18, ""  # class-only mode: no per-student state on screen
+            else:
+                cls = self._STATE_CLASS[state]
+                label = state if state != "unknown" else "?"
+            new = hailo.HailoDetection(hailo.HailoBBox(b.xmin(), b.ymin(), b.width(), b.height()),
+                                       cls, label, float(det.get_confidence()))
+            for obj in det.get_objects():
+                new.add_object(obj)
+            roi.remove_object(det)
+            roi.add_object(new)
 
     def _on_pre_tracker(self, pad, info):
         """Snapshot the decoder's detections before hailotracker replaces their boxes
@@ -343,6 +409,7 @@ class GstRunner:
         except GLib.Error as e:
             print(f"[hcpose] failed to build pipeline: {e.message}\n  pipeline: {desc}")
             return 1
+        self._text_overlay = self.pipeline.get_by_name("class_text")
         tap = self.pipeline.get_by_name("meta_tap")
         tap.get_static_pad("src").add_probe(Gst.PadProbeType.BUFFER, self._on_buffer)
         if self.tracker and self.callbacks:

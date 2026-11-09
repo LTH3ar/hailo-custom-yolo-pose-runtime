@@ -69,6 +69,8 @@ def doctor() -> int:
         enc = next((e for e in ("x264enc", "openh264enc", "v4l2h264enc") if Gst.ElementFactory.find(e)), None)
         line(True if enc else None, "  H.264 encoder (for --output)", enc or "none",
              "sudo apt install gstreamer1.0-plugins-ugly")
+        line(True if Gst.ElementFactory.find("textoverlay") else None, "  textoverlay (engagement % on screen)",
+             "", "sudo apt install gstreamer1.0-x")
         line(True if Gst.ElementFactory.find("libcamerasrc") else None, "  libcamerasrc (Pi camera)",
              "" , "sudo apt install gstreamer1.0-libcamera")
     except Exception as e:
