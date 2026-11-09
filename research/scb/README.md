@@ -132,3 +132,24 @@ Part of the overall 0.854 is the image shortcut. The within-image figure is the 
 | 0.25 | ~57% |
 
 For classrooms, a threshold around 0.3–0.35 (`score_threshold` in the model sidecar) is worth testing.
+
+## Tiling: detecting the far rows
+
+`extract_pt.py --tiles auto` runs the model on the full frame plus one row of overlapping, roughly square tiles over the top 60% of the image, and merges the detections the same way `hcpose run --tiles auto` does. `compare_coverage.py` compares two caches on the same images.
+
+The test used 1,500 front-view SCB images (500 per subset) with the stand-in yolov8n-pose, and counted labelled students matched to a detection.
+
+| Students | No tiling @0.3 | Tiles @0.3 | No tiling @0.5 | Tiles @0.5 |
+|---|---|---|---|---|
+| **All** | 44.3% | **73.7%** | 29.6% | 57.1% |
+| Small (far third) | 11.0% | **70.3%** | 4.7% | 48.0% |
+| Medium | 50.5% | 77.2% | 28.1% | 61.3% |
+| Large (near third) | 71.4% | 73.6% | 56.0% | 62.0% |
+| BowHead | 26.7% | 59.4% | 16.3% | 40.7% |
+| TurnHead | 50.3% | 86.7% | 31.2% | 68.5% |
+| discuss | 37.2% | 58.7% | 24.8% | 46.2% |
+| read | 51.8% | 82.9% | 36.4% | 64.7% |
+
+Detections per image went from 12.9 to 26.0 at threshold 0.3. Visual checks show the extra detections are mostly real back-row students with usable skeletons. Tiling also narrows the gap between behaviors, which reduces the bias toward attentive poses noted earlier.
+
+The cost is one extra inference per tile: full frame plus 3 tiles is four passes per frame, which is fine at the 5–10 FPS that engagement needs.
