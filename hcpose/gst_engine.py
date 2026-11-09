@@ -176,11 +176,15 @@ class GstRunner:
         post += f"identity name=meta_tap ! {_q('meta_q')} ! "
         if self.overlay and (self.display or self.output):
             show_conf = "false" if self.display_mode != "none" else "true"
-            post += f"hailooverlay name=overlay show-confidence={show_conf} qos=false ! {_q('overlay_q')} ! "
+            # thicker lines/text so the focused/distracted labels are readable at 720p
+            thick = "line-thickness=2 font-thickness=2 " if self.display_mode != "none" else ""
+            post += f"hailooverlay name=overlay show-confidence={show_conf} {thick}qos=false ! {_q('overlay_q')} ! "
             if self.display_mode in ("class", "both") and self.has_textoverlay:
+                pt = max(10, round(self.height / 52))  # ~14 pt at 720p, ~21 pt at 1080p
                 post += (
-                    'textoverlay name=class_text text="Engagement: starting..." valignment=top halignment=left '
-                    'font-desc="Sans Bold 16" shaded-background=true ! '
+                    'textoverlay name=class_text text="Engagement: starting" valignment=top halignment=left '
+                    f'line-alignment=left wrap-mode=none xpad=12 ypad=8 font-desc="Sans Bold {pt}" '
+                    'shaded-background=true ! '
                 )
 
         sinks = []
