@@ -395,6 +395,7 @@ class GstRunner:
             self.loop.quit()
             return False
         self._stopping = True
+        self.interrupted = True
         print("\n[hcpose] stopping (finishing output)...")
         # Inject EOS right after the source: demuxers run filesrc in pull mode
         # and ignore an EOS sent to the pipeline, so files would play to the end.
@@ -443,4 +444,6 @@ class GstRunner:
             print(f"[hcpose] {self.fps_counter.summary()}")
         if self.output and self.exit_code == 0:
             print(f"[hcpose] saved {os.path.abspath(self.output)}")
+        if self.exit_code == 0 and getattr(self, "interrupted", False):
+            return 130
         return self.exit_code

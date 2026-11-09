@@ -313,6 +313,23 @@ def main(argv: Optional[List[str]] = None) -> int:
     logging.basicConfig(level=logging.DEBUG if getattr(args, "verbose", False) else logging.INFO,
                         format="[hcpose] %(message)s")
     try:
+        code = _dispatch(args)
+    except KeyboardInterrupt:
+        code = 130
+    if code == 130:
+        # Re-raise Ctrl+C as a real SIGINT death (after outputs were finalized), so a
+        # calling shell loop (`for f in ...; do hcpose run ...; done`) stops too.
+        import os
+        import signal
+
+        sys.stdout.flush()
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        os.kill(os.getpid(), signal.SIGINT)
+    return code
+
+
+def _dispatch(args) -> int:
+    try:
         if args.cmd == "doctor":
             from .doctor import doctor
 
