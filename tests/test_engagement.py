@@ -276,7 +276,9 @@ def test_analyze_command(tmp_path, capsys):
     w.close()
     out = tmp_path / "labelled.jsonl"
     cal = tmp_path / "room.json"
-    assert main(["analyze", str(src), "-o", str(out), "--calibration", str(cal), "--every", "10"]) == 0
+    # rules, so the expected percentages don't depend on which learned model is bundled
+    assert main(["analyze", str(src), "-o", str(out), "--calibration", str(cal), "--every", "10",
+                 "--classifier", "none"]) == 0
     text = capsys.readouterr().out
     rows = [ln.split() for ln in text.splitlines() if ln.strip() and ln.split()[0].replace(".", "").isdigit()]
     pct = [float(r[1].rstrip("%")) for r in rows]
