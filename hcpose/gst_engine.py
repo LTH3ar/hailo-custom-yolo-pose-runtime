@@ -11,6 +11,7 @@ import logging
 import os
 import signal
 import tempfile
+from collections import deque
 import time
 from typing import List, Optional
 
@@ -79,6 +80,7 @@ class GstRunner:
         self.callbacks = callbacks or []
         self.fps_counter = FpsCounter() if show_fps else None
         self.frame_index = 0
+        self._raw_dets: deque = deque(maxlen=64)  # (pts, persons) snapshots taken before hailotracker
         self.t_start = None
         self.exit_code = 0
         self._stopping = False
@@ -142,8 +144,13 @@ class GstRunner:
         post = ""
         if self.tracker:
             post += (
+                # keep-tracked-frames=0: a track that misses a frame is moved to 'lost'
+                # (no longer emitted) instead of being re-emitted with its stale box
+                # for up to N frames, which created phantom/duplicate persons.
+                # keep-lost-frames=15: lost tracks can still be re-matched for 0.5 s,
+                # so ids survive short occlusions.
                 "hailotracker name=tracker class-id=-1 kalman-dist-thr=0.8 iou-thr=0.9 init-iou-thr=0.7 "
-                "keep-new-frames=2 keep-tracked-frames=15 keep-lost-frames=2 keep-past-metadata=false qos=false ! "
+                "keep-new-frames=2 keep-tracked-frames=0 keep-lost-frames=15 keep-past-metadata=false qos=false ! "
                 f"{_q('tracker_q')} ! "
             )
         post += f"identity name=meta_tap ! {_q('meta_q')} ! "
@@ -184,7 +191,8 @@ class GstRunner:
         self.frame_index += 1
         n = 0
         if self.callbacks:
-            result = self._extract(buf, idx, now - self.t_start)
+            raw = self._pop_raw(buf.pts) if self.tracker else None
+            result = self._extract(buf, idx, now - self.t_start, raw)
             n = len(result.persons)
             for cb in self.callbacks:
                 try:
@@ -195,10 +203,64 @@ class GstRunner:
             self.fps_counter.tick(f"persons: {n}" if self.callbacks else "")
         return self.Gst.PadProbeReturn.OK
 
-    def _extract(self, buf, idx: int, t: float) -> FrameResult:
+    def _on_pre_tracker(self, pad, info):
+        """Snapshot the decoder's detections before hailotracker replaces their boxes
+        with Kalman-smoothed ones (which also moves the box-relative keypoints) and
+        holds back unconfirmed new tracks."""
+        buf = info.get_buffer()
+        if buf is not None:
+            self._raw_dets.append((buf.pts, self._read_persons(buf)))
+        return self.Gst.PadProbeReturn.OK
+
+    def _pop_raw(self, pts) -> Optional[List[Person]]:
+        # Buffers reach meta_tap in the order they entered the tracker; match on
+        # PTS when the source sets one, otherwise take the oldest snapshot.
+        none = self.Gst.CLOCK_TIME_NONE
+        while self._raw_dets:
+            p, persons = self._raw_dets.popleft()
+            if pts == none or p == none or p == pts:
+                return persons
+        return None
+
+    @staticmethod
+    def _iou(a, b) -> float:
+        iw = min(a[2], b[2]) - max(a[0], b[0])
+        ih = min(a[3], b[3]) - max(a[1], b[1])
+        if iw <= 0 or ih <= 0:
+            return 0.0
+        inter = iw * ih
+        return inter / ((a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter)
+
+    def _assign_ids(self, raw: List[Person], tracked: List[Person]) -> List[Person]:
+        """Give each raw detection the id of the tracker output it overlaps most (greedy, IoU>=0.5).
+        Detections the tracker has not confirmed yet keep track_id=None."""
+        pairs = sorted(
+            ((self._iou(r.box, t.box), i, j) for i, r in enumerate(raw) for j, t in enumerate(tracked)),
+            reverse=True,
+        )
+        used_r, used_t = set(), set()
+        for v, i, j in pairs:
+            if v < 0.5:
+                break
+            if i in used_r or j in used_t:
+                continue
+            used_r.add(i)
+            used_t.add(j)
+            raw[i].track_id = tracked[j].track_id
+        return raw
+
+    def _extract(self, buf, idx: int, t: float, raw: Optional[List[Person]] = None) -> FrameResult:
+        res = FrameResult(index=idx, timestamp=t, width=self.width, height=self.height)
+        persons = self._read_persons(buf)
+        res.persons = self._assign_ids(raw, persons) if raw is not None else persons
+        return res
+
+    def _read_persons(self, buf) -> List[Person]:
+        import numpy as np
+
         hailo = self._hailo
         W, H = self.width, self.height
-        res = FrameResult(index=idx, timestamp=t, width=W, height=H)
+        persons: List[Person] = []
         roi = hailo.get_roi_from_buffer(buf)
         for det in roi.get_objects_typed(hailo.HAILO_DETECTION):
             b = det.get_bbox()
@@ -212,9 +274,7 @@ class GstRunner:
             if lms:
                 for p in lms[0].get_points():
                     kpts.append(((p.x() * bw + x1) * W, (p.y() * bh + y1) * H, p.confidence()))
-            import numpy as np
-
-            res.persons.append(
+            persons.append(
                 Person(
                     track_id=track_id,
                     score=float(det.get_confidence()),
@@ -224,7 +284,7 @@ class GstRunner:
                     keypoints=np.array(kpts, dtype=np.float32).reshape(-1, 3),
                 )
             )
-        return res
+        return persons
 
     # ------------------------------------------------------------------ run loop
     def _on_message(self, bus, msg):
@@ -277,6 +337,9 @@ class GstRunner:
             return 1
         tap = self.pipeline.get_by_name("meta_tap")
         tap.get_static_pad("src").add_probe(Gst.PadProbeType.BUFFER, self._on_buffer)
+        if self.tracker and self.callbacks:
+            trk = self.pipeline.get_by_name("tracker")
+            trk.get_static_pad("sink").add_probe(Gst.PadProbeType.BUFFER, self._on_pre_tracker)
 
         self.loop = GLib.MainLoop()
         bus = self.pipeline.get_bus()

@@ -82,7 +82,7 @@ Put the HEF anywhere (`models/` is git-ignored for `.hef`). Optionally add a **s
               "box": [x1, y1, x2, y2], "keypoints": [[x, y, visibility], ...]}]}
 ```
 
-Coordinates are pixels in the processed frame (`w`×`h`). `track_id` comes from `hailotracker` (gst) or a simple IoU tracker (python).
+Coordinates are pixels in the processed frame (`w`×`h`). Boxes and keypoints are always the decoder's own output; the tracker only supplies `track_id` (`hailotracker` in gst, a simple IoU tracker in python). In the gst engine a person seen for the first time has `track_id: null` until `hailotracker` confirms the track (about 1–2 frames). `hailotracker` replaces boxes with Kalman-smoothed ones, which also moves the box-relative keypoints, so hcpose reads the detections before the tracker and only takes the ids from after it.
 
 ## Building on it (part 2: engagement analysis)
 
