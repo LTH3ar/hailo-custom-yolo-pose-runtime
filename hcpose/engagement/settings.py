@@ -49,6 +49,10 @@ class EngagementSettings:
     )
     hand_raised_is_focused: bool = True  # a raised hand overrides the other cues
 
+    # Per-frame decision: "auto" = the bundled learned classifier if present,
+    # otherwise the rules; "none" = rules only; or a path to a classifier JSON.
+    classifier: Optional[str] = "auto"
+
     # seat-anchored identity
     seat_match_radius: float = 0.6  # max center distance, in box widths, to reuse a seat
     seat_yaw_max_offset: float = 0.3  # how far a seat's attentive yaw may differ from the room's

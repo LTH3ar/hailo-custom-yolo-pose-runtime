@@ -72,7 +72,7 @@ def draw(frame: np.ndarray, persons: List[Person], skeleton, kpt_thr: float,
             tag = f"{p.label} {p.score:.2f}" + (f" #{p.track_id}" if p.track_id is not None else "")
         cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
         if tag:
-            cv2.putText(frame, tag, (x1, max(12, y1 - 6)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+            cv2.putText(frame, tag, (x1, max(14, y1 - 6)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2, cv2.LINE_AA)
         k = p.keypoints
         for a, b in skeleton:
             if k[a, 2] >= kpt_thr and k[b, 2] >= kpt_thr:
@@ -161,6 +161,7 @@ class PyRunner:
         if display and not self.display:
             print("[hcpose] no display available; running headless")
         self.output = output
+        self.interrupted = False
         self.tracker = IouTracker() if tracker else None
         self.overlay = overlay
         self.callbacks = list(callbacks or [])
@@ -221,18 +222,20 @@ class PyRunner:
                                 if writer is None:
                                     writer = cv2.VideoWriter(self.output, cv2.VideoWriter_fourcc(*"mp4v"), self.fps, (fw, fh))
                                 writer.write(frame)
+                        if is_image:
+                            for p in persons:
+                                state = f" {p.engagement['state']}" if p.engagement else ""
+                                print(f"  {p.label} {p.score:.2f} box={[round(v) for v in p.box]}{state}")
                         if self.display:
                             cv2.imshow("hcpose", frame)
-                            if (cv2.waitKey(0 if is_image else 1) & 0xFF) in (27, ord("q")):
+                            if self._wait_key(is_image) in (27, ord("q")):
                                 break
                         if self.fps_counter:
                             self.fps_counter.tick(self.engagement.class_text() if self.engagement
                                                   else f"persons: {len(persons)}")
-                        if is_image:
-                            for p in persons:
-                                print(f"  {p.label} {p.score:.2f} box={[round(v) for v in p.box]}")
                 except KeyboardInterrupt:
                     print("\n[hcpose] stopped")
+                    self.interrupted = True
         if writer is not None:
             writer.release()
         if self.display:
@@ -241,7 +244,26 @@ class PyRunner:
             print(f"[hcpose] {self.fps_counter.summary()}")
         if self.output:
             print(f"[hcpose] saved {os.path.abspath(self.output)}")
-        return 0
+        return 130 if self.interrupted else 0
+
+    @staticmethod
+    def _wait_key(still: bool) -> int:
+        """Key press in the window. For a still image, wait until a key is pressed or the
+        window is closed, in short slices: one long cv2.waitKey(0) blocks inside the GUI
+        toolkit, where Python can't see Ctrl+C."""
+        import cv2
+
+        if not still:
+            return cv2.waitKey(1) & 0xFF
+        while True:
+            k = cv2.waitKey(100) & 0xFF
+            if k != 0xFF:
+                return k
+            try:
+                if cv2.getWindowProperty("hcpose", cv2.WND_PROP_VISIBLE) < 1:
+                    return 0  # window closed: continue
+            except cv2.error:
+                return 0
 
     def _report_activation(self, out) -> None:
         self.decoder({k: v[0] for k, v in out.items()})  # resolves auto activations
