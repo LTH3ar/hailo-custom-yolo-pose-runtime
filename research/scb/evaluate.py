@@ -25,6 +25,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("poses")
 ap.add_argument("--out")
 ap.add_argument("--det-thr", type=float, default=0.5)
+ap.add_argument("--no-dedup", action="store_true", help="skip merging duplicate images (old behavior)")
 args = ap.parse_args()
 
 S = load_settings()
@@ -49,8 +50,10 @@ rows = []
 views = Counter()
 gt_total = Counter()
 gt_matched = Counter()
-for line in open(args.poses):
-    d = json.loads(line)
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
+import scbdata  # noqa: E402
+
+for d in scbdata.load(args.poses, dedup=not args.no_dedup):
     dets = [x for x in d["dets"] if x["score"] >= args.det_thr]
     K = [np.array(x["kpts"], dtype=np.float32) for x in dets]
     shoulders = [k for k in K if k[5, 2] >= THR and k[6, 2] >= THR]

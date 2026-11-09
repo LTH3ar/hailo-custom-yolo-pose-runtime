@@ -26,10 +26,6 @@ FOC = {"read", "write", "hand-raising"}
 DIS = {"TurnHead", "BowHead", "discuss"}
 
 
-def video_id(path, subset):
-    name = path.rsplit("/", 1)[-1].rsplit(".", 1)[0]
-    m = re.match(r"(\d+)_", name)
-    return f"{subset}:{m.group(1) if m else name[:4]}"
 
 
 def kp_vector(k, box):
@@ -47,10 +43,19 @@ def kp_vector(k, box):
     return np.concatenate([rel.ravel(), vis]), f
 
 
-X, y, groups, rule_scores, cls_names = [], [], [], [], []
-for line in open(sys.argv[1]):
-    d = json.loads(line)
-    dets = [x for x in d["dets"] if x["score"] >= 0.5]
+X, y, groups, rule_scores, cls_names, img_of = [], [], [], [], [], []
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
+import scbdata  # noqa: E402
+
+import argparse  # noqa: E402
+
+ap = argparse.ArgumentParser()
+ap.add_argument("poses")
+ap.add_argument("--det-thr", type=float, default=0.5)
+ap.add_argument("--no-dedup", action="store_true", help="old behavior: no duplicate merging, subset+lesson groups")
+args = ap.parse_args()
+for d in scbdata.load(args.poses, dedup=not args.no_dedup):
+    dets = [x for x in d["dets"] if x["score"] >= args.det_thr]
     K = [np.array(x["kpts"], dtype=np.float32) for x in dets]
     sh = [k for k in K if k[5, 2] >= 0.5 and k[6, 2] >= 0.5]
     if len(sh) < 3 or np.mean([k[0, 2] >= 0.5 and (k[1, 2] >= 0.5 or k[2, 2] >= 0.5) for k in sh]) < 0.6:
@@ -93,12 +98,13 @@ for line in open(sys.argv[1]):
         X.append(np.concatenate([v, ctx]))
         y.append(d["gt"][gi][0] in DIS)
         cls_names.append(d["gt"][gi][0])
-        groups.append(video_id(d["img"], d["subset"]))
+        groups.append(d["group"])
+        img_of.append(d["img"])
         rule_scores.append(score(f, base, S.weights, S.hand_raised_is_focused)[0])
 
 X, y, groups = np.array(X, dtype=np.float32), np.array(y), np.array(groups)
 rule_scores, cls_names = np.array(rule_scores), np.array(cls_names)
-print(f"{len(y)} students from {len(set(groups))} videos; distracted share {y.mean():.1%}")
+print(f"{len(y)} students from {len(set(groups))} lesson groups; distracted share {y.mean():.1%}")
 
 oof = np.zeros(len(y))
 for tr, te in GroupKFold(n_splits=5).split(X, y, groups):
@@ -108,7 +114,7 @@ for tr, te in GroupKFold(n_splits=5).split(X, y, groups):
     oof[te] = clf.predict_proba(X[te])[:, 1]
 
 print(f"rules   : AUC {roc_auc_score(y, rule_scores):.3f}  balanced acc {balanced_accuracy_score(y, rule_scores >= S.on_threshold):.1%}")
-print(f"learned : AUC {roc_auc_score(y, oof):.3f}  balanced acc {balanced_accuracy_score(y, oof >= 0.5):.1%}  (5-fold, split by video)")
+print(f"learned : AUC {roc_auc_score(y, oof):.3f}  balanced acc {balanced_accuracy_score(y, oof >= 0.5):.1%}  (5-fold, split by lesson)")
 print("\nper behavior, share predicted distracted (learned @0.5 | rules):")
 for c in ["read", "write", "hand-raising", "TurnHead", "BowHead", "discuss"]:
     m = cls_names == c
@@ -126,3 +132,38 @@ for name, idx in blocks.items():
         clf.fit(X[tr][:, keep], y[tr])
         o[te] = clf.predict_proba(X[te][:, keep])[:, 1]
     print(f"  without {name:40} AUC {roc_auc_score(y, o):.3f}")
+
+# --- shortcut checks -------------------------------------------------------
+# SCB subsets label only their own behaviors, so most images contain only focused
+# or only distracted labels. A model could then score well by recognizing the
+# *image* (camera, room, crowd size) instead of the student's pose.
+img_ids = np.array(img_of)
+mixed = np.zeros(len(y), bool)
+for im in set(img_of):
+    m = img_ids == im
+    if y[m].any() and (~y[m]).any():
+        mixed[m] = True
+print(f"\nshortcut checks: {mixed.sum()} students ({mixed.mean():.0%}) are in images that contain both classes")
+ctx_cols = [39, 40, 41, 48]  # position in room, box size, number of students
+o = np.zeros(len(y))
+for tr, te in GroupKFold(n_splits=5).split(X, y, groups):
+    clf = HistGradientBoostingClassifier(max_iter=300, learning_rate=0.05, class_weight="balanced", random_state=0)
+    clf.fit(X[tr][:, ctx_cols], y[tr])
+    o[te] = clf.predict_proba(X[te][:, ctx_cols])[:, 1]
+print(f"  context only (where in the image, box size, crowd size; no pose): AUC {roc_auc_score(y, o):.3f}")
+
+
+def within_image_auc(scores):
+    """Probability that a distracted student scores higher than a focused one *in the same image*."""
+    wins = ties = total = 0
+    for im in set(img_ids[mixed]):
+        m = img_ids == im
+        pos, neg = scores[m & y], scores[m & ~y]
+        diff = pos[:, None] - neg[None, :]
+        wins += (diff > 0).sum()
+        ties += (diff == 0).sum()
+        total += diff.size
+    return (wins + 0.5 * ties) / total if total else float("nan")
+
+
+print(f"  within-image AUC (only images with both classes): learned {within_image_auc(oof):.3f}, rules {within_image_auc(rule_scores):.3f}")

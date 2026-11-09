@@ -42,30 +42,58 @@ done
 
 ## What the scripts measure
 
-`evaluate.py`:
-- Sorts each image into front, back or mixed camera view by how many students show a face.
-- Matches SCB boxes to pose detections and reports how many labelled students were detected at all.
-- Scores the current rules in their uncalibrated single-frame mode, per behavior.
+Both scripts first run `scbdata.load()`, which fixes two dataset issues the first Pi run found:
+- **Duplicate images.** About 1,900 images are byte-identical copies across subsets, and each subset labels only its own behaviors. Copies are merged into one image with the union of their labels. A student labelled both focused and distracted across copies is dropped as ambiguous.
+- **Lesson groups.** Cross-validation groups are whole lessons, with duplicate images joined into the same group, so no lesson or image appears on both sides of a fold.
 
-`learn.py` trains a gradient-boosted classifier on front-view keypoints with 5-fold cross-validation split by source lesson, so no lesson appears in both training and test data. It compares the classifier with the rules on the same students and reports which feature groups matter.
+`--no-dedup` restores the old behavior.
+
+`evaluate.py`:
+- Sorts each image into front, back or mixed camera view.
+- Reports detection coverage: how many labelled students got a pose detection at `--det-thr` (default 0.5).
+- Scores the rules in their uncalibrated single-frame mode, per behavior.
+
+`learn.py`:
+- Trains a gradient-boosted classifier on front-view keypoints, with 5-fold cross-validation grouped by lesson.
+- Reports which feature groups matter.
+- Runs two **shortcut checks**. Most SCB images contain only focused or only distracted labels, so a model can partly "recognize the image" instead of the pose. A context-only model (position, box size, crowd size, no pose) shows how big that shortcut is. The **within-image AUC**, computed only on images with both classes, is the number to quote: it compares students in the same room and frame, so the shortcut can't help.
+
+Class order per subset comes from the dataset's own YAML files on the Hugging Face mirror:
+
+| Subset | Classes |
+|---|---|
+| BowTurnHead | BowHead, TurnHead |
+| Discuss | discuss |
+| Handrise | hand-raising, read, write |
 
 Single images can't test the temporal smoothing or the per-seat calibration, so these numbers are a lower bound for the live system.
 
-## First results (stand-in yolov8n-pose, PyTorch FP32)
+## Results so far
 
-**Images by view:** 5,794 front, 2,398 back, 1,172 mixed, 774 with too few people.
+The deployed INT8 HEFs on the Hailo-8, before the fixes above, are in [`results/hef_results.md`](results/hef_results.md). In that run the learned classifier beat the rules for all three models, and m was best (AUC 0.74–0.81 depending on grouping, against 0.53–0.55 for the rules).
 
-**Detection coverage:** only 16–38% of labelled students matched a detection at confidence 0.5. The misses are mostly small, back-row students.
+**Stand-in yolov8n-pose (PyTorch FP32), with the duplicate merging and lesson groups:**
 
-**Front view, 16,896 students from 264 lessons:**
+**Data after merging:**
+- 8,116 unique images, from 10,138.
+- 2,891 students had both a focused and a distracted label and were dropped. Most of them were "BowHead" in one copy and "read/write" in another, so even the SCB annotators couldn't separate a bowed head from reading or writing.
 
-| Method | AUC | Balanced accuracy |
+**Classifier vs rules (front view):**
+
+| Measure | Learned | Rules |
 |---|---|---|
-| Rules | 0.56–0.63 | 54% |
-| Learned | **0.74** | **68.5%** |
+| Overall AUC | 0.854 | 0.559 |
+| Context-only AUC (no pose) | 0.646 | – |
+| **Within-image AUC** | **0.763** | **0.542** |
 
-**Share flagged "distracted" by the learned classifier:**
-- TurnHead: 70% (the rules flag 16%)
-- discuss: 64%
-- read, write, hand-raising: 22–24% (false alarms)
-- BowHead: 16%. A bowed head can't be told apart from reading or writing.
+Part of the overall 0.854 is the image shortcut. The within-image figure is the honest one, and it still shows clear pose signal, while the rules sit near chance.
+
+**Detection coverage** of labelled front-view students, by detection threshold:
+
+| `--det-thr` | Coverage |
+|---|---|
+| 0.5 | ~40% |
+| 0.35 | ~48% |
+| 0.25 | ~57% |
+
+For classrooms, a threshold around 0.3–0.35 (`score_threshold` in the model sidecar) is worth testing.
