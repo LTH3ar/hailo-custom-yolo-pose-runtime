@@ -29,8 +29,8 @@ def run(
 
     engine="gst" gives frame=None (pixels stay in native code); engine="python"
     passes the BGR frame. Extra kwargs go to the runner (width, height, fps,
-    display, output, tracker, overlay, show_fps, and score_threshold etc. which
-    override the sidecar).
+    display, output, tracker, overlay, show_fps, engagement=EngagementAnalyzer(...),
+    and score_threshold etc. which override the sidecar).
     """
     cfg_keys = {"score_threshold", "iou_threshold", "keypoint_threshold", "max_detections",
                 "score_activation", "keypoint_activation"}

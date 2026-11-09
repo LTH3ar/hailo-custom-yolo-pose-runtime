@@ -53,14 +53,26 @@ def poses_to_persons(
     return out
 
 
-def draw(frame: np.ndarray, persons: List[Person], skeleton, kpt_thr: float) -> None:
+STATE_COLORS = {"focused": (0, 200, 0), "distracted": (0, 0, 230), "unknown": (200, 200, 200)}  # BGR
+
+
+def draw(frame: np.ndarray, persons: List[Person], skeleton, kpt_thr: float,
+         display: str = "none", class_text: Optional[str] = None) -> None:
     import cv2
 
     for p in persons:
         x1, y1, x2, y2 = (int(v) for v in p.box)
-        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 200, 255), 2)
-        tag = f"{p.label} {p.score:.2f}" + (f" #{p.track_id}" if p.track_id is not None else "")
-        cv2.putText(frame, tag, (x1, max(12, y1 - 6)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 200, 255), 1, cv2.LINE_AA)
+        state = (p.engagement or {}).get("state") if display != "none" else None
+        if display == "class":
+            color, tag = STATE_COLORS["unknown"], ""  # no per-student state on screen
+        elif state:
+            color, tag = STATE_COLORS[state], (state if state != "unknown" else "?")
+        else:
+            color = (0, 200, 255)
+            tag = f"{p.label} {p.score:.2f}" + (f" #{p.track_id}" if p.track_id is not None else "")
+        cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+        if tag:
+            cv2.putText(frame, tag, (x1, max(12, y1 - 6)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
         k = p.keypoints
         for a, b in skeleton:
             if k[a, 2] >= kpt_thr and k[b, 2] >= kpt_thr:
@@ -68,10 +80,14 @@ def draw(frame: np.ndarray, persons: List[Person], skeleton, kpt_thr: float) -> 
         for x, y, v in k:
             if v >= kpt_thr:
                 cv2.circle(frame, (int(x), int(y)), 3, (0, 255, 0), -1, cv2.LINE_AA)
+    if class_text and display in ("class", "both"):
+        (tw, th), _ = cv2.getTextSize(class_text, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+        cv2.rectangle(frame, (8, 8), (16 + tw, 18 + th), (0, 0, 0), -1)
+        cv2.putText(frame, class_text, (12, 12 + th), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2, cv2.LINE_AA)
 
 
-def frames(source: str, width: int, height: int, fps: int) -> Iterator[np.ndarray]:
-    """Yields BGR frames."""
+def frames(source: str, width: int, height: int, fps: int) -> Iterator[Tuple[np.ndarray, Optional[float]]]:
+    """Yields (BGR frame, media time in seconds or None for live sources)."""
     import cv2
 
     kind = classify(source)
@@ -79,7 +95,7 @@ def frames(source: str, width: int, height: int, fps: int) -> Iterator[np.ndarra
         img = cv2.imread(os.path.expanduser(source))
         if img is None:
             raise FileNotFoundError(source)
-        yield img
+        yield img, 0.0
         return
     if kind == "rpi":
         try:
@@ -93,7 +109,7 @@ def frames(source: str, width: int, height: int, fps: int) -> Iterator[np.ndarra
         cam.start()
         try:
             while True:
-                yield cam.capture_array()  # RGB888 in picamera2 is BGR byte order
+                yield cam.capture_array(), None  # RGB888 in picamera2 is BGR byte order
         finally:
             cam.stop()
         return
@@ -108,12 +124,15 @@ def frames(source: str, width: int, height: int, fps: int) -> Iterator[np.ndarra
         cap = cv2.VideoCapture(os.path.expanduser(source))
     if not cap.isOpened():
         raise RuntimeError(f"cannot open input {source}")
+    file_fps = cap.get(cv2.CAP_PROP_FPS) if kind == "file" else 0
+    n = 0
     try:
         while True:
             ok, f = cap.read()
             if not ok:
                 break
-            yield f
+            yield f, (n / file_fps if file_fps and file_fps > 0 else None)
+            n += 1
     finally:
         cap.release()
 
@@ -134,6 +153,7 @@ class PyRunner:
         overlay: bool = True,
         callbacks: Optional[List[FrameCallback]] = None,
         show_fps: bool = True,
+        engagement=None,
     ):
         self.cfg, self.info, self.layout = cfg, info, layout
         self.source, self.width, self.height, self.fps = source, width, height, fps
@@ -143,7 +163,11 @@ class PyRunner:
         self.output = output
         self.tracker = IouTracker() if tracker else None
         self.overlay = overlay
-        self.callbacks = callbacks or []
+        self.callbacks = list(callbacks or [])
+        self.engagement = engagement
+        self.display_mode = engagement.s.display if engagement else "none"
+        if engagement:
+            self.callbacks.insert(0, engagement)
         self.fps_counter = FpsCounter() if show_fps else None
         self.decoder = PoseDecoder(
             layout,
@@ -171,7 +195,7 @@ class PyRunner:
             in_h, in_w = self.layout.input_height, self.layout.input_width
             with ng.activate(ng.create_params()), hp.InferVStreams(ng, ivp, ovp) as pipe:
                 try:
-                    for idx, frame in enumerate(frames(self.source, self.width, self.height, self.fps)):
+                    for idx, (frame, media_t) in enumerate(frames(self.source, self.width, self.height, self.fps)):
                         fh, fw = frame.shape[:2]
                         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                         net_in, s, px, py = letterbox(rgb, in_w, in_h)
@@ -183,11 +207,13 @@ class PyRunner:
                         if self.tracker:
                             for p, tid in zip(persons, self.tracker.update([p.box for p in persons])):
                                 p.track_id = tid
-                        res = FrameResult(idx, time.monotonic() - t0, fw, fh, persons)
+                        t = media_t if media_t is not None else time.monotonic() - t0
+                        res = FrameResult(idx, t, fw, fh, persons)
                         for cb in self.callbacks:
                             cb(res, frame)
                         if self.overlay and (self.display or self.output):
-                            draw(frame, persons, self.cfg.skeleton, self.cfg.keypoint_threshold)
+                            draw(frame, persons, self.cfg.skeleton, self.cfg.keypoint_threshold, self.display_mode,
+                                 self.engagement.class_text() if self.engagement else None)
                         if self.output:
                             if is_image:
                                 cv2.imwrite(self.output, frame)
@@ -200,7 +226,8 @@ class PyRunner:
                             if (cv2.waitKey(0 if is_image else 1) & 0xFF) in (27, ord("q")):
                                 break
                         if self.fps_counter:
-                            self.fps_counter.tick(f"persons: {len(persons)}")
+                            self.fps_counter.tick(self.engagement.class_text() if self.engagement
+                                                  else f"persons: {len(persons)}")
                         if is_image:
                             for p in persons:
                                 print(f"  {p.label} {p.score:.2f} box={[round(v) for v in p.box]}")

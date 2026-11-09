@@ -51,7 +51,7 @@ fi
 # --------------------------------------------------------------------------
 say "Checking build/runtime packages"
 need=()
-for pkg in meson ninja-build g++ pkg-config python3-venv python3-gi python3-opencv; do
+for pkg in meson ninja-build g++ pkg-config python3-venv python3-gi python3-opencv gstreamer1.0-x; do
   dpkg -s "$pkg" >/dev/null 2>&1 || need+=("$pkg")
 done
 RAPIDJSON_DIR="$(pkg-config --variable=rapidjson_includedir "$TAPPAS_PKG" 2>/dev/null || true)"

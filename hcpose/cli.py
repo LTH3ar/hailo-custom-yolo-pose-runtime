@@ -53,11 +53,31 @@ def build_parser() -> argparse.ArgumentParser:
     th.add_argument("--max-detections", type=int)
     th.add_argument("--score-activation", choices=["auto", "sigmoid", "none"],
                     help="force whether class scores need a sigmoid (default: auto-detect)")
+    eg = r.add_argument_group("engagement analysis (focused / distracted)")
+    eg.add_argument("--engagement", nargs="?", const="", metavar="SETTINGS_YAML",
+                    help="enable engagement analysis, optionally with a settings file (see configs/engagement.yaml)")
+    eg.add_argument("--display", choices=["students", "class", "both", "none"],
+                    help="what to show on screen: per-student labels, the class percentage, both, or none")
+    eg.add_argument("--camera-position", choices=["auto", "center", "left", "right"],
+                    help="where the camera is mounted at the front (left/right as seen from the students)")
+    eg.add_argument("--calibration", metavar="JSON",
+                    help="per-classroom calibration file: loaded if it exists, saved when the run ends")
+    eg.add_argument("--recalibrate", action="store_true", default=None,
+                    help="ignore the existing calibration file and learn it again (camera moved)")
     r.add_argument("-v", "--verbose", action="store_true")
 
     i = sub.add_parser("inspect", help="show what the runtime detects in a HEF")
     _add_model_args(i)
     i.add_argument("--no-device", action="store_true", help="don't run a test inference")
+
+    a = sub.add_parser("analyze", help="run engagement analysis offline on a --save-json skeleton file")
+    a.add_argument("jsonl", help="skeletons saved with `hcpose run --save-json`")
+    a.add_argument("--engagement", metavar="SETTINGS_YAML", help="engagement settings file")
+    a.add_argument("--camera-position", choices=["auto", "center", "left", "right"])
+    a.add_argument("--calibration", metavar="JSON", help="calibration file to load (if it exists) and save")
+    a.add_argument("--recalibrate", action="store_true", default=None)
+    a.add_argument("--output", "-o", help="write the skeletons with engagement labels to this JSONL")
+    a.add_argument("--every", type=float, default=10.0, help="timeline step in seconds (default 10)")
 
     sub.add_parser("doctor", help="check the installation")
     return ap
@@ -127,6 +147,89 @@ def _printer(result: FrameResult, frame=None) -> None:
         print(f"  {p.label}{tid} {p.score:.2f} box={[round(v) for v in p.box]}")
 
 
+def _engagement(args, keypoint_names):
+    wanted = any(getattr(args, k, None) is not None for k in ("engagement", "display", "camera_position", "calibration", "recalibrate"))
+    if not wanted:
+        return None
+    from .engagement import EngagementAnalyzer, load_settings
+
+    settings = load_settings(args.engagement or None, {
+        "display": getattr(args, "display", None),
+        "camera_position": args.camera_position,
+        "calibration": args.calibration,
+        "recalibrate": args.recalibrate,
+    })
+    an = EngagementAnalyzer(settings, keypoint_names)
+    loaded = sum(1 for s in an.seats if s.calibrated)
+    print(f"[hcpose] engagement: display={settings.display} camera={settings.camera_position} "
+          + (f"calibration {settings.calibration} ({loaded} seats loaded)" if settings.calibration else
+             "no calibration file (pass --calibration room.json to keep what it learns)"))
+    return an
+
+
+def _finish_engagement(an) -> None:
+    if an is None:
+        return
+    s = an.summary()
+    if s["distracted_pct_overall"] is not None:
+        print(f"[hcpose] engagement: {s['distracted_pct_overall']}% of counted student-time distracted "
+              f"({s['student_seconds_counted']} student-seconds, {len(s['seats'])} seats)")
+    if an.s.calibration:
+        n = an.save_calibration(an.s.calibration)
+        print(f"[hcpose] calibration saved: {n} seats -> {an.s.calibration}")
+
+
+def cmd_analyze(args) -> int:
+    import json
+
+    from .engagement import EngagementAnalyzer, load_settings
+    from .results import FrameResult, Person
+    import numpy as np
+
+    settings = load_settings(args.engagement, {
+        "camera_position": args.camera_position, "calibration": args.calibration, "recalibrate": args.recalibrate,
+    })
+    an = None
+    out = open(args.output, "w") if args.output else None
+    timeline, next_t, bucket = [], None, []
+    with open(args.jsonl) as f:
+        for line in f:
+            d = json.loads(line)
+            if d.get("type") == "header":
+                an = EngagementAnalyzer(settings, d["keypoint_names"])
+                if out:
+                    out.write(json.dumps({**d, "engagement_settings": settings.to_dict()}) + "\n")
+                continue
+            if an is None:
+                raise ValueError(f"{args.jsonl}: no header line (was it written by hcpose run --save-json?)")
+            persons = [Person(p.get("track_id"), p["score"], p["class_id"], p["label"], p["box"],
+                              np.asarray(p["keypoints"], dtype=np.float32).reshape(-1, 3)) for p in d["persons"]]
+            res = FrameResult(d["i"], d["t"], d["w"], d["h"], persons)
+            c = an.update(res)
+            if out:
+                out.write(json.dumps({**d, "persons": [p.to_dict() for p in persons], **res.extra}) + "\n")
+            next_t = res.timestamp if next_t is None else next_t
+            if c["pct_distracted"] is not None:
+                bucket.append((c["pct_distracted"], c["counted"]))
+            if res.timestamp >= next_t + args.every:
+                timeline.append((next_t, bucket))
+                next_t, bucket = res.timestamp, []
+    if bucket:
+        timeline.append((next_t, bucket))
+    if out:
+        out.close()
+    print(f"{'time':>8}  {'distracted':>10}  {'students':>8}")
+    for t0, b in timeline:
+        if b:
+            print(f"{t0:8.1f}  {np.mean([x for x, _ in b]):9.1f}%  {np.mean([n for _, n in b]):8.1f}")
+        else:
+            print(f"{t0:8.1f}  {'-':>10}  {'0':>8}")
+    _finish_engagement(an)
+    if args.output:
+        print(f"[hcpose] labelled skeletons written to {args.output}")
+    return 0
+
+
 def cmd_run(args) -> int:
     overrides = {
         "score_threshold": args.score_threshold,
@@ -139,6 +242,7 @@ def cmd_run(args) -> int:
     print(f"[hcpose] {cfg.hef}: {layout.num_keypoints} keypoints, {layout.num_classes} class(es), "
           f"input {layout.input_width}x{layout.input_height}" + (f", sidecar {cfg.sidecar}" if cfg.sidecar else ""))
 
+    engagement = _engagement(args, cfg.keypoint_names)
     callbacks = []
     writer = None
     if args.save_json:
@@ -149,6 +253,7 @@ def cmd_run(args) -> int:
             "skeleton": cfg.skeleton,
             "labels": cfg.labels,
             "score_threshold": cfg.score_threshold,
+            **({"engagement_settings": engagement.s.to_dict()} if engagement else {}),
         })
         callbacks.append(writer)
     if args.print_dets:
@@ -170,6 +275,7 @@ def cmd_run(args) -> int:
         source=args.input, width=args.width, height=args.height, fps=args.fps,
         display=not args.headless, output=args.output, tracker=not args.no_tracker,
         overlay=not args.no_overlay, callbacks=callbacks, show_fps=not args.quiet_fps,
+        engagement=engagement,
     )
     try:
         if engine == "gst":
@@ -187,6 +293,7 @@ def cmd_run(args) -> int:
         if writer:
             writer.close()
             print(f"[hcpose] skeletons saved to {args.save_json}")
+        _finish_engagement(engagement)
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -200,6 +307,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             return doctor()
         if args.cmd == "inspect":
             return cmd_inspect(args)
+        if args.cmd == "analyze":
+            return cmd_analyze(args)
         return cmd_run(args)
     except (FileNotFoundError, ValueError, RuntimeError, LayoutError) as e:
         print(f"[hcpose] error: {e}", file=sys.stderr)

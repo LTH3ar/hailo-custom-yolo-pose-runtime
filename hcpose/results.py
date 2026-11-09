@@ -22,6 +22,7 @@ class Person:
     label: str
     box: List[float]  # x1, y1, x2, y2 in pixels of the original frame
     keypoints: np.ndarray  # (K, 3): x px, y px, visibility 0..1
+    engagement: Optional[dict] = None  # set by hcpose.engagement when enabled
 
     def to_dict(self, keypoint_names=None) -> dict:
         d = {
@@ -32,6 +33,8 @@ class Person:
             "box": [round(float(v), 1) for v in self.box],
             "keypoints": [[round(float(x), 1), round(float(y), 1), round(float(v), 3)] for x, y, v in self.keypoints],
         }
+        if self.engagement is not None:
+            d["engagement"] = self.engagement
         return d
 
 
@@ -42,6 +45,7 @@ class FrameResult:
     width: int
     height: int
     persons: List[Person] = field(default_factory=list)
+    extra: dict = field(default_factory=dict)  # e.g. {"class": {...}} from the engagement analyzer
 
 
 FrameCallback = Callable[[FrameResult, Optional[np.ndarray]], None]
@@ -64,6 +68,7 @@ class JsonlWriter:
                     "w": result.width,
                     "h": result.height,
                     "persons": [p.to_dict() for p in result.persons],
+                    **result.extra,
                 }
             )
             + "\n"

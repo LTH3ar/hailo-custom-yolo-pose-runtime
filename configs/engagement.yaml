@@ -1,0 +1,47 @@
+# Engagement-analysis settings for `hcpose run --engagement configs/engagement.yaml`.
+# Every key is optional; command-line flags (--display, --camera-position,
+# --calibration, --recalibrate) override this file.
+
+# What appears on screen:
+#   students = a focused/distracted label on each student
+#   class    = only the class percentage (no per-student state on screen)
+#   both     = labels + percentage
+#   none     = plain pose overlay
+display: both
+
+# Where the camera is mounted at the front of the room, seen from the students'
+# seats facing the board: auto | center | left | right.
+# auto learns the attentive direction from the class itself; setting the real
+# position also catches a class that is mostly distracted from the very start.
+camera_position: auto
+
+# Per-classroom calibration (what "attentive" looks like for each seat).
+# Loaded if the file exists, saved when the run ends. Set recalibrate: true
+# (or pass --recalibrate) after moving the camera.
+calibration: null
+recalibrate: false
+calibration_seconds: 120     # each seat is observed this long before its baseline is fixed
+
+keypoint_threshold: 0.5      # ignore keypoints with lower visibility
+
+# Decisions over time (seconds are video time)
+ema_tau: 1.0                 # smoothing of the per-frame score
+on_threshold: 0.6            # smoothed score above this ...
+on_seconds: 2.5              # ... for this long -> distracted
+off_threshold: 0.4           # below this ...
+off_seconds: 1.5             # ... for this long -> focused again
+unknown_after: 2.0           # no usable keypoints this long -> unknown (not counted)
+window_seconds: 5.0          # rolling average of the class percentage on screen
+
+# Cue weights (0 disables a cue). Cues combine like a noisy-OR: a cue whose
+# weight is below on_threshold can't flag a student alone, only with another cue.
+weights:
+  head_turned: 1.0           # head turned away from this seat's attentive direction
+  face_hidden: 0.9           # shoulders visible but no face: turned around
+  head_down: 0.7             # lower: writing notes looks the same
+  body_turned: 0.5           # torso rotated (e.g. toward a neighbour)
+  hand_at_face: 0.4          # head resting on a hand / phone at the face
+hand_raised_is_focused: true # a raised hand overrides everything
+
+seat_match_radius: 0.6       # how far (in box widths) a student may move and keep their seat
+seat_yaw_max_offset: 0.3     # max difference between a seat's and the room's attentive direction
