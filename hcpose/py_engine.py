@@ -72,7 +72,7 @@ def draw(frame: np.ndarray, persons: List[Person], skeleton, kpt_thr: float,
             tag = f"{p.label} {p.score:.2f}" + (f" #{p.track_id}" if p.track_id is not None else "")
         cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
         if tag:
-            cv2.putText(frame, tag, (x1, max(12, y1 - 6)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+            cv2.putText(frame, tag, (x1, max(14, y1 - 6)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2, cv2.LINE_AA)
         k = p.keypoints
         for a, b in skeleton:
             if k[a, 2] >= kpt_thr and k[b, 2] >= kpt_thr:

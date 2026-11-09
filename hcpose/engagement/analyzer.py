@@ -306,19 +306,20 @@ class EngagementAnalyzer:
             "pct_distracted": None if pct is None else round(pct, 1),
             "pct_distracted_smoothed": None if smooth is None else round(smooth, 1),
             "seats_calibrated": calibrated,
+            "calibrating": any(not seat.calibrated for seat in seats),
         }
         result.extra["class"] = self.last_class
         return self.last_class
 
     # ------------------------------------------------------------------ text for display
     def class_text(self) -> str:
+        """Short one-line banner for the screen (fits a 640 px wide frame)."""
         c = self.last_class
         if not c or c.get("pct_distracted_smoothed") is None:
-            return "Engagement: waiting for students..."
-        txt = f"{c['pct_distracted_smoothed']:.0f}% distracted  ({c['counted']} of {c['visible']} students counted)"
-        total = len(self.seats)
-        if total and c["seats_calibrated"] < total:
-            txt += f"  [calibrating {c['seats_calibrated']}/{total}]"
+            return "Engagement: waiting for students"
+        txt = f"{c['pct_distracted_smoothed']:.0f}% distracted | {c['counted']}/{c['visible']} students"
+        if c.get("calibrating"):
+            txt += " | calibrating"
         return txt
 
     # ------------------------------------------------------------------ calibration file
