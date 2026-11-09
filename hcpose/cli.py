@@ -64,6 +64,8 @@ def build_parser() -> argparse.ArgumentParser:
                     help="per-classroom calibration file: loaded if it exists, saved when the run ends")
     eg.add_argument("--recalibrate", action="store_true", default=None,
                     help="ignore the existing calibration file and learn it again (camera moved)")
+    eg.add_argument("--classifier", metavar="auto|none|JSON",
+                    help="per-frame decision: bundled learned model (auto, default), rules (none), or a model file")
     r.add_argument("-v", "--verbose", action="store_true")
 
     i = sub.add_parser("inspect", help="show what the runtime detects in a HEF")
@@ -76,6 +78,7 @@ def build_parser() -> argparse.ArgumentParser:
     a.add_argument("--camera-position", choices=["auto", "center", "left", "right"])
     a.add_argument("--calibration", metavar="JSON", help="calibration file to load (if it exists) and save")
     a.add_argument("--recalibrate", action="store_true", default=None)
+    a.add_argument("--classifier", metavar="auto|none|JSON")
     a.add_argument("--output", "-o", help="write the skeletons with engagement labels to this JSONL")
     a.add_argument("--every", type=float, default=10.0, help="timeline step in seconds (default 10)")
     a.add_argument("--fps", type=float, help="use frame index / FPS as time (for files saved before timestamps "
@@ -150,7 +153,8 @@ def _printer(result: FrameResult, frame=None) -> None:
 
 
 def _engagement(args, keypoint_names):
-    wanted = any(getattr(args, k, None) is not None for k in ("engagement", "display", "camera_position", "calibration", "recalibrate"))
+    wanted = any(getattr(args, k, None) is not None
+                 for k in ("engagement", "display", "camera_position", "calibration", "recalibrate", "classifier"))
     if not wanted:
         return None
     from .engagement import EngagementAnalyzer, load_settings
@@ -160,10 +164,12 @@ def _engagement(args, keypoint_names):
         "camera_position": args.camera_position,
         "calibration": args.calibration,
         "recalibrate": args.recalibrate,
+        "classifier": args.classifier,
     })
     an = EngagementAnalyzer(settings, keypoint_names)
     loaded = sum(1 for s in an.seats if s.calibrated)
-    print(f"[hcpose] engagement: display={settings.display} camera={settings.camera_position} "
+    decision = f"learned classifier ({an.classifier.meta.get('name', 'custom')})" if an.classifier else "rules"
+    print(f"[hcpose] engagement: {decision}, display={settings.display} camera={settings.camera_position} "
           + (f"calibration {settings.calibration} ({loaded} seats loaded)" if settings.calibration else
              "no calibration file (pass --calibration room.json to keep what it learns)"))
     return an
@@ -190,6 +196,7 @@ def cmd_analyze(args) -> int:
 
     settings = load_settings(args.engagement, {
         "camera_position": args.camera_position, "calibration": args.calibration, "recalibrate": args.recalibrate,
+        "classifier": args.classifier,
     })
     an = None
     out = open(args.output, "w") if args.output else None

@@ -32,7 +32,7 @@ def main():
     cfg = ModelConfig(hef="/tmp/model.hef", labels=["person"], keypoint_names=UPPER_BODY13_NAMES,
                       skeleton=UPPER_BODY13_SKELETON)
     layout = Layout(scales=[], num_keypoints=13, num_classes=1, reg_max=16, input_width=640, input_height=640)
-    an = EngagementAnalyzer(load_settings(overrides={"display": "both"}), UPPER_BODY13_NAMES)
+    an = EngagementAnalyzer(load_settings(overrides={"classifier": "none", "display": "both"}), UPPER_BODY13_NAMES)
     writer = JsonlWriter(jsonl, {"keypoint_names": UPPER_BODY13_NAMES})
     r = gst_engine.GstRunner(cfg, layout, source=src, display=True, output=out, callbacks=[writer], engagement=an)
     orig = r.pipeline_string

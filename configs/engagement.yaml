@@ -43,5 +43,13 @@ weights:
   hand_at_face: 0.4          # head resting on a hand / phone at the face
 hand_raised_is_focused: true # a raised hand overrides everything
 
+# Per-frame decision:
+#   auto  = the learned classifier bundled at hcpose/engagement/models/scb_classifier.json
+#           (trained on SCB classroom images, research/scb/train_classifier.py), else the rules
+#   none  = the rule weights above
+#   path  = your own classifier JSON
+# The rule cues still provide the "reason" shown for a distracted student.
+classifier: auto
+
 seat_match_radius: 0.6       # how far (in box widths) a student may move and keep their seat
 seat_yaw_max_offset: 0.3     # max difference between a seat's and the room's attentive direction

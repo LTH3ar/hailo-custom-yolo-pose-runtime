@@ -97,7 +97,7 @@ def seats_grid(n=12, base_yaw=0.0):
 def run_class(script, settings=None, seconds=60.0, fps=10, seats=None, analyzer=None, t0=0.0, drop=None):
     """script(i, t) -> dict of overrides for student i at time t (or None = not visible)."""
     seats = seats or seats_grid()
-    an = analyzer or EngagementAnalyzer(settings or load_settings(), UPPER_BODY13_NAMES)
+    an = analyzer or EngagementAnalyzer(settings or load_settings(overrides={"classifier": "none"}), UPPER_BODY13_NAMES)
     rng = np.random.default_rng(1)
     hist = []
     for k in range(int(seconds * fps)):
@@ -175,7 +175,7 @@ def test_corner_camera(position, base_yaw):
     seats = seats_grid(base_yaw=base_yaw)
     away = 1.0 if base_yaw < 0 else -1.0  # turning the other way: deviation 1.5
     an, hist = run_class(lambda i, t: {"yaw": away} if i < 3 and t >= 20 else {},
-                         settings=load_settings(overrides={"camera_position": position}), seconds=35, seats=seats)
+                         settings=load_settings(overrides={"classifier": "none", "camera_position": position}), seconds=35, seats=seats)
     st, _ = states_at(hist, 2)
     assert st.count(FOCUSED) == 12, st  # right from the start, before any seat is calibrated
     st, _ = states_at(hist, 34)
@@ -184,7 +184,7 @@ def test_corner_camera(position, base_yaw):
 
 def test_calibration_learns_save_load(tmp_path):
     cal = tmp_path / "room.json"
-    s = load_settings(overrides={"calibration_seconds": 20.0, "calibration": str(cal)})
+    s = load_settings(overrides={"classifier": "none", "calibration_seconds": 20.0, "calibration": str(cal)})
     an, hist = run_class(lambda i, t: {}, settings=s, seconds=30)
     assert all(seat.calibrated for seat in an.seats) and len(an.seats) == 12
     assert an.save_calibration(str(cal)) == 12
@@ -197,13 +197,13 @@ def test_calibration_learns_save_load(tmp_path):
     assert all(p.engagement["calibrated"] for p in hist2[0][1].persons)
     assert states_at(hist2, 14)[0][0] == DISTRACTED
     # recalibrate ignores the file
-    an3 = EngagementAnalyzer(load_settings(overrides={"calibration": str(cal), "recalibrate": True}), UPPER_BODY13_NAMES)
+    an3 = EngagementAnalyzer(load_settings(overrides={"classifier": "none", "calibration": str(cal), "recalibrate": True}), UPPER_BODY13_NAMES)
     assert an3.seats == []
 
 
 def test_distracted_during_calibration_does_not_poison_baseline():
     """A student who looks away the whole calibration window still gets a sane baseline."""
-    s = load_settings(overrides={"calibration_seconds": 20.0})
+    s = load_settings(overrides={"classifier": "none", "calibration_seconds": 20.0})
     an, hist = run_class(lambda i, t: {"yaw": 1.0} if i == 0 and t < 25 else {}, settings=s, seconds=45)
     st, _ = states_at(hist, 15)
     assert st[0] == DISTRACTED  # class reference catches it while uncalibrated
@@ -231,7 +231,7 @@ def test_low_confidence_person_is_unknown():
         return {"face": False, "hidden_all": True} if i == 0 else {}
 
     seats = seats_grid()
-    an = EngagementAnalyzer(load_settings(), UPPER_BODY13_NAMES)
+    an = EngagementAnalyzer(load_settings(overrides={"classifier": "none"}), UPPER_BODY13_NAMES)
     for k in range(100):
         t = k / 10
         persons = [synth_person(s["cx"], s["cy"], s["sw"]) for s in seats]
@@ -251,7 +251,7 @@ def test_jsonl_and_settings(tmp_path):
     line = json.loads(path.read_text().splitlines()[1])
     assert line["class"]["counted"] == 12 and line["persons"][0]["engagement"]["state"] == FOCUSED
     with pytest.raises(ValueError):
-        load_settings(overrides={"display": "everything"})
+        load_settings(overrides={"classifier": "none", "display": "everything"})
     y = tmp_path / "e.yaml"
     y.write_text("display: class\ncamera_position: left\nweights:\n  head_down: 0.0\n")
     s = load_settings(str(y))
@@ -299,6 +299,51 @@ def test_camera_setting_anchors_a_distracted_start():
     """If most students look away from the very start, auto mode can't know the board
     direction, but a camera_position setting can."""
     script = lambda i, t: {"yaw": 1.0} if i < 9 else {}  # noqa: E731
-    _, hist = run_class(script, settings=load_settings(overrides={"camera_position": "center"}), seconds=30)
+    _, hist = run_class(script, settings=load_settings(overrides={"classifier": "none", "camera_position": "center"}), seconds=30)
     st, _ = states_at(hist, 29)
     assert st.count(DISTRACTED) == 9 and st.count(FOCUSED) == 3, st
+
+
+# ---------------------------------------------------------------- learned classifier
+def _train_synthetic(tmp_path):
+    """A tiny model trained on synthetic students: turned head or face hidden = distracted."""
+    pytest.importorskip("sklearn")
+    from sklearn.ensemble import HistGradientBoostingClassifier
+
+    from hcpose.engagement.classifier import export_hgb, feature_vector
+    from hcpose.engagement.features import Baseline
+
+    rng = np.random.default_rng(0)
+    X, y = [], []
+    for _ in range(1500):
+        dis = rng.random() < 0.3
+        yaw = rng.choice([-1.0, 1.0]) * rng.uniform(0.8, 1.2) if dis else rng.normal(0, 0.1)
+        p = synth_person(rng.uniform(200, 1000), rng.uniform(300, 600), rng.uniform(50, 120), yaw=yaw,
+                         jitter=0.02, rng=rng)
+        f = compute(p.keypoints, p.box, IDX, 0.5)
+        X.append(feature_vector(p.keypoints, p.box, f, Baseline(0.0, 0.9, 0.38), IDX, 0.5))
+        y.append(dis)
+    est = HistGradientBoostingClassifier(max_iter=60, random_state=0).fit(np.vstack(X), y)
+    path = tmp_path / "clf.json"
+    export_hgb(est, str(path), {"name": "synthetic"})
+    return est, path, np.vstack(X)
+
+
+def test_classifier_export_matches_sklearn(tmp_path):
+    from hcpose.engagement.classifier import TreeEnsemble
+
+    est, path, X = _train_synthetic(tmp_path)
+    rt = TreeEnsemble.load(str(path))
+    Xn = X.copy()
+    Xn[::7, -6] = np.nan  # missing yaw_dev must follow sklearn's missing-value routing
+    assert np.abs(rt.predict_proba(Xn) - est.predict_proba(Xn)[:, 1]).max() < 1e-9
+
+
+def test_analyzer_with_classifier(tmp_path):
+    _, path, _ = _train_synthetic(tmp_path)
+    s = load_settings(overrides={"classifier": str(path)})
+    an, hist = run_class(lambda i, t: {"yaw": 1.0} if i < 3 and t >= 20 else {}, settings=s, seconds=35)
+    assert an.classifier is not None
+    st, res = states_at(hist, 34)
+    assert st[:3] == [DISTRACTED] * 3 and st.count(FOCUSED) == 9, st
+    assert res.persons[0].engagement["reason"] == "head_turned"  # reasons still come from the rule cues

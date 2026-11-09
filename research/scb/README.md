@@ -40,6 +40,33 @@ done
 
 `extract_pt.py` does the same with a PyTorch `.pt` (Ultralytics) on any machine. The first results came from it, using the stock yolov8n-pose as a stand-in.
 
+## Train the learned classifier
+
+The classifier takes the keypoints and pose cues computed by `hcpose.engagement.classifier.feature_vector()`, the same code the live analyzer runs. Image-context features (position in the frame, crowd size) are deliberately excluded.
+
+`train_classifier.py`:
+- Compares logistic regression, gradient-boosted trees and a small MLP with 5-fold cross-validation by lesson.
+- Fits gradient-boosted trees on all the data.
+- Exports them as JSON, which the Pi evaluates in NumPy (no scikit-learn needed at runtime).
+
+```bash
+# on the Pi: pose caches from the deployed m HEF, at the runtime detection threshold
+.venv/bin/python research/scb/train_classifier.py ~/scb/poses_hef_m.jsonl --det-thr 0.3 \
+    --name scb-m-int8 --out hcpose/engagement/models/scb_classifier.json
+```
+
+`classifier: auto` (the default) picks that file up. `--classifier none` uses the rules.
+
+Stand-in yolov8n-pose, FP32, threshold 0.3, 22,674 students:
+
+| Model | AUC | Within-image AUC | Balanced accuracy |
+|---|---|---|---|
+| Logistic regression | 0.768 | 0.684 | 70.7% |
+| Gradient-boosted trees | 0.831 | 0.750 | 74.7% |
+| MLP 64-32 | 0.832 | 0.739 | 72.2% |
+
+Training takes about a minute on 2 CPU cores. The exported 200-tree model is 0.6 MB and scores 30 students in about 0.7 ms.
+
 ## What the scripts measure
 
 Both scripts first run `scbdata.load()`, which fixes two dataset issues the first Pi run found:
