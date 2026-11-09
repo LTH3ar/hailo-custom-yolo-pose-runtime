@@ -171,7 +171,7 @@ class GstRunner:
             out = os.path.abspath(self.output)
             sinks.append(
                 f"videoconvert name=enc_convert n-threads=2 qos=false ! video/x-raw, format=I420 ! {enc} ! "
-                f"h264parse ! {mux} ! filesink location=\"{out}\" sync=false"
+                f"h264parse ! {mux} ! filesink location=\"{out}\" sync={sync}"
             )
         if not sinks:
             sinks.append(f"fakesink name=sink sync={sync}")
