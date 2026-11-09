@@ -130,7 +130,10 @@ class GstRunner:
             f"{_q('inf_scale_q')} ! videoscale name=inf_scale n-threads=2 qos=false ! "
             f"{_q('inf_convert_q')} ! video/x-raw, pixel-aspect-ratio=1/1 ! videoconvert name=inf_convert n-threads=2 ! "
             f"{_q('inf_net_q')} ! hailonet name=net hef-path=\"{self.cfg.hef}\" batch-size={self.batch_size} force-writable=true ! "
-            f"{_q('inf_filter_q')} ! hailofilter name=pose so-path=\"{self.so_path}\" config-path=\"{self.pp_config}\" "
+            # inf_filter_q is larger than everything the branch can hold in flight
+            # (bypass_q=20): hailonet then never blocks on push, which is when it
+            # discards in-flight frames at EOS (they came out with no detections).
+            f"{_q('inf_filter_q', 30)} ! hailofilter name=pose so-path=\"{self.so_path}\" config-path=\"{self.pp_config}\" "
             f"function-name=filter_letterbox qos=false ! {_q('inf_out_q')} "
         )
         infer = (
