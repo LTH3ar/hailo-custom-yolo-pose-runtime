@@ -99,6 +99,11 @@ class GstRunner:
             missing += [e for e in ("hailotracker",) if not Gst.ElementFactory.find(e)]
         if overlay:
             missing += [e for e in ("hailooverlay",) if not Gst.ElementFactory.find(e)]
+        if self.kind == "rpi" and not Gst.ElementFactory.find("libcamerasrc"):
+            raise RuntimeError(
+                "--input rpi needs the libcamerasrc GStreamer element: sudo apt install gstreamer1.0-libcamera "
+                "(or use --engine python, which uses picamera2)"
+            )
         if missing:
             raise RuntimeError(f"missing GStreamer elements: {missing}. Is hailo-all installed? Run `hcpose doctor`.")
 

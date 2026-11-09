@@ -124,6 +124,8 @@ Run `./hcpose.sh doctor` first; it checks every dependency and prints the fix.
 
 - **`expected 3 outputs per scale`**: the HEF was compiled with NMS or different end nodes. Recompile with the 9 head convs as end nodes.
 - **Camera `not-negotiated`**: the camera can't do the requested mode. Try `--width 640 --height 480`, `--fps 15`, or `--camera-raw`; list modes with `v4l2-ctl -d /dev/video0 --list-formats-ext`.
+- **`--input rpi` says `libcamerasrc` is missing**: `sudo apt install gstreamer1.0-libcamera`, or use `--engine python` (picamera2).
+- **`--input usb` says no USB camera found**: on a Pi 5 the `/dev/video*` nodes are ISP/codec nodes; plug in a camera or pass `--input /dev/videoN`.
 - **`--save-json` with the gst engine says the `hailo` module is missing**: the TAPPAS Python bindings aren't installed. Use `--engine python` meanwhile.
 - **Different results between engines**: they letterbox slightly differently (`hailocropper` vs OpenCV resize), which can move borderline detections; the decoders themselves are identical.
 

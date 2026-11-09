@@ -17,7 +17,7 @@ from .decode import Pose, PoseDecoder
 from .hef import HefInfo, import_hailo_platform
 from .layout import Layout
 from .results import FpsCounter, FrameCallback, FrameResult, Person
-from .sources import classify, default_usb_device
+from .sources import classify, usb_device
 from .tracker import IouTracker
 
 log = logging.getLogger("hcpose")
@@ -86,6 +86,8 @@ def frames(source: str, width: int, height: int, fps: int) -> Iterator[np.ndarra
             from picamera2 import Picamera2
         except ImportError as e:
             raise RuntimeError("python engine needs picamera2 for the Pi camera (sudo apt install python3-picamera2)") from e
+        if not Picamera2.global_camera_info():
+            raise RuntimeError("no Pi camera detected (check the ribbon cable; `rpicam-hello --list-cameras`)")
         cam = Picamera2()
         cam.configure(cam.create_video_configuration(main={"size": (width, height), "format": "RGB888"}))
         cam.start()
@@ -96,7 +98,7 @@ def frames(source: str, width: int, height: int, fps: int) -> Iterator[np.ndarra
             cam.stop()
         return
     if kind == "usb":
-        dev = default_usb_device() if source == "usb" else source
+        dev = usb_device(source)
         cap = cv2.VideoCapture(dev, cv2.CAP_V4L2)
         cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)

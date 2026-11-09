@@ -4,6 +4,7 @@ from __future__ import annotations
 import glob
 import os
 from pathlib import Path
+from typing import Optional
 
 IMAGE_EXT = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
@@ -24,8 +25,8 @@ def classify(src: str) -> str:
     return "file"
 
 
-def default_usb_device() -> str:
-    """First /dev/video* that is a USB camera (Pi 5 also exposes many ISP nodes)."""
+def default_usb_device() -> Optional[str]:
+    """First /dev/video* that is a USB camera (Pi 5 also exposes many ISP nodes), or None."""
     for dev in sorted(glob.glob("/dev/video*"), key=lambda d: int(d[10:]) if d[10:].isdigit() else 999):
         name = Path(f"/sys/class/video4linux/{os.path.basename(dev)}/device")
         try:
@@ -33,7 +34,22 @@ def default_usb_device() -> str:
                 return dev
         except OSError:
             continue
-    return "/dev/video0"
+    return None
+
+
+def usb_device(src: str) -> str:
+    """Resolve `--input usb` / `/dev/videoN` to a device path, with a clear error if there is none."""
+    if src != "usb":
+        if not os.path.exists(src):
+            raise FileNotFoundError(f"{src} does not exist (list cameras with: v4l2-ctl --list-devices)")
+        return src
+    dev = default_usb_device()
+    if dev is None:
+        raise FileNotFoundError(
+            "no USB camera found (the /dev/video* nodes on a Pi 5 are ISP/codec nodes, not cameras). "
+            "Plug one in, or pass --input /dev/videoN explicitly."
+        )
+    return dev
 
 
 def gst_source(src: str, width: int, height: int, fps: int, camera_raw: bool = False) -> str:
@@ -41,7 +57,7 @@ def gst_source(src: str, width: int, height: int, fps: int, camera_raw: bool = F
     if kind == "rpi":
         return f"libcamerasrc name=src ! video/x-raw, width={width}, height={height}, framerate={fps}/1 ! "
     if kind == "usb":
-        dev = default_usb_device() if src == "usb" else src
+        dev = usb_device(src)
         if camera_raw:
             return f"v4l2src name=src device={dev} ! video/x-raw, framerate={fps}/1 ! "
         return (

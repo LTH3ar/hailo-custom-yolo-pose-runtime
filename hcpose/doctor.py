@@ -105,7 +105,9 @@ def doctor() -> int:
     vids = sorted(glob.glob("/dev/video*"))
     from .sources import default_usb_device
 
-    line(True if vids else None, "video devices", f"{len(vids)} nodes, USB camera guess: {default_usb_device()}" if vids else "none")
+    usb = default_usb_device()
+    line(True if usb else None, "video devices",
+         f"{len(vids)} nodes, USB camera: {usb or 'none found (ISP/codec nodes only)'}" if vids else "none")
 
     print()
     if problems:
