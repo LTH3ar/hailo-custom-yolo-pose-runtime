@@ -102,5 +102,5 @@ class InferVStreams(_Ctx):
 
     def infer(self, inputs):
         (x,) = inputs.values()
-        assert x.dtype == np.uint8 and x.shape == (1, 640, 640, 3), (x.dtype, x.shape)
-        return {k: v[None] for k, v in self.out.items()}
+        assert x.dtype == np.uint8 and x.shape[1:] == (640, 640, 3), (x.dtype, x.shape)
+        return {k: np.repeat(v[None], x.shape[0], axis=0) for k, v in self.out.items()}
