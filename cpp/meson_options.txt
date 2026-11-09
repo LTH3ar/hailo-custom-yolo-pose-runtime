@@ -1,0 +1,3 @@
+option('tappas_include', type : 'string', value : '', description : 'Path to TAPPAS core/hailo/general when pkg-config is unavailable')
+option('hailort_include', type : 'string', value : '', description : 'Extra include dir that contains hailo/hailo_gst_tensor_metadata.hpp')
+option('rapidjson_include', type : 'string', value : '', description : 'Path containing rapidjson/document.h')

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hcpose"
+version = "0.1.0"
+description = "Run custom YOLOv8-pose HEF models on Raspberry Pi 5 + Hailo-8 (GStreamer or HailoRT engine)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "AGPL-3.0-or-later" }
+authors = [{ name = "LTH3ar" }]
+# hailo_platform, gi (GStreamer), hailo (TAPPAS bindings), numpy and cv2 come
+# from the system (apt: hailo-all, python3-opencv) through --system-site-packages.
+dependencies = ["pyyaml", "numpy"]
+
+[project.optional-dependencies]
+eval = ["pycocotools", "tqdm"]
+test = ["pytest"]
+
+[project.scripts]
+hcpose = "hcpose.cli:main"
+
+[tool.setuptools]
+packages = ["hcpose"]
+
+[tool.setuptools.package-data]
+hcpose = ["lib/*.so"]

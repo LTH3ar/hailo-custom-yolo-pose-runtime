@@ -1,0 +1,12 @@
+.venv/
+build/
+hcpose/lib/*.so
+*.egg-info/
+__pycache__/
+.pytest_cache/
+models/*.hef
+models/*.har
+models/*.onnx
+*.mp4
+*.mkv
+*.jsonl
