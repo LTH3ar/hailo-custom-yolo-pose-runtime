@@ -10,3 +10,4 @@ models/*.onnx
 *.mp4
 *.mkv
 *.jsonl
+hailort*.log
