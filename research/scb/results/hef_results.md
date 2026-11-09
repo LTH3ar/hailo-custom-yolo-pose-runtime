@@ -683,3 +683,36 @@ label -> matched to a pose detection (front view):
   write           3068/7333   (42%)
 ```
 
+
+---
+
+# Classifier families on the m HEF (`train_classifier.py`, `0766a8c`)
+
+`.venv/bin/python research/scb/train_classifier.py ~/scb/poses_hef_m.jsonl --det-thr 0.3 --save-cv ~/scb/cv_m.npz --save-models ~/scb/models_m`,
+with no `--out`, so the bundled `hcpose/engagement/models/scb_classifier.json` is unchanged (checksum verified before and after). Features exclude the image context (position in the frame, crowd size).
+
+```
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+22361 students (1 pose cache(s)), 179 lesson groups, distracted 22.4%
+```
+
+Printed comparison table:
+
+```
+model                       AUC  within-img AUC  bal. acc  (5-fold, grouped by lesson)
+logistic regression       0.792           0.721    72.8%
+gradient-boosted trees    0.861           0.811    77.0%
+   per behavior, share predicted distracted: read 18%, write 9%, hand-raising 23%, TurnHead 73%, BowHead 25%, discuss 74%
+MLP (64-32)               0.867           0.814    76.1%
+```
+
+| Model | AUC | Within-image AUC | Balanced acc |
+|---|---|---|---|
+| Logistic regression | 0.792 | 0.721 | 72.8% |
+| Gradient-boosted trees (bundled) | 0.861 | 0.811 | 77.0% |
+| MLP (64-32) | 0.867 | 0.814 | 76.1% |
+
+5-fold CV grouped by lesson. For the MLP, balanced accuracy is taken at the prevalence-matched threshold, since it has no class weights; the other two use 0.5.
+The numbers are identical to the run that produced the bundled model (deterministic, `random_state=0`). The MLP edges out the trees on AUC by 0.006 and on within-image AUC by 0.003, a small difference (variance across folds wasn't measured). The trees are bundled because they run in NumPy without sklearn.
+
+The saved files stay on the Pi and are not committed: `~/scb/cv_m.npz` (out-of-fold predictions for all three families, labels, lesson groups, image ids, mixed-image mask, X, feature names), `~/scb/cv_m.json` (metrics), and `~/scb/models_m/{logistic,gradient_boosted,mlp}.pkl` (all fit on every student, sklearn 1.9.1). AUCs recomputed from `cv_m.npz` match the table.
