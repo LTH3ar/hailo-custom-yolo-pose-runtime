@@ -76,7 +76,9 @@ The deployed INT8 HEFs on the Hailo-8, before the fixes above, are in [`results/
 
 **Data after merging:**
 - 8,116 unique images, from 10,138.
-- 2,891 students had both a focused and a distracted label and were dropped. Most of them were "BowHead" in one copy and "read/write" in another, so even the SCB annotators couldn't separate a bowed head from reading or writing.
+- 2,891 students had both a focused and a distracted label and were dropped:
+  - 2,078 (72%) were "BowHead" in one copy and "read" or "write" in another, so even the SCB annotators couldn't separate a bowed head from reading or writing.
+  - 674 were "TurnHead" and "hand-raising" at the same time.
 
 **Classifier vs rules (front view):**
 
