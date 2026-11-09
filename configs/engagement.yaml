@@ -33,6 +33,15 @@ off_seconds: 1.5             # ... for this long -> focused again
 unknown_after: 2.0           # no usable keypoints this long -> unknown (not counted)
 window_seconds: 5.0          # rolling average of the class percentage on screen
 
+# Whole-class estimate. The camera misses some students (mostly far rows), and
+# missed students are not a random sample, so the class percentage uses:
+#  - seat memory: a student seen in the last presence_seconds counts with their last state
+#  - zones: near/middle/far rows weighted by their number of seats, not by detections
+#  - a 95% range, narrower when most of the class is counted
+presence_seconds: 15.0
+zones: 3                     # 1 = no zone weighting
+class_size: null             # real number of students if known (--class-size); unseen ones count as far row
+
 # Cue weights (0 disables a cue). Cues combine like a noisy-OR: a cue whose
 # weight is below on_threshold can't flag a student alone, only with another cue.
 weights:

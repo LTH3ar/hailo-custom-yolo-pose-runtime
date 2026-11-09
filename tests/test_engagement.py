@@ -349,3 +349,59 @@ def test_analyzer_with_classifier(tmp_path):
     st, res = states_at(hist, 34)
     assert st[:3] == [DISTRACTED] * 3 and st.count(FOCUSED) == 9, st
     assert res.persons[0].engagement["reason"] == "head_turned"  # reasons still come from the rule cues
+
+
+# ---------------------------------------------------------------- whole-class estimate
+def _biased_visibility_run(**overrides):
+    """12 students in 3 rows; the back row is detected in 1 of 4 frames, the middle in 3 of 5.
+    True distracted share: back 2/4, middle 1/4, front 0/4 -> 3/12 = 25%."""
+    distracted = {8, 9, 4}  # seats_grid: 0-3 front, 4-7 middle, 8-11 back
+
+    def script(i, t):
+        k = int(round(t * 10))
+        row = i // 4
+        if row == 2 and (k + i) % 4:
+            return None
+        if row == 1 and (k + i) % 5 >= 3:
+            return None
+        return {"yaw": 1.0} if i in distracted and t >= 10 else {}
+
+    s = load_settings(overrides={"classifier": "none", **overrides})
+    return run_class(script, settings=s, seconds=70)
+
+
+def test_class_estimate_corrects_detection_bias():
+    an, hist = _biased_visibility_run()
+    c = hist[-1][1].extra["class"]
+    raw = c["pct_distracted_smoothed"]
+    est = c["class_pct_distracted"]
+    assert raw < 20, raw  # per-frame share over-represents the always-visible, focused front row
+    assert abs(est - 25.0) <= 3.0, (est, c["zones"])
+    lo, hi = c["class_ci"]
+    assert lo <= 25.0 <= hi and hi - lo < 40
+    assert c["class_size"] == 12 and c["class_counted"] == 12
+    assert [z["zone"] for z in c["zones"]] == ["far", "middle", "near"]
+    assert [z["seats"] for z in c["zones"]] == [4, 4, 4]
+
+
+def test_class_estimate_without_zones_is_plain_memory():
+    an, hist = _biased_visibility_run(zones=1)
+    c = hist[-1][1].extra["class"]
+    assert abs(c["class_pct_distracted"] - 25.0) <= 3.0  # memory alone fixes this case (all seats get counted)
+
+
+def test_class_size_setting_and_banner():
+    an, hist = _biased_visibility_run(class_size=30)
+    c = hist[-1][1].extra["class"]
+    assert c["class_size"] == 30 and c["class_size_from"] == "setting"
+    txt = an.class_text()
+    assert "of 30 students" in txt and "%" in txt and "(" in txt, txt
+    an2, hist2 = _biased_visibility_run()
+    assert "of ~12 students" in an2.class_text()
+
+
+def test_unseen_students_weight_the_far_zone():
+    an, hist = _biased_visibility_run(class_size=16)  # 4 students never detected
+    c = hist[-1][1].extra["class"]
+    assert c["zones"][0]["seats"] == 8
+    assert abs(c["class_pct_distracted"] - 31.25) <= 3.0, c  # (8*0.5 + 4*0.25 + 4*0) / 16

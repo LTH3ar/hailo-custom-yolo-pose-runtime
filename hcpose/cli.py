@@ -64,6 +64,8 @@ def build_parser() -> argparse.ArgumentParser:
                     help="per-classroom calibration file: loaded if it exists, saved when the run ends")
     eg.add_argument("--recalibrate", action="store_true", default=None,
                     help="ignore the existing calibration file and learn it again (camera moved)")
+    eg.add_argument("--class-size", type=int, metavar="N",
+                    help="real number of students in the room (improves the class estimate and its range)")
     eg.add_argument("--classifier", metavar="auto|none|JSON",
                     help="per-frame decision: bundled learned model (auto, default), rules (none), or a model file")
     r.add_argument("-v", "--verbose", action="store_true")
@@ -79,6 +81,7 @@ def build_parser() -> argparse.ArgumentParser:
     a.add_argument("--calibration", metavar="JSON", help="calibration file to load (if it exists) and save")
     a.add_argument("--recalibrate", action="store_true", default=None)
     a.add_argument("--classifier", metavar="auto|none|JSON")
+    a.add_argument("--class-size", type=int, metavar="N")
     a.add_argument("--output", "-o", help="write the skeletons with engagement labels to this JSONL")
     a.add_argument("--every", type=float, default=10.0, help="timeline step in seconds (default 10)")
     a.add_argument("--fps", type=float, help="use frame index / FPS as time (for files saved before timestamps "
@@ -154,7 +157,8 @@ def _printer(result: FrameResult, frame=None) -> None:
 
 def _engagement(args, keypoint_names):
     wanted = any(getattr(args, k, None) is not None
-                 for k in ("engagement", "display", "camera_position", "calibration", "recalibrate", "classifier"))
+                 for k in ("engagement", "display", "camera_position", "calibration", "recalibrate", "classifier",
+                           "class_size"))
     if not wanted:
         return None
     from .engagement import EngagementAnalyzer, load_settings
@@ -165,6 +169,7 @@ def _engagement(args, keypoint_names):
         "calibration": args.calibration,
         "recalibrate": args.recalibrate,
         "classifier": args.classifier,
+        "class_size": args.class_size,
     })
     an = EngagementAnalyzer(settings, keypoint_names)
     loaded = sum(1 for s in an.seats if s.calibrated)
@@ -197,6 +202,7 @@ def cmd_analyze(args) -> int:
     settings = load_settings(args.engagement, {
         "camera_position": args.camera_position, "calibration": args.calibration, "recalibrate": args.recalibrate,
         "classifier": args.classifier,
+        "class_size": args.class_size,
     })
     an = None
     out = open(args.output, "w") if args.output else None
@@ -221,8 +227,8 @@ def cmd_analyze(args) -> int:
             if out:
                 out.write(json.dumps({**d, "persons": [p.to_dict() for p in persons], **res.extra}) + "\n")
             next_t = res.timestamp if next_t is None else next_t
-            if c["pct_distracted"] is not None:
-                bucket.append((c["pct_distracted"], c["counted"]))
+            if c["class_pct_distracted"] is not None:
+                bucket.append((c["class_pct_distracted"], c["class_counted"], c["class_size"], c["pct_distracted"]))
             if res.timestamp >= next_t + args.every:
                 timeline.append((next_t, bucket))
                 next_t, bucket = res.timestamp, []
@@ -230,12 +236,14 @@ def cmd_analyze(args) -> int:
         timeline.append((next_t, bucket))
     if out:
         out.close()
-    print(f"{'time':>8}  {'distracted':>10}  {'students':>8}")
+    print(f"{'time':>8}  {'class est.':>10}  {'counted':>7}  {'of':>4}  {'visible-only':>12}")
     for t0, b in timeline:
         if b:
-            print(f"{t0:8.1f}  {np.mean([x for x, _ in b]):9.1f}%  {np.mean([n for _, n in b]):8.1f}")
+            raw = [r for *_, r in b if r is not None]
+            print(f"{t0:8.1f}  {np.mean([x[0] for x in b]):9.1f}%  {np.mean([x[1] for x in b]):7.1f}  "
+                  f"{np.mean([x[2] for x in b]):4.0f}  {(np.mean(raw) if raw else float('nan')):11.1f}%")
         else:
-            print(f"{t0:8.1f}  {'-':>10}  {'0':>8}")
+            print(f"{t0:8.1f}  {'-':>10}")
     _finish_engagement(an)
     if args.output:
         print(f"[hcpose] labelled skeletons written to {args.output}")

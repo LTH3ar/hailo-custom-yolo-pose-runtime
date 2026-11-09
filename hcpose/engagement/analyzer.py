@@ -65,6 +65,8 @@ class Seat:
     reason: Optional[str] = None
     distracted_time: float = 0.0
     counted_time: float = 0.0
+    last_state: Optional[str] = None  # last focused/distracted decision (seat memory)
+    last_state_t: float = -1e9
 
     @property
     def calibrated(self) -> bool:
@@ -80,6 +82,7 @@ class EngagementAnalyzer:
         self._pct_hist: Deque[Tuple[float, float]] = deque()
         self._prior_warned = False
         self._room_yaw: Optional[float] = None
+        self._est_hist: Deque[Tuple[float, float]] = deque()
         self.classifier = resolve_classifier(settings.classifier)
         if self.classifier is not None:
             m = self.classifier.meta
@@ -276,6 +279,9 @@ class EngagementAnalyzer:
                 "reason": seat.reason if seat.state == DISTRACTED else None,
                 "calibrated": seat.calibrated,
             }
+        for seat in seats:
+            if seat.state in (FOCUSED, DISTRACTED):
+                seat.last_state, seat.last_state_t = seat.state, t
         # seats not seen this frame time out to unknown
         seen = {id(s) for s in seats}
         for seat in self.seats:
@@ -297,6 +303,12 @@ class EngagementAnalyzer:
             self._pct_hist.popleft()
         smooth = float(np.mean([v for _, v in self._pct_hist])) if self._pct_hist else None
         calibrated = sum(1 for s in self.seats if s.calibrated)
+        cls = self._class_estimate(t)
+        if cls["pct"] is not None:
+            self._est_hist.append((t, cls["pct"]))
+        while self._est_hist and t - self._est_hist[0][0] > self.s.window_seconds:
+            self._est_hist.popleft()
+        est_smooth = float(np.mean([v for _, v in self._est_hist])) if self._est_hist else None
         self.last_class = {
             "visible": len(persons),
             "counted": counted,
@@ -307,6 +319,13 @@ class EngagementAnalyzer:
             "pct_distracted_smoothed": None if smooth is None else round(smooth, 1),
             "seats_calibrated": calibrated,
             "calibrating": any(not seat.calibrated for seat in seats),
+            # whole-class estimate: seat memory + zone weighting + uncertainty
+            "class_pct_distracted": None if est_smooth is None else round(est_smooth, 1),
+            "class_ci": cls["ci"],
+            "class_counted": cls["counted"],
+            "class_size": cls["size"],
+            "class_size_from": cls["size_from"],
+            "zones": cls["zones"],
         }
         result.extra["class"] = self.last_class
         return self.last_class
@@ -315,12 +334,72 @@ class EngagementAnalyzer:
     def class_text(self) -> str:
         """Short one-line banner for the screen (fits a 640 px wide frame)."""
         c = self.last_class
-        if not c or c.get("pct_distracted_smoothed") is None:
+        if not c or c.get("class_pct_distracted") is None:
             return "Engagement: waiting for students"
-        txt = f"{c['pct_distracted_smoothed']:.0f}% distracted | {c['counted']}/{c['visible']} students"
+        lo, hi = c["class_ci"] or (None, None)
+        rng = f" ({lo:.0f}-{hi:.0f}%)" if lo is not None and hi - lo >= 1 else ""
+        approx = "" if c["class_size_from"] == "setting" else "~"
+        txt = f"{c['class_pct_distracted']:.0f}% distracted{rng} | {c['class_counted']} of {approx}{c['class_size']} students"
         if c.get("calibrating"):
             txt += " | calibrating"
         return txt
+
+    # ------------------------------------------------------------------ whole-class estimate
+    def _established(self, seat: Seat) -> bool:
+        """A real seat, not a passer-by: seen repeatedly over a few seconds."""
+        return seat.calibrated or (seat.hits >= 10 and seat.last_seen - seat.first_seen >= 3.0)
+
+    def _class_estimate(self, t: float) -> dict:
+        """Distracted share of the *whole class*, correcting for who the camera misses.
+
+        1. Seat memory: every established seat whose student was decided within the last
+           presence_seconds counts with that last decision, not only students detected in
+           this exact frame.
+        2. Zones: seats are split into near / middle / far by apparent size. Each zone's
+           distracted share is weighted by how many seats the zone has, not by how many
+           students happen to be detected there, because far rows are detected less often.
+           With class_size set, students never found at all are added to the far zone.
+        3. Uncertainty: Wilson 95% interval on the counted students, narrowed by the
+           finite-population correction when they are a large part of the class.
+        """
+        S = self.s
+        seats = [x for x in self.seats if self._established(x)]
+        recent = [x for x in seats if x.last_state is not None and t - x.last_state_t <= S.presence_seconds]
+        size_from = "setting" if S.class_size else "seats"
+        N = max(S.class_size or 0, len(seats)) if S.class_size else len(seats)
+        out = {"pct": None, "ci": None, "counted": len(recent), "size": N, "size_from": size_from, "zones": []}
+        if not recent:
+            return out
+        k = max(1, min(S.zones, len(seats) // 3))
+        heights = np.array([x.h for x in seats])
+        edges = np.quantile(heights, np.linspace(0, 1, k + 1)[1:-1]) if k > 1 else np.array([])
+        zone_of = lambda seat: int(np.searchsorted(edges, seat.h, side="right"))  # noqa: E731  0 = far
+        names = {1: ["all"], 2: ["far", "near"], 3: ["far", "middle", "near"]}.get(k, [f"z{i}" for i in range(k)])
+        num = den = 0.0
+        # students the camera has never found are most likely in the far rows
+        unseen = max(0, N - len(seats))
+        for z in range(k):
+            Nz = sum(1 for x in seats if zone_of(x) == z) + (unseen if z == 0 else 0)
+            rz = [x for x in recent if zone_of(x) == z]
+            dz = sum(1 for x in rz if x.last_state == DISTRACTED)
+            out["zones"].append({"zone": names[z], "seats": Nz, "counted": len(rz), "distracted": dz})
+            if rz:
+                num += Nz * dz / len(rz)
+                den += Nz
+        p = num / den if den else 0.0
+        n = len(recent)
+        z95 = 1.96
+        center = (p + z95 * z95 / (2 * n)) / (1 + z95 * z95 / n)
+        half = z95 * math.sqrt(p * (1 - p) / n + z95 * z95 / (4 * n * n)) / (1 + z95 * z95 / n)
+        if N > n:
+            half *= math.sqrt((N - n) / max(N - 1, 1))
+        elif N:
+            half = 0.0
+        lo, hi = max(0.0, center - half), min(1.0, center + half)
+        if half == 0.0:
+            lo = hi = p
+        out.update(pct=100 * p, ci=[round(100 * lo, 1), round(100 * hi, 1)])
+        return out
 
     # ------------------------------------------------------------------ calibration file
     def save_calibration(self, path: str) -> int:

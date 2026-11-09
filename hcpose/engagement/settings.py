@@ -35,6 +35,11 @@ class EngagementSettings:
     unknown_after: float = 2.0  # seconds without usable keypoints -> unknown (not counted)
     window_seconds: float = 5.0  # rolling window for the class percentage on screen
 
+    # whole-class estimate (see analyzer._class_estimate)
+    presence_seconds: float = 15.0  # a seat counts with its last decision for this long after it was seen
+    zones: int = 3  # near / middle / far rows, each weighted by its number of seats (1 = no weighting)
+    class_size: Optional[int] = None  # real number of students, if known; else the number of seats found
+
     # rule weights (0 disables a cue). Cues combine as a noisy-OR, so a cue whose
     # weight is below on_threshold can't make a student "distracted" on its own,
     # only together with another cue.
