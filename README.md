@@ -114,7 +114,7 @@ Turns each student's skeleton into **focused**, **distracted** or **unknown**, a
 
 1. **Seats instead of track ids.** Seated students barely move, so each detection is matched to a seat by position. This is robust to tracker id switches and to students disappearing behind others for a moment.
 2. **Cues from the pose**, normalized by the student's own size:
-   - head turned away from that seat's attentive direction
+   - head turned away from that seat's attentive direction, measured two ways: the nose's position between the ears (yaw), and the nose's offset from the shoulder centre. The second keeps working in profile, when the far ear disappears and the yaw reads almost straight ahead (on a staged session this raised recall from 11% to 45-56% with no new false alarms; `research/tune/sweep_offset.md`).
    - face hidden while the shoulders are visible (turned around)
    - head down
    - torso rotated

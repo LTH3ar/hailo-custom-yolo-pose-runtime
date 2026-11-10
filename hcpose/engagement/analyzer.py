@@ -103,6 +103,7 @@ class EngagementAnalyzer:
         self._pct_hist: Deque[Tuple[float, float]] = deque()
         self._prior_warned = False
         self._room_yaw: Optional[float] = None
+        self._room_offset: Optional[float] = None
         self._est_hist: Deque[Tuple[float, float]] = deque()
         self.classifier = resolve_classifier(settings.classifier)
         if self.classifier is not None:
@@ -209,8 +210,16 @@ class EngagementAnalyzer:
         else:
             yaw = prior
         pick = lambda a: getattr(own, a) if own is not None and getattr(own, a) is not None else getattr(class_now, a)  # noqa: E731
+        # the head-offset baseline gets the same protection as yaw: a seat that learned while
+        # turned mustn't keep "turned" as its attentive pose (the room's offset is near 0,
+        # since an attentive head points the same way as the shoulders)
+        offset = pick("head_offset")
+        if offset is not None:
+            m = self.s.seat_head_offset_max
+            room_off = self._room_offset if self._room_offset is not None else 0.0
+            offset = room_off + float(np.clip(offset - room_off, -m, m))
         return Baseline(yaw=yaw, head_height=pick("head_height"), torso_ratio=pick("torso_ratio"),
-                        head_offset=pick("head_offset"))
+                        head_offset=offset)
 
     def _learn(self, seat: Seat, f: Features, t: float, dt: float) -> None:
         if seat.calibrated or not f.valid:
@@ -280,6 +289,9 @@ class EngagementAnalyzer:
         for f, seat in zip(feats, seats):
             self._learn(seat, f, t, dt)
         self._room_yaw = self._compute_room_yaw()
+        offs = [b.head_offset for b in (s.baseline if s.calibrated else s.partial for s in self.seats)
+                if b is not None and b.head_offset is not None]
+        self._room_offset = float(np.median(offs)) if len(offs) >= 3 else None
 
         bases = [self._baseline_for(seat, class_now) for seat in seats]
         offset = (self.s.head_offset_start, self.s.head_offset_full) if self.s.head_offset_cue else None

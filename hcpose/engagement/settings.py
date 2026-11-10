@@ -61,10 +61,10 @@ class EngagementSettings:
     head_turn_full: float = 0.85
     # second head-turn measure: the nose's offset from the shoulder centre (in shoulder-width
     # units) against the seat's own attentive offset. It keeps working in profile, when the far
-    # ear is lost and the ear-based yaw underestimates the turn. Off until validated.
-    head_offset_cue: bool = False
-    head_offset_start: float = 0.15
-    head_offset_full: float = 0.35
+    # ear is lost and the ear-based yaw underestimates the turn (research/tune/sweep_offset.md).
+    head_offset_cue: bool = True
+    head_offset_start: float = 0.2
+    head_offset_full: float = 0.4
 
     # Per-frame decision: "auto" / "none" (= the rules, the default),
     # "trees" | "logistic" | "mlp" (bundled SCB-trained models, opt-in),
@@ -74,6 +74,7 @@ class EngagementSettings:
     # seat-anchored identity
     seat_match_radius: float = 0.6  # max center distance, in box widths, to reuse a seat
     seat_yaw_max_offset: float = 0.3  # how far a seat's attentive yaw may differ from the room's
+    seat_head_offset_max: float = 0.15  # same for the head offset (nose vs shoulders)
 
     def validate(self) -> "EngagementSettings":
         if self.display not in DISPLAY_MODES:

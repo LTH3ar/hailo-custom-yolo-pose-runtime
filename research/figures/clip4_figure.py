@@ -70,8 +70,9 @@ def draw(img, p):
     lines = [who, f"ear yaw {f.yaw:+.2f}" if f.yaw is not None else "ear yaw: n/a",
              f"nose offset {f.head_offset:+.2f}" if f.head_offset is not None else "nose offset: n/a"]
     x, y = int(p["box"][0]), int(p["box"][1]) - 58
+    w = max(cv2.getTextSize(s, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 1)[0][0] for s in lines)
+    cv2.rectangle(img, (x - 4, y - 17), (x + w + 6, y + 20 * (len(lines) - 1) + 7), (30, 30, 30), -1)
     for j, s in enumerate(lines):
-        cv2.putText(img, s, (x, y + 20 * j), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 4, cv2.LINE_AA)
         cv2.putText(img, s, (x, y + 20 * j), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
 
 
