@@ -237,3 +237,49 @@ The same clip through `best.pt` (n, FP32) and `hcpose analyze` on a PC, with `po
 - An earlier Pi run with m untiled gave 10.5% for trees and 11.0% for the rules.
 
 So the learned classifiers transfer to this room only when the poses are good: the m model, or n with tiles. With n's full-frame poses they over-call heavily. Retraining on the n model's poses with head-height cues removed didn't fix it in a quick test, so the cause is pose quality, not the SCB label definitions. The rules are less accurate on SCB but much more stable across models. This is single-clip evidence, so it calls for a small labelled set from the target classrooms before choosing the classifier for deployment.
+
+## Check on a dense self-study room with a low camera
+
+A 6 min study-hall clip (about 50 students, all reading or writing, camera at desk height on the teacher's desk; not in the repo), with `best.pt` (n, FP32) at 10 FPS, `pose_dedup`, `--camera-position center`:
+
+| | No tiles | Tiles |
+|---|---|---|
+| Students per frame | 9.7 | 23.7 |
+| Class size inferred from seats, before the seat fix | 28 | 78 |
+| Class size inferred from seats, after the seat fix | 19 | 52 |
+| Class % after 2:30, trees | 24% | 37% |
+| Class % after 2:30, rules | 37% | 44% |
+| Class % after 2:30, rules, `face_hidden` 0.4 | – | 23% |
+| Class % after 2:30, rules, `face_hidden` 0 | – | 16% |
+
+**What this shows:**
+- **Tiling** more than doubles the students found in a dense room.
+- **Seat fix.** Before it, every box that persisted about 1.5 s became a permanent seat, so the inferred class size grew to 78. Now a seat counts only if seen in the last 60 s and, before calibration, in at least 15% of frames. That gives 52, close to the real count.
+- **Low camera.** Most "distracted" labels here (two thirds, rules) come from `face_hidden`. A head bowed over the desk toward a low camera hides the face, so it looks like turning away. Shoulder left/right order doesn't separate the two: the model guesses a back view for most bowed heads. With a camera high on the wall (the ALTIMA clip) faces stay visible while writing, and the weight barely matters there (rules 5.4% → 4.2% at 0.4).
+- **Default kept.** It stays at 0.9 for the intended high mounting, and the setting is documented for low cameras.
+- **Calibration.** Only 20 of 52 seats had finished calibrating after 6 min. Far students are detected intermittently and need 120 s of usable observation, so a session needs to be longer than a few minutes before per-seat baselines apply to most of the room.
+
+## Check on an attentive lecture with a high front camera
+
+A 3 min 18 s clip (about 35 middle-school students, camera high at the front like the ALTIMA clip, faces visible; nearly all students sit upright facing the front or read the book on the desk; not in the repo). `best.pt` (n, FP32) at 12.5 FPS, `pose_dedup`, `--camera-position center`. Class distracted %, mean after 2:30:
+
+| | No tiles | Tiles |
+|---|---|---|
+| Students per frame | 14.5 | 19.3 |
+| Class size inferred from seats | 19 | 28 |
+| Trees | 60% | 62% |
+| Logistic | 89% | 89% |
+| MLP | 61% | 66% |
+| Rules | 0% | 1% |
+
+The learned classifiers call students who sit upright and look forward *distracted*, and students reading with the head down *focused* (median head height above the shoulders 0.45 vs 0.32 at 2:00). This is a gap in SCB's labels, not pose quality:
+- SCB's focused classes are read, write and hand-raising, all head-down or hand-up poses.
+- Its distracted classes include TurnHead and discuss, both head-up.
+- SCB has no "listening / looking at the board" label, which is the most common attentive state in a lecture.
+
+So a model trained on SCB learns "head up = distracted". The rules compare each student with their own calibrated pose and with the room, and they get this clip right. They also gave 5–8% on the exam-hall clip.
+
+**Conclusion for deployment:**
+- The SCB-trained classifiers rank SCB actions well (within-image AUC 0.84) but don't measure attention in a lecture.
+- The rules are the better default for live use. The learned models remain useful as an SCB benchmark and as a comparison in the thesis.
+- Making them usable in lectures would need training labels that include attentive, head-up students from the target classrooms.

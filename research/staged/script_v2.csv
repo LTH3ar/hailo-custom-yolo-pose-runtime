@@ -1,0 +1,13 @@
+start,end,seats,behaviour,label
+03:00,03:45,S2 S3,talk to each other,distracted
+03:45,04:45,S7,write notes,focused
+04:45,05:30,S5,phone under desk,distracted
+05:30,06:15,S9,turn around,distracted
+06:15,07:00,S1,head on desk,distracted
+07:00,08:00,S4,read head down,focused
+08:00,08:45,S8,look at side wall,distracted
+08:45,09:15,S6,hand raised,focused
+09:15,10:00,S3,phone on desk,distracted
+10:00,10:45,S6 S7,talk to each other,distracted
+10:45,11:45,all,write notes,focused
+11:45,12:45,S1 S2 S4 S5 S6 S9,mass distraction,distracted

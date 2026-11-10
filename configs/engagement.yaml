@@ -40,6 +40,8 @@ window_seconds: 5.0          # rolling average of the class percentage on screen
 #  - a 95% range around the shown number (sampling only), narrower when most of
 #    the class is counted and class_size is set
 presence_seconds: 15.0
+seat_forget_seconds: 60.0    # seats not seen for this long drop out of the class size
+min_presence: 0.15           # uncalibrated seats must be detected in this share of frames to count
 zones: 3                     # 1 = no zone weighting
 class_size: null             # real number of students if known (--class-size); unseen ones count as far row
 
@@ -48,19 +50,23 @@ class_size: null             # real number of students if known (--class-size); 
 weights:
   head_turned: 1.0           # head turned away from this seat's attentive direction
   face_hidden: 0.9           # shoulders visible but no face: turned around
+                             # (camera at desk height instead of high on the wall: a head bowed
+                             #  over the desk also hides the face; use 0.3 or less there)
   head_down: 0.7             # lower: writing notes looks the same
   body_turned: 0.5           # torso rotated (e.g. toward a neighbour)
   hand_at_face: 0.4          # head resting on a hand / phone at the face
 hand_raised_is_focused: true # a raised hand overrides everything
 
 # Per-frame decision (switch freely; all three learned models use the same features):
-#   auto      = trees (default); falls back to the rules if no model is bundled
+#   auto      = the rules (default)
 #   trees     = gradient-boosted trees   (hcpose/engagement/models/scb_trees.json)
 #   logistic  = logistic regression      (models/scb_logistic.json)
 #   mlp       = small neural net 64-32   (models/scb_mlp.json)
 #   none      = the rule weights above
 #   path      = your own classifier JSON
 # All learned models were trained on SCB classroom images (research/scb/train_classifier.py).
+# They are opt-in: on real lecture clips they call students who sit upright and look at the
+# board "distracted", because SCB has no "listening" label (research/scb/README.md).
 # The rule cues still provide the "reason" shown for a distracted student.
 classifier: auto
 

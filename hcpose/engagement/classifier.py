@@ -290,17 +290,14 @@ CHOICES = ("auto", "trees", "logistic", "mlp", "none")
 
 def resolve(setting: Optional[str]) -> Optional[_Model]:
     """settings.classifier:
-    auto      the bundled trees if present, else the rules
+    auto      the rules (the default). The SCB-trained models rank SCB actions well but call
+              head-up listening "distracted" in real lectures (research/scb/README.md), so they
+              are opt-in.
     trees | logistic | mlp   the bundled model of that kind (error if not exported yet)
     none      the rules
     a path    any hcpose classifier JSON
     """
-    if setting in (None, "none", "rules"):
-        return None
-    if setting == "auto":
-        for p in (BUNDLED["trees"], LEGACY_TREES):
-            if p.is_file():
-                return load_model(str(p))
+    if setting in (None, "none", "rules", "auto"):
         return None
     if setting in BUNDLED:
         p = BUNDLED[setting]
