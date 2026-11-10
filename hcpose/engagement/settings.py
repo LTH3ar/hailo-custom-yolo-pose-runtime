@@ -56,8 +56,8 @@ class EngagementSettings:
     )
     hand_raised_is_focused: bool = True  # a raised hand overrides the other cues
 
-    # Per-frame decision: "auto" (= the bundled trees, or the rules if none are bundled),
-    # "trees" | "logistic" | "mlp" (bundled learned models), "none" (rules only),
+    # Per-frame decision: "auto" / "none" (= the rules, the default),
+    # "trees" | "logistic" | "mlp" (bundled SCB-trained models, opt-in),
     # or a path to a classifier JSON.
     classifier: Optional[str] = "auto"
 

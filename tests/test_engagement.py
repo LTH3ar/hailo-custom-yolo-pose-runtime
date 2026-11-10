@@ -459,8 +459,7 @@ def test_classifier_names_resolve(tmp_path, monkeypatch):
     from hcpose.engagement import classifier as C
 
     assert C.resolve("none") is None and C.resolve("rules") is None
-    auto = C.resolve("auto")
-    assert auto is None or auto.kind == "trees"
+    assert C.resolve("auto") is None  # the rules are the default
     monkeypatch.setattr(C, "BUNDLED", {k: tmp_path / f"scb_{k}.json" for k in ("trees", "logistic", "mlp")})
     with pytest.raises(FileNotFoundError):
         C.resolve("mlp")

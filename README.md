@@ -103,7 +103,7 @@ Turns each student's skeleton into **focused**, **distracted** or **unknown**, a
 # (full frame + 3 tiles = 4 inferences per frame, in either engine)
 ./hcpose.sh run models/upper_body_m.hef --input usb --engagement --tiles auto --score-threshold 0.3
 
-# choose the per-student classifier: trees (default), logistic, mlp, or none (rules)
+# choose the per-student decision: the rules (default), or a learned model: trees, logistic, mlp
 ./hcpose.sh run models/upper_body_m.hef --input usb --engagement --classifier mlp
 
 # offline: replay a skeleton file recorded with --save-json (no Hailo needed)
@@ -121,16 +121,16 @@ Turns each student's skeleton into **focused**, **distracted** or **unknown**, a
    - hand at the face
 
    A raised hand always counts as focused. These cues name the *reason* shown for a distracted student.
-   **The per-frame decision** comes from a classifier trained on SCB classroom images ([`research/scb/`](research/scb/README.md)), switchable with `--classifier`:
+   **The per-frame decision** comes from these cue weights by default. Learned classifiers trained on SCB classroom images ([`research/scb/`](research/scb/README.md)) can replace them, with `--classifier`:
 
-   | Value | Model |
+   | Value | Decision |
    |---|---|
-   | `trees` / `auto` (default) | gradient-boosted trees |
+   | `auto` / `none` (default) | the cue weights above (rules) |
+   | `trees` | gradient-boosted trees |
    | `logistic` | logistic regression |
    | `mlp` | small neural net |
-   | `none` | the hand-written cue weights |
 
-   All run in NumPy on the Pi. They are trained on the m HEF's poses of SCB students, with and without tiles. On SCB front-view students they reach a within-image AUC of about 0.74–0.84, against 0.54 for the rules. They depend on good poses: on a real exam-hall clip, trees gave about 9–13% distracted with the m model, but 36% with n without tiles (16% with tiles), while the rules stayed at 5–11% with either model. With the n model, prefer `--tiles auto` or `--classifier none`.
+   All run in NumPy on the Pi. They are trained on the m HEF's poses of SCB students, with and without tiles. On SCB front-view students they reach a within-image AUC of about 0.74–0.84, against 0.54 for the rules. They depend on good poses: on a real exam-hall clip, trees gave about 9–13% distracted with the m model, but 36% with n without tiles (16% with tiles), while the rules stayed at 5–11% with either model. On a real lecture (students upright, looking at the board) all three called 60–89% of the class distracted, against 0–1% for the rules: SCB has no "listening" label, so the models learned that a raised head means distracted. That is why the rules are the default and the learned models are opt-in.
 3. **Attentive baseline per seat.** Each seat learns its own "looking at the board" pose from its first `calibration_seconds` of observation (median, so glances don't matter). Until then the seat's running history and the room's typical direction are used. That works with a camera at the front center, front-left or front-right, without telling it where. `--camera-position` adds a check against a class that is mostly distracted from the very start. `--calibration room.json` saves what was learned for that classroom and loads it next time; use `--recalibrate` after moving the camera.
 4. **Decisions over time.** The per-frame score is smoothed and switches state with hysteresis: distracted after about 2.5 s, focused again after about 1.5 s. A glance doesn't flip a student. Students without usable keypoints for 2 s are **unknown** and left out of the percentage.
 5. **Class estimate.** The camera misses students, mostly in far rows, and the misses aren't random, so a plain percentage of *detected* students is biased. The estimate counts every recently seen seat with its last state (seat memory, `presence_seconds`). It weights near, middle and far rows by their number of seats, not by how many students happen to be detected there. Only current seats count toward the class size: seen in the last `seat_forget_seconds` (60 s) and, before calibration, in at least `min_presence` (15%) of frames, so spurious boxes don't pile up over a long session. It shows a 95% range around the number on screen. The range covers students that weren't counted, not classifier mistakes. `--class-size N` gives it the real head count; only then does counting most of the class narrow the range, because a size inferred from the seats seen so far may be too small.

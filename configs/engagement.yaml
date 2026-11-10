@@ -58,13 +58,15 @@ weights:
 hand_raised_is_focused: true # a raised hand overrides everything
 
 # Per-frame decision (switch freely; all three learned models use the same features):
-#   auto      = trees (default); falls back to the rules if no model is bundled
+#   auto      = the rules (default)
 #   trees     = gradient-boosted trees   (hcpose/engagement/models/scb_trees.json)
 #   logistic  = logistic regression      (models/scb_logistic.json)
 #   mlp       = small neural net 64-32   (models/scb_mlp.json)
 #   none      = the rule weights above
 #   path      = your own classifier JSON
 # All learned models were trained on SCB classroom images (research/scb/train_classifier.py).
+# They are opt-in: on real lecture clips they call students who sit upright and look at the
+# board "distracted", because SCB has no "listening" label (research/scb/README.md).
 # The rule cues still provide the "reason" shown for a distracted student.
 classifier: auto
 
