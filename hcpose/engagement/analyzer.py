@@ -36,7 +36,7 @@ log = logging.getLogger("hcpose")
 FOCUSED, DISTRACTED, UNKNOWN = "focused", "distracted", "unknown"
 CALIBRATION_VERSION = 1
 MAX_CALIB_SAMPLES = 3000
-BASELINE_KEYS = ("yaw", "head_height", "torso_ratio")
+BASELINE_KEYS = ("yaw", "head_height", "torso_ratio", "head_offset")
 PARTIAL_MIN_SECONDS = 3.0  # a seat's own history is used once it has this much
 
 
@@ -209,7 +209,8 @@ class EngagementAnalyzer:
         else:
             yaw = prior
         pick = lambda a: getattr(own, a) if own is not None and getattr(own, a) is not None else getattr(class_now, a)  # noqa: E731
-        return Baseline(yaw=yaw, head_height=pick("head_height"), torso_ratio=pick("torso_ratio"))
+        return Baseline(yaw=yaw, head_height=pick("head_height"), torso_ratio=pick("torso_ratio"),
+                        head_offset=pick("head_offset"))
 
     def _learn(self, seat: Seat, f: Features, t: float, dt: float) -> None:
         if seat.calibrated or not f.valid:
@@ -281,7 +282,9 @@ class EngagementAnalyzer:
         self._room_yaw = self._compute_room_yaw()
 
         bases = [self._baseline_for(seat, class_now) for seat in seats]
-        rule = [score(f, b, self.s.weights, self.s.hand_raised_is_focused, (self.s.head_turn_start, self.s.head_turn_full))
+        offset = (self.s.head_offset_start, self.s.head_offset_full) if self.s.head_offset_cue else None
+        rule = [score(f, b, self.s.weights, self.s.hand_raised_is_focused, (self.s.head_turn_start, self.s.head_turn_full),
+                      offset)
                 if f.valid else (0.0, None)
                 for f, b in zip(feats, bases)]
         if self.classifier is not None and persons:

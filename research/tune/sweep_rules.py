@@ -3,6 +3,7 @@
 The rules were set by hand. This replays saved INT8 skeleton files (no model is run)
 with a grid of
   * head_turn ramp (yaw change where the head_turned cue starts / is full)
+  * the nose-vs-shoulders head-turn measure (off, or its start / full ramp)
   * on_threshold (smoothed score needed to switch to distracted; off = on - 0.2)
 and reports, per setting:
   * staged clip_4: recall, precision, false alarms (attentive, and while writing), latency
@@ -49,12 +50,19 @@ ap.add_argument("--jobs", type=int, default=os.cpu_count() or 2)
 ap.add_argument("--work", default=str(Path(tempfile.gettempdir()) / "hcpose_sweep"))
 ap.add_argument("--out", default=str(ROOT / "research/tune/sweep.md"))
 ap.add_argument("--only", help="comma-separated skeleton names (default: all)")
-ap.add_argument("--grid", default="full", choices=["full", "current"])
+ap.add_argument("--grid", default="offset", choices=["offset", "yaw", "current"],
+                help="offset: the head-offset measure x two yaw ramps x two on thresholds (default); "
+                     "yaw: the first sweep (yaw ramp x on threshold); current: the defaults only")
 args = ap.parse_args()
 
-TURNS = [(0.35, 0.85), (0.25, 0.65), (0.2, 0.5), (0.15, 0.4), (0.1, 0.3)]
-ONS = [0.6, 0.5, 0.4]
-GRID = [((0.35, 0.85), 0.6)] if args.grid == "current" else list(itertools.product(TURNS, ONS))
+# a setting = (yaw ramp, head-offset ramp or None, on threshold)
+if args.grid == "current":
+    GRID = [((0.35, 0.85), None, 0.6)]
+elif args.grid == "yaw":
+    GRID = [(t, None, on) for t, on in itertools.product(
+        [(0.35, 0.85), (0.25, 0.65), (0.2, 0.5), (0.15, 0.4), (0.1, 0.3)], [0.6, 0.5, 0.4])]
+else:
+    GRID = list(itertools.product([(0.35, 0.85), (0.2, 0.5)], [None, (0.1, 0.3), (0.15, 0.35), (0.2, 0.4)], [0.6, 0.5]))
 names = args.only.split(",") if args.only else list(SKELETONS)
 work = Path(args.work)
 work.mkdir(parents=True, exist_ok=True)
@@ -70,16 +78,19 @@ def unpack(name):
 
 
 def run(job):
-    (turn, on), name = job
-    tag = f"t{turn[0]}-{turn[1]}_on{on}"
+    (turn, offset, on), name = job
+    tag = f"t{turn[0]}-{turn[1]}_o{offset[0] if offset else 'off'}-{offset[1] if offset else ''}_on{on}"
     cfg = work / f"{tag}.yaml"
-    cfg.write_text(f"head_turn_start: {turn[0]}\nhead_turn_full: {turn[1]}\non_threshold: {on}\noff_threshold: {round(on - 0.2, 2)}\n")
+    text = f"head_turn_start: {turn[0]}\nhead_turn_full: {turn[1]}\non_threshold: {on}\noff_threshold: {round(on - 0.2, 2)}\n"
+    if offset:
+        text += f"head_offset_cue: true\nhead_offset_start: {offset[0]}\nhead_offset_full: {offset[1]}\n"
+    cfg.write_text(text)
     out = work / f"{name}__{tag}.jsonl"
     if not out.is_file():
         subprocess.run([sys.executable, "-m", "hcpose.cli", "analyze", str(work / f"{name}.skeleton.jsonl"),
                         "--engagement", str(cfg), "--classifier", "none", "--camera-position", SKELETONS[name][1],
                         "-o", str(out)], cwd=ROOT, check=True, capture_output=True)
-    return (turn, on), name, out
+    return (turn, offset, on), name, out
 
 
 def frames(path):
@@ -144,9 +155,9 @@ with ProcessPoolExecutor(args.jobs) as ex:
 
 events = staged.load_script(str(ROOT / "research/staged/script_clip4.csv"), ["S1", "S2"])
 pc = lambda v: "–" if v != v else f"{100 * v:.0f}%"  # noqa: E731
-lines = ["| Head turn ramp | On threshold | Model | clip_4 recall | clip_4 precision | clip_4 false alarms, attentive / writing | "
+lines = ["| Yaw ramp | Head-offset ramp | On threshold | Model | clip_4 recall | clip_4 precision | clip_4 false alarms, attentive / writing | "
          "clip_4 latency (s) | Labels: false alarms on focused | Labels: distracted caught | Lecture % | Exam % | Study hall % |",
-         "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+         "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
 for g in GRID:
     for m in ("n", "m"):
         if f"clip4_{m}" not in names:
@@ -155,11 +166,11 @@ for g in GRID:
         lab = {LABEL_CLIP[c]: done[(g, f"{c}_{m}")] for c in ("lecture", "exam") if f"{c}_{m}" in names}
         fa, nf, tp, nd = label_score(lab) if lab else (0, 0, 0, 0)
         cp = {c: (class_pct(done[(g, f"{c}_{m}")]) if f"{c}_{m}" in names else float("nan")) for c in ("lecture", "exam", "study")}
-        lines.append(f"| {g[0][0]}-{g[0][1]} | {g[1]} | {m} | {pc(r['recall'])} | {pc(r['precision'])} | "
+        lines.append(f"| {g[0][0]}-{g[0][1]} | {f'{g[1][0]}-{g[1][1]}' if g[1] else 'off'} | {g[2]} | {m} | {pc(r['recall'])} | {pc(r['precision'])} | "
                      f"{pc(r['fa_attentive'])} / {pc(r['fa_hard'])} | {staged.num(r['latency'], '.1f')} | "
                      f"{fa}/{nf} ({pc(fa / nf if nf else float('nan'))}) | {tp}/{nd} | "
                      + " | ".join("–" if v != v else f"{v:.1f}%" for v in cp.values()) + " |")
 text = "\n".join(lines)
 print(text)
-Path(args.out).write_text("# Rule threshold sweep\n\nCurrent defaults: head turn ramp 0.35-0.85, on threshold 0.6.\n\n" + text + "\n")
+Path(args.out).write_text("# Rule threshold sweep\n\nCurrent defaults: yaw ramp 0.35-0.85, head-offset measure off, on threshold 0.6.\n\n" + text + "\n")
 print(f"written to {args.out}")

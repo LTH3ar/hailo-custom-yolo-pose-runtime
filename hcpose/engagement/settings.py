@@ -59,6 +59,12 @@ class EngagementSettings:
     # (yaw = nose offset between the ears, -1..1)
     head_turn_start: float = 0.35
     head_turn_full: float = 0.85
+    # second head-turn measure: the nose's offset from the shoulder centre (in shoulder-width
+    # units) against the seat's own attentive offset. It keeps working in profile, when the far
+    # ear is lost and the ear-based yaw underestimates the turn. Off until validated.
+    head_offset_cue: bool = False
+    head_offset_start: float = 0.15
+    head_offset_full: float = 0.35
 
     # Per-frame decision: "auto" / "none" (= the rules, the default),
     # "trees" | "logistic" | "mlp" (bundled SCB-trained models, opt-in),
@@ -78,6 +84,8 @@ class EngagementSettings:
             raise ValueError("need 0 <= off_threshold <= on_threshold <= 1")
         if not 0 <= self.head_turn_start < self.head_turn_full:
             raise ValueError("need 0 <= head_turn_start < head_turn_full")
+        if not 0 <= self.head_offset_start < self.head_offset_full:
+            raise ValueError("need 0 <= head_offset_start < head_offset_full")
         unknown = set(self.weights) - set(EngagementSettings().weights)
         if unknown:
             raise ValueError(f"unknown weights {sorted(unknown)}")

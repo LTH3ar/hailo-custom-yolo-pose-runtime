@@ -543,3 +543,45 @@ def test_class_size_ignores_departed_and_flickering_seats():
     # while student 0 was still there (and within the 60 s memory) it counted
     c50 = min(hist, key=lambda h: abs(h[0] - 50))[1].extra["class"]
     assert c50["class_size"] == 11, c50
+
+
+def test_head_offset_catches_a_profile_turn_the_ear_yaw_misses():
+    """clip_4: a student turned to her neighbour loses the far ear; the ear-based yaw then
+    reads about zero, while the nose has moved well off the shoulder centre."""
+    from hcpose.engagement.features import Baseline, KeypointIndex, compute, score
+    from hcpose.presets import UPPER_BODY13_NAMES
+
+    idx = KeypointIndex(UPPER_BODY13_NAMES)
+
+    def person(nose_x, ear_l, ear_r, eye_l=0.95, eye_r=0.95, ear_dx=30):
+        k = np.zeros((13, 3), np.float32)
+        k[0] = (nose_x, 200, 0.95)                       # nose
+        k[1] = (nose_x + 12, 190, eye_l)                 # left eye (image right)
+        k[2] = (nose_x - 12, 190, eye_r)
+        k[3] = (nose_x + ear_dx, 195, ear_l)             # left ear: moves with the head
+        k[4] = (nose_x - ear_dx, 195, ear_r)
+        k[5] = (360, 280, 0.95)                          # left shoulder (image right)
+        k[6] = (240, 280, 0.95)
+        k[7:13, 2] = 0.0
+        return compute(k, (220, 150, 380, 400), idx, 0.5)
+
+    front = person(300, 0.9, 0.9)
+    # head turned to image-left: in profile the near ear sits further behind the nose, the far ear is lost
+    turned = person(255, 0.95, 0.02, eye_r=0.4, ear_dx=45)
+    assert abs(front.head_offset) < 0.02 and turned.head_offset < -0.3
+    assert abs(turned.yaw) < 0.2                         # the ear fallback hides the turn
+
+    base = Baseline(yaw=front.yaw, head_height=front.head_height, torso_ratio=front.torso_ratio,
+                    head_offset=front.head_offset)
+    w = {"head_turned": 1.0}
+    assert score(turned, base, w, True)[0] < 0.3                          # ear yaw alone: missed
+    s, why = score(turned, base, w, True, head_offset=(0.15, 0.35))
+    assert s > 0.9 and why == "head_turned"                               # with the offset: caught
+    assert score(front, base, w, True, head_offset=(0.15, 0.35))[0] == 0.0
+
+
+def test_old_calibration_files_still_load():
+    from hcpose.engagement.features import Baseline
+
+    b = Baseline(**{"yaw": 0.1, "head_height": 0.3, "torso_ratio": 0.4})  # written before head_offset
+    assert b.head_offset is None and "head_offset" in b.to_dict()
