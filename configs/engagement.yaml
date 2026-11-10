@@ -37,7 +37,8 @@ window_seconds: 5.0          # rolling average of the class percentage on screen
 # missed students are not a random sample, so the class percentage uses:
 #  - seat memory: a student seen in the last presence_seconds counts with their last state
 #  - zones: near/middle/far rows weighted by their number of seats, not by detections
-#  - a 95% range, narrower when most of the class is counted
+#  - a 95% range around the shown number (sampling only), narrower when most of
+#    the class is counted and class_size is set
 presence_seconds: 15.0
 zones: 3                     # 1 = no zone weighting
 class_size: null             # real number of students if known (--class-size); unseen ones count as far row

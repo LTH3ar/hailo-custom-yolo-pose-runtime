@@ -33,7 +33,7 @@ def run(
     and score_threshold etc. which override the sidecar).
     """
     cfg_keys = {"score_threshold", "iou_threshold", "keypoint_threshold", "max_detections",
-                "score_activation", "keypoint_activation"}
+                "pose_dedup", "score_activation", "keypoint_activation"}
     overrides = {k: kwargs.pop(k) for k in list(kwargs) if k in cfg_keys}
     cfg = load_config(hef, sidecar, overrides)
     info = read_hef(cfg.hef)

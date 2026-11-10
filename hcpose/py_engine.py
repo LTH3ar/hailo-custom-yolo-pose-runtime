@@ -184,6 +184,8 @@ class PyRunner:
             class_agnostic_nms=cfg.class_agnostic_nms,
             score_activation=cfg.score_activation,
             keypoint_activation=cfg.keypoint_activation,
+            keypoint_threshold=cfg.keypoint_threshold,
+            pose_dedup=cfg.pose_dedup,
         )
 
     def run(self) -> int:

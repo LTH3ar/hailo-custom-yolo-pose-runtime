@@ -185,4 +185,37 @@ python research/scb/extract_pt.py best.pt ub_tiles_auto.jsonl --conf 0.25 --tile
 python research/scb/compare_coverage.py ub_tiles_none.jsonl ub_tiles_auto.jsonl --names none,tiles --det-thr 0.3
 ```
 
+**Duplicate boxes.** About one box per image is a second box for a student who already has one: a looser box with the same skeleton. Box NMS keeps it because the two boxes overlap little. The decoders now drop it (`pose_dedup`, see the main README). On the upper_body_n caches this removed 6.5% of detections without tiles and 6.3% with them. Measured coverage fell 0.6 and 0.8 points, because the SCB matcher had been crediting a second student with the duplicate box. The tables above are from before this change.
+
+### Do the classifiers work on tiled poses?
+
+`eval_tiling.py` scores the bundled classifiers on the same students with and without tiling, and on the students only tiling finds. Results for upper_body_n `best.pt`, threshold 0.3; "pred" is the share the classifier calls distracted:
+
+| Students | n | True distracted | Trees AUC | Trees pred | MLP AUC | MLP pred | Logistic pred | Rules AUC |
+|---|---|---|---|---|---|---|---|---|
+| Found by both, untiled pose | 5,160 | 55% | 0.770 | 55% | 0.768 | 50% | 61% | 0.571 |
+| Found by both, tiled pose | 5,160 | 55% | 0.792 | 47% | 0.799 | 45% | 52% | 0.593 |
+| Found only with tiles | 3,348 | 65% | 0.705 | 47% | 0.698 | 44% | 49% | 0.582 |
+
+The tiled pose of a student ranks *better* (AUC up), but the classifiers call it distracted less often. They were trained on full-frame poses only, where a far student is a few pixels wide. The far students that only tiling finds are under-called the most: 47% predicted against 65% true. This explains most of the drop in the class distracted share that the Pi check saw with tiles on. The SCB images are subset-balanced, so the true shares here aren't classroom rates. The bundled models were trained on these images (with the m HEF's poses), so their absolute AUCs here are optimistic; the point is the difference between the rows.
+
+The fix is in the classifier, not the detector. Training on untiled and tiled poses together, with lesson-grouped out-of-fold predictions on these caches (trees), gave:
+
+| Students | True | Pred, trained untiled | Pred, trained untiled + tiled | AUC untiled → pooled |
+|---|---|---|---|---|
+| Both, untiled pose | 55% | 52% | 54% | 0.720 → 0.719 |
+| Both, tiled pose | 55% | 44% | 52% | 0.728 → 0.748 |
+| Only with tiles | 65% | 38% | 53% | 0.646 → 0.689 |
+
+So the bundled classifiers should be trained on pooled caches from the deployed HEF:
+
+```bash
+# on the Pi: INT8 m caches with and without tiles (the decoder now applies pose_dedup)
+.venv/bin/python research/scb/extract_hef.py ~/models/upper_body_m.hef ~/scb/poses_hef_m.jsonl <SCB dirs...>
+.venv/bin/python research/scb/extract_hef.py ~/models/upper_body_m.hef ~/scb/poses_hef_m_tiles.jsonl <SCB dirs...> --tiles auto
+.venv/bin/python research/scb/train_classifier.py ~/scb/poses_hef_m.jsonl ~/scb/poses_hef_m_tiles.jsonl \
+    --det-thr 0.3 --name scb-m-int8-tiles --export-dir hcpose/engagement/models --save-cv ~/scb/cv_m_pooled.npz
+.venv/bin/python research/scb/eval_tiling.py ~/scb/poses_hef_m.jsonl ~/scb/poses_hef_m_tiles.jsonl
+```
+
 The cost is one extra inference per tile: full frame plus 3 tiles is four passes per frame, which is fine at the 5–10 FPS that engagement needs. Both engines support it; the gst engine does the crops and the merge in C++ (`cpp/tiling.cpp`), with the same rules as the Python engine.

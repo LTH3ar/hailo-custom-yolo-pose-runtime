@@ -73,6 +73,25 @@ class Seat:
         return self.baseline is not None
 
 
+def class_interval(p: float, n: int, N: int, finite_population: bool) -> list:
+    """95% interval (percent) for a class share p measured on n of N students.
+
+    Wilson score interval, which always contains p. The finite-population correction
+    (narrowing it as n approaches N) is only applied when the class size is known from
+    the settings: a size inferred from the seats seen so far is itself a lower bound, so
+    "all known seats counted" is not a census. The interval covers sampling (students
+    not counted), not labelling errors of the classifier.
+    """
+    z = 1.96
+    center = (p + z * z / (2 * n)) / (1 + z * z / n)
+    half = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / (1 + z * z / n)
+    lo, hi = max(0.0, center - half), min(1.0, center + half)
+    if finite_population and N > 1:
+        f = math.sqrt(max(N - n, 0) / (N - 1))  # shrink toward p, so p stays inside
+        lo, hi = p - (p - lo) * f, p + (hi - p) * f
+    return [round(100 * lo, 1), round(100 * hi, 1)]
+
+
 class EngagementAnalyzer:
     def __init__(self, settings: EngagementSettings, keypoint_names: Sequence[str]):
         self.s = settings
@@ -309,6 +328,11 @@ class EngagementAnalyzer:
         while self._est_hist and t - self._est_hist[0][0] > self.s.window_seconds:
             self._est_hist.popleft()
         est_smooth = float(np.mean([v for _, v in self._est_hist])) if self._est_hist else None
+        # the interval goes with the number on screen: built around the smoothed estimate
+        ci = None
+        if est_smooth is not None and cls["counted"]:
+            ci = class_interval(est_smooth / 100, cls["counted"], cls["size"],
+                                finite_population=cls["size_from"] == "setting")
         self.last_class = {
             "visible": len(persons),
             "counted": counted,
@@ -321,7 +345,7 @@ class EngagementAnalyzer:
             "calibrating": any(not seat.calibrated for seat in seats),
             # whole-class estimate: seat memory + zone weighting + uncertainty
             "class_pct_distracted": None if est_smooth is None else round(est_smooth, 1),
-            "class_ci": cls["ci"],
+            "class_ci": ci,
             "class_counted": cls["counted"],
             "class_size": cls["size"],
             "class_size_from": cls["size_from"],
@@ -359,8 +383,8 @@ class EngagementAnalyzer:
            distracted share is weighted by how many seats the zone has, not by how many
            students happen to be detected there, because far rows are detected less often.
            With class_size set, students never found at all are added to the far zone.
-        3. Uncertainty: Wilson 95% interval on the counted students, narrowed by the
-           finite-population correction when they are a large part of the class.
+        3. Uncertainty: see class_interval(); the caller builds it around the smoothed
+           estimate so the interval always contains the number shown.
         """
         S = self.s
         seats = [x for x in self.seats if self._established(x)]
@@ -387,18 +411,7 @@ class EngagementAnalyzer:
                 num += Nz * dz / len(rz)
                 den += Nz
         p = num / den if den else 0.0
-        n = len(recent)
-        z95 = 1.96
-        center = (p + z95 * z95 / (2 * n)) / (1 + z95 * z95 / n)
-        half = z95 * math.sqrt(p * (1 - p) / n + z95 * z95 / (4 * n * n)) / (1 + z95 * z95 / n)
-        if N > n:
-            half *= math.sqrt((N - n) / max(N - 1, 1))
-        elif N:
-            half = 0.0
-        lo, hi = max(0.0, center - half), min(1.0, center + half)
-        if half == 0.0:
-            lo = hi = p
-        out.update(pct=100 * p, ci=[round(100 * lo, 1), round(100 * hi, 1)])
+        out.update(pct=100 * p, ci=class_interval(p, len(recent), N, finite_population=bool(S.class_size)))
         return out
 
     # ------------------------------------------------------------------ calibration file

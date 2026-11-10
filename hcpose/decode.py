@@ -44,8 +44,12 @@ class PoseDecoder:
         class_agnostic_nms: bool = True,
         score_activation: str = "auto",
         keypoint_activation: str = "auto",
+        keypoint_threshold: float = 0.5,
+        pose_dedup: float = 0.1,
     ):
         self.layout = layout
+        self.keypoint_threshold = keypoint_threshold
+        self.pose_dedup = pose_dedup
         self.score_threshold = score_threshold
         self.iou_threshold = iou_threshold
         self.max_detections = max_detections
@@ -121,7 +125,38 @@ class PoseDecoder:
         box = np.concatenate(all_box)
         kp = np.concatenate(all_kpt)
         keep = self._nms(box, conf, cls)
+        if self.pose_dedup > 0:
+            keep = self._dedup(keep, box, kp)
         return [Pose(box=box[i], score=float(conf[i]), class_id=int(cls[i]), keypoints=kp[i]) for i in keep]
+
+    def _dedup(self, keep: List[int], box, kp) -> List[int]:
+        """Drop a detection whose skeleton matches a higher-scored one: its box lies inside
+        the other (>= 70% of the smaller box), >= 3 keypoints are visible in both, and their
+        mean distance is below pose_dedup * sqrt(smaller box area). YOLO-pose often emits a
+        tight and a loose box for one person, and box-IoU NMS keeps both. Same rule as the
+        C++ post-process (dedup_skeletons)."""
+        W, H = float(self.layout.input_width), float(self.layout.input_height)
+        out: List[int] = []
+        for i in keep:
+            ai = (box[i, 2] - box[i, 0]) * W * (box[i, 3] - box[i, 1]) * H
+            dup = False
+            for j in out:
+                aj = (box[j, 2] - box[j, 0]) * W * (box[j, 3] - box[j, 1]) * H
+                iw = max(0.0, min(box[i, 2], box[j, 2]) - max(box[i, 0], box[j, 0])) * W
+                ih = max(0.0, min(box[i, 3], box[j, 3]) - max(box[i, 1], box[j, 1])) * H
+                small = max(min(ai, aj), 1e-9)
+                if iw * ih / small < 0.7:
+                    continue
+                m = (kp[i, :, 2] >= self.keypoint_threshold) & (kp[j, :, 2] >= self.keypoint_threshold)
+                if m.sum() < 3:
+                    continue
+                d = np.hypot((kp[i, m, 0] - kp[j, m, 0]) * W, (kp[i, m, 1] - kp[j, m, 1]) * H).mean()
+                if d < self.pose_dedup * np.sqrt(small):
+                    dup = True
+                    break
+            if not dup:
+                out.append(i)
+        return out
 
     def _nms(self, box, conf, cls) -> List[int]:
         order = np.argsort(-conf, kind="stable")

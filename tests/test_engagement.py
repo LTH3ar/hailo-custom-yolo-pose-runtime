@@ -378,7 +378,7 @@ def test_class_estimate_corrects_detection_bias():
     assert raw < 20, raw  # per-frame share over-represents the always-visible, focused front row
     assert abs(est - 25.0) <= 3.0, (est, c["zones"])
     lo, hi = c["class_ci"]
-    assert lo <= 25.0 <= hi and hi - lo < 40
+    assert lo <= 25.0 <= hi and hi - lo < 50  # 12 students, class size unknown: wide on purpose
     assert c["class_size"] == 12 and c["class_counted"] == 12
     assert [z["zone"] for z in c["zones"]] == ["far", "middle", "near"]
     assert [z["seats"] for z in c["zones"]] == [4, 4, 4]
@@ -495,3 +495,33 @@ def test_analyzer_switches_between_learned_models(tmp_path):
         assert an.classifier.kind == kind
         st, _ = states_at(hist, 34)
         assert st[:3] == [DISTRACTED] * 3 and st.count(FOCUSED) == 9, (kind, st)
+
+
+def test_class_interval_contains_the_shown_estimate_every_frame():
+    an, hist = _biased_visibility_run()
+    seen = 0
+    for _, res in hist:
+        c = res.extra.get("class") or {}
+        if c.get("class_pct_distracted") is None:
+            continue
+        lo, hi = c["class_ci"]
+        assert lo - 0.1 <= c["class_pct_distracted"] <= hi + 0.1, c
+        seen += 1
+    assert seen > 100
+
+
+def test_class_interval_only_census_with_known_class_size():
+    from hcpose.engagement.analyzer import class_interval
+
+    # all 31 known seats counted, size inferred from seats: still a real range
+    lo, hi = class_interval(0.03, 31, 31, finite_population=False)
+    assert lo < 3.0 < hi and hi - lo > 5
+    # head count given and everyone counted: census, the range collapses onto p
+    assert class_interval(0.03, 31, 31, finite_population=True) == [3.0, 3.0]
+    # half the class counted: narrower than without the correction, and contains p
+    a = class_interval(0.25, 15, 30, finite_population=True)
+    b = class_interval(0.25, 15, 30, finite_population=False)
+    assert b[0] < a[0] <= 25.0 <= a[1] < b[1]
+    # the banner shows a range when the size is inferred
+    an, _ = _biased_visibility_run()
+    assert "(" in an.class_text(), an.class_text()

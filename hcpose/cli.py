@@ -39,7 +39,7 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--fps", type=int, default=30, help="camera frame rate (default 30)")
     sync = r.add_mutually_exclusive_group()
     sync.add_argument("--sync", dest="sync", action="store_true", default=None,
-                      help="play files in real time (default when displaying a file)")
+                      help="play files in real time (default when displaying a file, unless --tiles is on)")
     sync.add_argument("--no-sync", dest="sync", action="store_false", help="run as fast as possible (benchmarking)")
     r.add_argument("--batch-size", type=int, default=1)
     r.add_argument("--no-tracker", action="store_true")
@@ -56,6 +56,9 @@ def build_parser() -> argparse.ArgumentParser:
     th.add_argument("--iou-threshold", type=float)
     th.add_argument("--keypoint-threshold", type=float)
     th.add_argument("--max-detections", type=int)
+    th.add_argument("--pose-dedup", type=float, metavar="D",
+                    help="drop a box whose skeleton matches a stronger one (mean keypoint distance below "
+                         "D x box size; default 0.1, 0 = off)")
     th.add_argument("--score-activation", choices=["auto", "sigmoid", "none"],
                     help="force whether class scores need a sigmoid (default: auto-detect)")
     eg = r.add_argument_group("engagement analysis (focused / distracted)")
@@ -264,6 +267,7 @@ def cmd_run(args) -> int:
         "iou_threshold": args.iou_threshold,
         "keypoint_threshold": args.keypoint_threshold,
         "max_detections": args.max_detections,
+        "pose_dedup": args.pose_dedup,
         "score_activation": args.score_activation,
     }
     cfg, info, layout = _model(args, overrides)

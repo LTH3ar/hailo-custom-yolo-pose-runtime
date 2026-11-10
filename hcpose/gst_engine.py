@@ -110,6 +110,11 @@ class GstRunner:
             print(f"[hcpose] tiling: full frame + {len(self.tiles)} tile(s) over rows "
                   f"{parse_region(tile_region)[0]:.0%}-{parse_region(tile_region)[1]:.0%} "
                   f"({self.tiles[0].w}x{self.tiles[0].h} px each); {1 + len(self.tiles)} inferences per frame")
+            if sync is None and self.sync:
+                # with 4 inferences per frame the bigger models run below the file's frame rate;
+                # a display synced to the file clock would then drop most frames (and warn on each)
+                self.sync = False
+                print("[hcpose] tiling: playing the file as fast as it is processed (--sync to force real time)")
         self.cropper = self.so_path if self.tiles else env.find_whole_buffer_cropper()
         if not self.cropper:
             raise RuntimeError("TAPPAS libwhole_buffer.so not found (part of hailo-tappas-core). Run `hcpose doctor`.")
