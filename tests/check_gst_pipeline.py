@@ -6,7 +6,7 @@ pipeline is run on a real video file through GstRunner.run(), exercising
 caps negotiation, the tee/encoder/mux branch, the metadata probe and EOS
 handling. Run with a python that has gi + GStreamer:
 
-    python tests/check_gst_pipeline.py input.mp4 out.mp4
+    python tests/check_gst_pipeline.py input.mp4 out.mp4 [--tiles auto]
 """
 import re
 import sys
@@ -66,13 +66,18 @@ def strip_hailo(desc: str) -> str:
 
 def main():
     src, out = sys.argv[1], sys.argv[2]
+    tiles = sys.argv[sys.argv.index("--tiles") + 1] if "--tiles" in sys.argv else None
     cfg = ModelConfig(hef="/tmp/model.hef", labels=["person"])
     layout = Layout(scales=[], num_keypoints=13, num_classes=1, reg_max=16, input_width=640, input_height=640)
     frames = []
-    r = gst_engine.GstRunner(cfg, layout, source=src, display=True, output=out, callbacks=[])
+    r = gst_engine.GstRunner(cfg, layout, source=src, display=True, output=out, callbacks=[], tiles=tiles)
     r.callbacks = []  # metadata extraction needs the real `hailo` module
     orig = r.pipeline_string
     r.pipeline_string = lambda: strip_hailo(orig())
+    desc = orig()
+    if tiles:
+        assert "function-name=create_tile_crops" in desc and "function-name=merge_tiles" in desc, desc
+        assert desc.index("agg. !") < desc.index("merge_tiles") < desc.index("hailotracker"), desc
     print(r.pipeline_string().replace(" ! ", " !\n  "))
     r._on_buffer_orig = r._on_buffer
 

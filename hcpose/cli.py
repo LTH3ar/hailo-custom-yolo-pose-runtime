@@ -47,7 +47,7 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--camera-raw", action="store_true", help="USB camera: request raw frames instead of MJPEG")
     r.add_argument("--tiles", metavar="auto|RxC",
                    help="also run the model on zoomed-in tiles of the far rows to find small students "
-                        "(python engine; auto = one row of square tiles)")
+                        "(auto = one row of roughly square tiles, or e.g. 1x3, 2x4)")
     r.add_argument("--tile-region", default="0:0.6", metavar="Y0:Y1",
                    help="part of the frame height to tile, as fractions (default 0:0.6, the far rows)")
     r.add_argument("--quiet-fps", action="store_true", help="don't print FPS")
@@ -291,7 +291,7 @@ def cmd_run(args) -> int:
     from .sources import classify
 
     if engine == "auto":
-        if classify(args.input) == "image" or args.tiles:
+        if classify(args.input) == "image":
             engine = "python"
         elif env.find_postprocess_so() is None:
             print("[hcpose] C++ post-process not built; using the python engine (run ./install.sh for the faster one)")
@@ -306,12 +306,11 @@ def cmd_run(args) -> int:
         engagement=engagement,
     )
     try:
-        if engine == "gst" and args.tiles:
-            raise ValueError("--tiles currently runs in the python engine (use --engine python or auto)")
         if engine == "gst":
             from .gst_engine import GstRunner
 
-            runner = GstRunner(cfg, layout, sync=args.sync, batch_size=args.batch_size, camera_raw=args.camera_raw, **common)
+            runner = GstRunner(cfg, layout, sync=args.sync, batch_size=args.batch_size, camera_raw=args.camera_raw,
+                               tiles=args.tiles, tile_region=args.tile_region, **common)
             if args.verbose:
                 print("[hcpose] pipeline:\n  " + runner.pipeline_string().replace(" ! ", " !\n    "))
         else:

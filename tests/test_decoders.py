@@ -151,6 +151,22 @@ def test_cpp_letterbox_mapping():
 
 
 @pytest.mark.skipif(not (FIXTURE.exists() and os.path.isfile(HARNESS)), reason="fixture or C++ harness missing")
+def test_cpp_letterbox_on_a_tile_roi_is_tile_relative():
+    """On a tile ROI (bbox != whole frame), detections are relative to the tile: the same
+    numbers as on the whole-frame ROI. merge_tiles maps them to the frame afterwards."""
+    raw, _ = load()
+    top, h = 0.21875, 0.5625
+    scaling = [0.0, -top / h, 1.0, 1.0 / h]
+    with tempfile.TemporaryDirectory() as tmp:
+        full, _ = run_cpp(raw, tmp, None, letterbox=scaling)
+        tile, _ = run_cpp(raw, tmp, None, letterbox=scaling + [0.3, 0.1, 0.4, 0.5])
+    assert len(full) == len(tile) > 0
+    for a, b in zip(full, tile):
+        np.testing.assert_allclose(a["box"], b["box"], atol=1e-6)
+        np.testing.assert_allclose(a["kpts"], b["kpts"], atol=1e-6)
+
+
+@pytest.mark.skipif(not (FIXTURE.exists() and os.path.isfile(HARNESS)), reason="fixture or C++ harness missing")
 def test_cpp_forced_activation_and_sidecar_counts():
     raw, _ = load()
     with tempfile.TemporaryDirectory() as tmp:

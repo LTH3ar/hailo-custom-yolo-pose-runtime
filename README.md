@@ -99,7 +99,8 @@ Turns each student's skeleton into **focused**, **distracted** or **unknown**, a
 # all settings in a file
 ./hcpose.sh run models/upper_body_s.hef --input usb --engagement configs/engagement.yaml
 
-# far rows too small to detect: also run the model on zoomed-in tiles of the back half
+# far rows too small to detect: also run the model on zoomed-in tiles of the top 60% of the frame
+# (full frame + 3 tiles = 4 inferences per frame, in either engine)
 ./hcpose.sh run models/upper_body_m.hef --input usb --engagement --tiles auto --score-threshold 0.3
 
 # choose the per-student classifier: trees (default), logistic, mlp, or none (rules)
@@ -172,13 +173,15 @@ run("models/upper_body_n.hef", source="/dev/video0", on_frame=on_frame, engageme
 
 ```bash
 .venv/bin/pip install pytest
-# C++ test harness (needs the TAPPAS/HailoRT headers, present after hailo-all):
-g++ -std=c++17 -O2 $(pkg-config --cflags hailo-tappas-core) \
-    -I"$(pkg-config --variable=rapidjson_includedir hailo-tappas-core)" tests/cpp_harness.cpp cpp/yolov8_pose_postprocess.cpp -o build/cpp_harness
+# C++ test harnesses (need the TAPPAS/HailoRT headers, present after hailo-all):
+mkdir -p build
+G="-std=c++17 -O2 -Wno-psabi $(pkg-config --cflags hailo-tappas-core) -I$(pkg-config --variable=rapidjson_includedir hailo-tappas-core)"
+g++ $G tests/cpp_harness.cpp cpp/yolov8_pose_postprocess.cpp cpp/tiling.cpp -o build/cpp_harness
+g++ $G tests/tile_harness.cpp cpp/yolov8_pose_postprocess.cpp cpp/tiling.cpp -o build/tile_harness
 .venv/bin/python -m pytest -q tests
 ```
 
-The fixture is the raw head output of the official `yolov8n-pose` on Ultralytics' `bus.jpg`. The NumPy decoder matches Ultralytics' own decode+NMS exactly. The C++ post-process matches the NumPy decoder for float32, uint8/uint16-quantized, sigmoid-in-HEF, shuffled-order and 13-keypoint variants, and for the letterbox mapping. `tests/check_gst_pipeline.py` runs the generated GStreamer pipeline end-to-end on a machine without Hailo using stand-in elements. `tests/check_gst_engagement.py` does the same with a fake `hailo` bindings module that feeds a synthetic class through the engagement path: re-labelling for the overlay, the class text and the JSONL. `tests/test_engagement.py` covers the rules on synthetic classrooms:
+The fixture is the raw head output of the official `yolov8n-pose` on Ultralytics' `bus.jpg`. The NumPy decoder matches Ultralytics' own decode+NMS exactly. The C++ post-process matches the NumPy decoder for float32, uint8/uint16-quantized, sigmoid-in-HEF, shuffled-order and 13-keypoint variants, and for the letterbox mapping, including on a tile. `tests/test_tiling.py` checks the tile geometry and the merge, and that the C++ merge in the GStreamer pipeline gives the same result as the Python one on random scenes. `tests/check_gst_pipeline.py` runs the generated GStreamer pipeline end-to-end on a machine without Hailo using stand-in elements. `tests/check_gst_engagement.py` does the same with a fake `hailo` bindings module that feeds a synthetic class through the engagement path: re-labelling for the overlay, the class text and the JSONL. `tests/test_engagement.py` covers the rules on synthetic classrooms:
 - turning away, glances, each cue
 - corner cameras
 - most of the class distracted

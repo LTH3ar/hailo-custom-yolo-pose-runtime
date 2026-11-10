@@ -12,6 +12,7 @@
  * spatial size and assigned a role by channel count.
  **/
 #include "yolov8_pose_postprocess.hpp"
+#include "hcpose_params.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -125,7 +126,7 @@ struct Scale
     float stride_x = 0.f, stride_y = 0.f;
 };
 
-struct PoseParams
+struct PoseParams : HcposeParams
 {
     // user settings
     float score_threshold = 0.5f;
@@ -559,9 +560,10 @@ void run(HailoROIPtr roi, PoseParams &p, bool letterbox)
 
     std::vector<PoseResult> results = decode(p, tensors);
 
-    // network-normalized -> frame-normalized
-    HailoBBox map = letterbox ? hailo_common::create_flattened_bbox(roi->get_bbox(), roi->get_scaling_bbox())
-                              : HailoBBox(0.f, 0.f, 1.f, 1.f);
+    // network-normalized -> ROI-normalized. Detections are stored relative to the ROI they
+    // belong to: the whole frame (bbox 0,0,1,1) or a tile, which merge_tiles maps back to the
+    // frame. The scaling bbox set by hailocropper's letterbox is exactly that mapping.
+    HailoBBox map = letterbox ? roi->get_scaling_bbox() : HailoBBox(0.f, 0.f, 1.f, 1.f);
     auto mx = [&](float x) { return x * map.width() + map.xmin(); };
     auto my = [&](float y) { return y * map.height() + map.ymin(); };
 
@@ -598,6 +600,8 @@ void run(HailoROIPtr roi, PoseParams &p, bool letterbox)
 // ---------------------------------------------------------------------------
 void *init(const std::string config_path, const std::string function_name)
 {
+    if (function_name == "merge_tiles")
+        return tiling_make_merge_params(config_path);
     auto *p = new PoseParams();
     load_config(*p, config_path);
     if (p->verbose)
@@ -608,14 +612,14 @@ void *init(const std::string config_path, const std::string function_name)
 
 void free_resources(void *params_void_ptr)
 {
-    delete reinterpret_cast<PoseParams *>(params_void_ptr);
+    delete static_cast<HcposeParams *>(params_void_ptr);
 }
 
 void filter(HailoROIPtr roi, void *params_void_ptr)
 {
     try
     {
-        run(roi, *reinterpret_cast<PoseParams *>(params_void_ptr), false);
+        run(roi, *static_cast<PoseParams *>(static_cast<HcposeParams *>(params_void_ptr)), false);
     }
     catch (const std::exception &e)
     {
@@ -627,7 +631,7 @@ void filter_letterbox(HailoROIPtr roi, void *params_void_ptr)
 {
     try
     {
-        run(roi, *reinterpret_cast<PoseParams *>(params_void_ptr), true);
+        run(roi, *static_cast<PoseParams *>(static_cast<HcposeParams *>(params_void_ptr)), true);
     }
     catch (const std::exception &e)
     {
