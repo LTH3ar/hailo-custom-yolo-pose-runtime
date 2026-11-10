@@ -55,6 +55,16 @@ class EngagementSettings:
         }
     )
     hand_raised_is_focused: bool = True  # a raised hand overrides the other cues
+    # head_turned cue: 0 at this change of yaw from the seat's attentive yaw, full at head_turn_full
+    # (yaw = nose offset between the ears, -1..1)
+    head_turn_start: float = 0.35
+    head_turn_full: float = 0.85
+    # second head-turn measure: the nose's offset from the shoulder centre (in shoulder-width
+    # units) against the seat's own attentive offset. It keeps working in profile, when the far
+    # ear is lost and the ear-based yaw underestimates the turn (research/tune/sweep_offset.md).
+    head_offset_cue: bool = True
+    head_offset_start: float = 0.2
+    head_offset_full: float = 0.4
 
     # Per-frame decision: "auto" / "none" (= the rules, the default),
     # "trees" | "logistic" | "mlp" (bundled SCB-trained models, opt-in),
@@ -64,6 +74,7 @@ class EngagementSettings:
     # seat-anchored identity
     seat_match_radius: float = 0.6  # max center distance, in box widths, to reuse a seat
     seat_yaw_max_offset: float = 0.3  # how far a seat's attentive yaw may differ from the room's
+    seat_head_offset_max: float = 0.15  # same for the head offset (nose vs shoulders)
 
     def validate(self) -> "EngagementSettings":
         if self.display not in DISPLAY_MODES:
@@ -72,6 +83,10 @@ class EngagementSettings:
             raise ValueError(f"camera_position must be one of {CAMERA_POSITIONS}, got {self.camera_position!r}")
         if not 0 <= self.off_threshold <= self.on_threshold <= 1:
             raise ValueError("need 0 <= off_threshold <= on_threshold <= 1")
+        if not 0 <= self.head_turn_start < self.head_turn_full:
+            raise ValueError("need 0 <= head_turn_start < head_turn_full")
+        if not 0 <= self.head_offset_start < self.head_offset_full:
+            raise ValueError("need 0 <= head_offset_start < head_offset_full")
         unknown = set(self.weights) - set(EngagementSettings().weights)
         if unknown:
             raise ValueError(f"unknown weights {sorted(unknown)}")

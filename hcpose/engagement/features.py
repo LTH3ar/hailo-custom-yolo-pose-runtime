@@ -59,6 +59,9 @@ class Features:
     yaw: Optional[float] = None
     head_height: Optional[float] = None
     torso_ratio: Optional[float] = None
+    # nose offset from the shoulder centre / scale: a second head-turn measure that keeps
+    # working in profile, when the far ear (and with it the ear-based yaw) is lost
+    head_offset: Optional[float] = None
     face_hidden: bool = False
     hand_raised: bool = False
     hand_at_face: bool = False
@@ -135,6 +138,8 @@ def compute(kp: np.ndarray, box: Sequence[float], index: KeypointIndex, thr: flo
             f.head_height = float((sh_y - ref[1]) / scale)
         f.torso_ratio = float(sw / box_h) if sw else None
         f.face_hidden = not have_face
+        if nose is not None:
+            f.head_offset = float((nose[0] - (ls[0] + rs[0]) / 2) / scale)
 
     # hands
     head_y = min(p[1] for p in (nose, le, re) if p is not None) if have_face else None
@@ -161,9 +166,11 @@ class Baseline:
     yaw: Optional[float] = None
     head_height: Optional[float] = None
     torso_ratio: Optional[float] = None
+    head_offset: Optional[float] = None
 
     def to_dict(self) -> dict:
-        return {"yaw": self.yaw, "head_height": self.head_height, "torso_ratio": self.torso_ratio}
+        return {"yaw": self.yaw, "head_height": self.head_height, "torso_ratio": self.torso_ratio,
+                "head_offset": self.head_offset}
 
     @classmethod
     def from_samples(cls, samples: List[Features], min_n: int = 5) -> "Baseline":
@@ -171,14 +178,22 @@ class Baseline:
             vals = [getattr(s, attr) for s in samples if getattr(s, attr) is not None]
             return float(np.median(vals)) if len(vals) >= min_n else None
 
-        return cls(yaw=med("yaw"), head_height=med("head_height"), torso_ratio=med("torso_ratio"))
+        return cls(yaw=med("yaw"), head_height=med("head_height"), torso_ratio=med("torso_ratio"),
+                   head_offset=med("head_offset"))
 
 
-def score(f: Features, base: Baseline, weights: Dict[str, float], hand_raised_is_focused: bool):
-    """Per-frame distraction score 0..1 and the cue that produced it."""
+def score(f: Features, base: Baseline, weights: Dict[str, float], hand_raised_is_focused: bool,
+          head_turn: tuple = (0.35, 0.85), head_offset: Optional[tuple] = None):
+    """Per-frame distraction score 0..1 and the cue that produced it.
+
+    head_offset: (start, full) ramp for the nose-vs-shoulders head-turn measure, or None to
+    use the ear-based yaw only. When given, head_turned is the larger of the two measures."""
     cues = {}
     if f.yaw is not None and base.yaw is not None:
-        cues["head_turned"] = ramp(abs(f.yaw - base.yaw), 0.35, 0.85)
+        cues["head_turned"] = ramp(abs(f.yaw - base.yaw), head_turn[0], head_turn[1])
+    if head_offset is not None and f.head_offset is not None and base.head_offset is not None:
+        v = ramp(abs(f.head_offset - base.head_offset), head_offset[0], head_offset[1])
+        cues["head_turned"] = max(cues.get("head_turned", 0.0), v)
     if f.face_hidden:
         cues["face_hidden"] = 1.0
     if f.head_height is not None and base.head_height is not None:

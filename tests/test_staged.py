@@ -61,7 +61,7 @@ def test_scorer_on_a_perfect_delayed_labeller(tmp_path):
     r = score.score(str(path), events, [3, 4, 3], "auto", 180.0, 900.0, 5.0)
     assert abs(r["offset"] - offset) < 0.3
     for n, (x, y, w, h) in SEATS.items():  # seats numbered as the camera sees them
-        assert abs(r["seats"][n][0] - x / 1280) < 0.01 and abs(r["seats"][n][1] - y / 720) < 0.01, n
+        assert abs(r["seats"][n][0] - x / 1280) < 0.01 and abs(r["seats"][n][1] - (y - h / 2) / 720) < 0.01, n  # head = box top
     assert r["recall"] > 0.98 and r["precision"] > 0.98, r
     assert r["fa_attentive"] < 0.01 and r["fa_hard"] < 0.01, r
     assert r["missed"] == 0 and abs(r["latency"] - delay) <= 1.0, r

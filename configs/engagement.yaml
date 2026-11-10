@@ -45,6 +45,15 @@ min_presence: 0.15           # uncalibrated seats must be detected in this share
 zones: 3                     # 1 = no zone weighting
 class_size: null             # real number of students if known (--class-size); unseen ones count as far row
 
+# Head turn: the ear-based yaw ramp, plus the nose-vs-shoulders offset, which keeps working in
+# profile when the far ear is lost (research/tune/sweep_offset.md)
+head_turn_start: 0.35
+head_turn_full: 0.85
+head_offset_cue: true
+head_offset_start: 0.2
+head_offset_full: 0.4
+seat_head_offset_max: 0.15   # a seat that calibrated while turned can't keep "turned" as its baseline
+
 # Cue weights (0 disables a cue). Cues combine like a noisy-OR: a cue whose
 # weight is below on_threshold can't flag a student alone, only with another cue.
 weights:

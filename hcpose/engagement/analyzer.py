@@ -36,7 +36,7 @@ log = logging.getLogger("hcpose")
 FOCUSED, DISTRACTED, UNKNOWN = "focused", "distracted", "unknown"
 CALIBRATION_VERSION = 1
 MAX_CALIB_SAMPLES = 3000
-BASELINE_KEYS = ("yaw", "head_height", "torso_ratio")
+BASELINE_KEYS = ("yaw", "head_height", "torso_ratio", "head_offset")
 PARTIAL_MIN_SECONDS = 3.0  # a seat's own history is used once it has this much
 
 
@@ -103,6 +103,7 @@ class EngagementAnalyzer:
         self._pct_hist: Deque[Tuple[float, float]] = deque()
         self._prior_warned = False
         self._room_yaw: Optional[float] = None
+        self._room_offset: Optional[float] = None
         self._est_hist: Deque[Tuple[float, float]] = deque()
         self.classifier = resolve_classifier(settings.classifier)
         if self.classifier is not None:
@@ -118,10 +119,13 @@ class EngagementAnalyzer:
 
     # ------------------------------------------------------------------ seats
     def _match_seats(self, persons: List[Person], W: int, H: int, t: float) -> List[Seat]:
+        # A seat is anchored at the top centre of the box (the head), not the box centre:
+        # when a student turns around or leans, the box shrinks to head and shoulders and its
+        # centre jumps by a third of its height, but the head stays where it was.
         dets = []
         for p in persons:
             x1, y1, x2, y2 = p.box
-            dets.append(((x1 + x2) / 2 / W, (y1 + y2) / 2 / H, max(1e-3, (x2 - x1) / W), max(1e-3, (y2 - y1) / H)))
+            dets.append(((x1 + x2) / 2 / W, y1 / H, max(1e-3, (x2 - x1) / W), max(1e-3, (y2 - y1) / H)))
         pairs = []
         for di, (cx, cy, w, h) in enumerate(dets):
             for si, s in enumerate(self.seats):
@@ -206,7 +210,16 @@ class EngagementAnalyzer:
         else:
             yaw = prior
         pick = lambda a: getattr(own, a) if own is not None and getattr(own, a) is not None else getattr(class_now, a)  # noqa: E731
-        return Baseline(yaw=yaw, head_height=pick("head_height"), torso_ratio=pick("torso_ratio"))
+        # the head-offset baseline gets the same protection as yaw: a seat that learned while
+        # turned mustn't keep "turned" as its attentive pose (the room's offset is near 0,
+        # since an attentive head points the same way as the shoulders)
+        offset = pick("head_offset")
+        if offset is not None:
+            m = self.s.seat_head_offset_max
+            room_off = self._room_offset if self._room_offset is not None else 0.0
+            offset = room_off + float(np.clip(offset - room_off, -m, m))
+        return Baseline(yaw=yaw, head_height=pick("head_height"), torso_ratio=pick("torso_ratio"),
+                        head_offset=offset)
 
     def _learn(self, seat: Seat, f: Features, t: float, dt: float) -> None:
         if seat.calibrated or not f.valid:
@@ -276,9 +289,15 @@ class EngagementAnalyzer:
         for f, seat in zip(feats, seats):
             self._learn(seat, f, t, dt)
         self._room_yaw = self._compute_room_yaw()
+        offs = [b.head_offset for b in (s.baseline if s.calibrated else s.partial for s in self.seats)
+                if b is not None and b.head_offset is not None]
+        self._room_offset = float(np.median(offs)) if len(offs) >= 3 else None
 
         bases = [self._baseline_for(seat, class_now) for seat in seats]
-        rule = [score(f, b, self.s.weights, self.s.hand_raised_is_focused) if f.valid else (0.0, None)
+        offset = (self.s.head_offset_start, self.s.head_offset_full) if self.s.head_offset_cue else None
+        rule = [score(f, b, self.s.weights, self.s.hand_raised_is_focused, (self.s.head_turn_start, self.s.head_turn_full),
+                      offset)
+                if f.valid else (0.0, None)
                 for f, b in zip(feats, bases)]
         if self.classifier is not None and persons:
             # learned per-frame probability; the rule cues still name the reason
