@@ -12,6 +12,7 @@
  * spatial size and assigned a role by channel count.
  **/
 #include "yolov8_pose_postprocess.hpp"
+#include "hcpose_params.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -125,7 +126,7 @@ struct Scale
     float stride_x = 0.f, stride_y = 0.f;
 };
 
-struct PoseParams
+struct PoseParams : HcposeParams
 {
     // user settings
     float score_threshold = 0.5f;
@@ -138,6 +139,10 @@ struct PoseParams
     int input_width = -1;   // -1 = auto (largest grid * 8)
     int input_height = -1;
     bool class_agnostic_nms = true;
+    // after NMS: drop a detection whose skeleton matches a higher-scored one (box inside
+    // the other, >= 3 common keypoints, mean distance < pose_dedup * sqrt(smaller box area)).
+    // YOLO-pose often emits such pairs (a tight box and a loose one) that box-IoU NMS keeps.
+    float pose_dedup = 0.1f; // 0 = off
     Activation score_activation = Activation::AUTO;
     Activation keypoint_activation = Activation::AUTO;
     std::vector<std::string> labels;
@@ -184,6 +189,7 @@ void load_config(PoseParams &p, const std::string &path)
     read_number(doc, "iou_threshold", p.iou_threshold);
     read_number(doc, "keypoint_threshold", p.keypoint_threshold);
     read_number(doc, "max_detections", p.max_detections);
+    read_number(doc, "pose_dedup", p.pose_dedup);
     read_number(doc, "num_keypoints", p.num_keypoints);
     read_number(doc, "num_classes", p.num_classes);
     read_number(doc, "reg_max", p.reg_max);
@@ -376,6 +382,45 @@ struct PoseResult
     std::vector<float> kx, ky, kv; // normalized to network input
 };
 
+// see PoseParams::pose_dedup; mirrored by PoseDecoder._dedup in hcpose/decode.py
+std::vector<PoseResult> dedup_skeletons(std::vector<PoseResult> &in, const PoseParams &p)
+{
+    std::vector<PoseResult> kept;
+    const float W = static_cast<float>(p.in_w), H = static_cast<float>(p.in_h);
+    for (auto &r : in)
+    {
+        bool dup = false;
+        const float ar = (r.c.x2 - r.c.x1) * W * (r.c.y2 - r.c.y1) * H;
+        for (auto &k : kept)
+        {
+            const float ak = (k.c.x2 - k.c.x1) * W * (k.c.y2 - k.c.y1) * H;
+            float iw = std::max(0.f, std::min(r.c.x2, k.c.x2) - std::max(r.c.x1, k.c.x1)) * W;
+            float ih = std::max(0.f, std::min(r.c.y2, k.c.y2) - std::max(r.c.y1, k.c.y1)) * H;
+            float small = std::max(std::min(ar, ak), 1e-9f);
+            if (iw * ih / small < 0.7f)
+                continue;
+            double sum = 0.0;
+            int common = 0;
+            for (size_t j = 0; j < r.kv.size() && j < k.kv.size(); j++)
+            {
+                if (r.kv[j] >= p.keypoint_threshold && k.kv[j] >= p.keypoint_threshold)
+                {
+                    sum += std::hypot((r.kx[j] - k.kx[j]) * W, (r.ky[j] - k.ky[j]) * H);
+                    common++;
+                }
+            }
+            if (common >= 3 && sum / common < p.pose_dedup * std::sqrt(small))
+            {
+                dup = true;
+                break;
+            }
+        }
+        if (!dup)
+            kept.push_back(std::move(r));
+    }
+    return kept;
+}
+
 std::vector<PoseResult> decode(PoseParams &p, std::vector<HailoTensorPtr> &tensors)
 {
     std::map<std::string, HailoTensorPtr> by_name;
@@ -515,6 +560,8 @@ std::vector<PoseResult> decode(PoseParams &p, std::vector<HailoTensorPtr> &tenso
         }
         results.push_back(std::move(r));
     }
+    if (p.pose_dedup > 0.f)
+        results = dedup_skeletons(results, p);
     return results;
 }
 
@@ -559,9 +606,10 @@ void run(HailoROIPtr roi, PoseParams &p, bool letterbox)
 
     std::vector<PoseResult> results = decode(p, tensors);
 
-    // network-normalized -> frame-normalized
-    HailoBBox map = letterbox ? hailo_common::create_flattened_bbox(roi->get_bbox(), roi->get_scaling_bbox())
-                              : HailoBBox(0.f, 0.f, 1.f, 1.f);
+    // network-normalized -> ROI-normalized. Detections are stored relative to the ROI they
+    // belong to: the whole frame (bbox 0,0,1,1) or a tile, which merge_tiles maps back to the
+    // frame. The scaling bbox set by hailocropper's letterbox is exactly that mapping.
+    HailoBBox map = letterbox ? roi->get_scaling_bbox() : HailoBBox(0.f, 0.f, 1.f, 1.f);
     auto mx = [&](float x) { return x * map.width() + map.xmin(); };
     auto my = [&](float y) { return y * map.height() + map.ymin(); };
 
@@ -598,6 +646,8 @@ void run(HailoROIPtr roi, PoseParams &p, bool letterbox)
 // ---------------------------------------------------------------------------
 void *init(const std::string config_path, const std::string function_name)
 {
+    if (function_name == "merge_tiles")
+        return tiling_make_merge_params(config_path);
     auto *p = new PoseParams();
     load_config(*p, config_path);
     if (p->verbose)
@@ -608,14 +658,14 @@ void *init(const std::string config_path, const std::string function_name)
 
 void free_resources(void *params_void_ptr)
 {
-    delete reinterpret_cast<PoseParams *>(params_void_ptr);
+    delete static_cast<HcposeParams *>(params_void_ptr);
 }
 
 void filter(HailoROIPtr roi, void *params_void_ptr)
 {
     try
     {
-        run(roi, *reinterpret_cast<PoseParams *>(params_void_ptr), false);
+        run(roi, *static_cast<PoseParams *>(static_cast<HcposeParams *>(params_void_ptr)), false);
     }
     catch (const std::exception &e)
     {
@@ -627,7 +677,7 @@ void filter_letterbox(HailoROIPtr roi, void *params_void_ptr)
 {
     try
     {
-        run(roi, *reinterpret_cast<PoseParams *>(params_void_ptr), true);
+        run(roi, *static_cast<PoseParams *>(static_cast<HcposeParams *>(params_void_ptr)), true);
     }
     catch (const std::exception &e)
     {

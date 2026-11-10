@@ -26,6 +26,7 @@ class ModelConfig:
     keypoint_threshold: float = 0.5
     max_detections: int = 100
     class_agnostic_nms: bool = True
+    pose_dedup: float = 0.1  # drop same-skeleton duplicates after NMS (0 = off)
     score_activation: str = "auto"  # auto | sigmoid | none
     keypoint_activation: str = "auto"
     # structure overrides (normally auto-detected from the HEF)
@@ -58,6 +59,7 @@ class ModelConfig:
             "keypoint_threshold": self.keypoint_threshold,
             "max_detections": self.max_detections,
             "class_agnostic_nms": self.class_agnostic_nms,
+            "pose_dedup": self.pose_dedup,
             "score_activation": self.score_activation,
             "keypoint_activation": self.keypoint_activation,
             "input_width": input_width,

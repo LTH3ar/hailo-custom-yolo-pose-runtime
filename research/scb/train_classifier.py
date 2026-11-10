@@ -10,7 +10,7 @@ reports overall and within-image AUC, then fits the chosen family (gradient-
 boosted trees) on all data and exports it as JSON for the Pi.
 
 usage:
-  python research/scb/train_classifier.py ~/scb/poses_hef_m.jsonl --out hcpose/engagement/models/scb_classifier.json
+  python research/scb/train_classifier.py ~/scb/poses_hef_m.jsonl --export-dir hcpose/engagement/models
 """
 import argparse
 import platform
@@ -32,13 +32,16 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parents[1]))
 sys.path.insert(0, str(HERE))
 import scbdata  # noqa: E402
-from hcpose.engagement.classifier import FEATURE_NAMES, TreeEnsemble, export_hgb, feature_vector  # noqa: E402
+from hcpose.engagement.classifier import FEATURE_NAMES, export_model, feature_vector, load_model  # noqa: E402
 from hcpose.engagement.features import Baseline, KeypointIndex, compute  # noqa: E402
 from hcpose.presets import UPPER_BODY13_NAMES  # noqa: E402
 
 ap = argparse.ArgumentParser()
 ap.add_argument("poses", nargs="+", help="pose caches; several are pooled (e.g. n, s and m)")
-ap.add_argument("--out", help="export the final model here (JSON)")
+ap.add_argument("--out", help="export the final gradient-boosted trees here (JSON)")
+ap.add_argument("--export-dir", metavar="DIR",
+                help="fit all three models on all data and export scb_trees.json, scb_logistic.json and "
+                     "scb_mlp.json here (e.g. hcpose/engagement/models)")
 ap.add_argument("--det-thr", type=float, default=0.3, help="detection confidence for students (default 0.3)")
 ap.add_argument("--kpt-thr", type=float, default=0.5)
 ap.add_argument("--name", default="scb", help="model name stored in the JSON")
@@ -121,13 +124,37 @@ def hgb():
                                           l2_regularization=1.0, class_weight="balanced", random_state=0)
 
 
+def imputer():
+    # keep_empty_features: an all-NaN column must stay in place, or the exported model's
+    # feature indices would shift (it doesn't occur with these features, but be safe)
+    return SimpleImputer(strategy="mean", keep_empty_features=True)
+
+
 families = {
-    "logistic regression": lambda: make_pipeline(SimpleImputer(), StandardScaler(),
+    "logistic regression": lambda: make_pipeline(imputer(), StandardScaler(),
                                                  LogisticRegression(max_iter=2000, class_weight="balanced")),
     "gradient-boosted trees": hgb,
-    "MLP (64-32)": lambda: make_pipeline(SimpleImputer(), StandardScaler(),
+    "MLP (64-32)": lambda: make_pipeline(imputer(), StandardScaler(),
                                          MLPClassifier((64, 32), max_iter=300, early_stopping=True, random_state=0)),
 }
+KIND = {"logistic regression": "logistic", "gradient-boosted trees": "trees", "MLP (64-32)": "mlp"}
+
+
+def prior_offset(name, y_train):
+    """The MLP can't use class weights, so its probabilities follow the training prior.
+    Shifting its logit by log((1-p)/p) gives the balanced probability the other two produce,
+    so one set of analyzer thresholds works for all models."""
+    if KIND[name] != "mlp":
+        return 0.0
+    p = float(np.mean(y_train))
+    return float(np.log((1 - p) / p))
+
+
+def shift(prob, offset):
+    if offset == 0.0:
+        return prob
+    q = np.clip(prob, 1e-12, 1 - 1e-12)
+    return 1.0 / (1.0 + np.exp(-(np.log(q / (1 - q)) + offset)))
 print(f"\n{'model':24} {'AUC':>6} {'within-img AUC':>15} {'bal. acc':>9}  (5-fold, grouped by lesson)")
 cv, oofs = {}, {}
 for name, make in families.items():
@@ -135,9 +162,8 @@ for name, make in families.items():
     for tr, te in GroupKFold(n_splits=5).split(X, y, groups):
         m = make()
         m.fit(X[tr], y[tr])
-        oof[te] = m.predict_proba(X[te])[:, 1]
-    # MLP has no class weights: compare at the prevalence-matched threshold for balanced accuracy
-    thr = 0.5 if "MLP" not in name else np.quantile(oof, 1 - y.mean())
+        oof[te] = shift(m.predict_proba(X[te])[:, 1], prior_offset(name, y[tr]))
+    thr = 0.5  # all three are on the balanced-probability scale (see prior_offset)
     oofs[name] = oof
     cv[name] = {"auc": roc_auc_score(y, oof), "within_image_auc": within_image_auc(oof),
                 "balanced_acc": balanced_accuracy_score(y, oof >= thr)}
@@ -171,25 +197,48 @@ if args.save_models:
         pickle.dump({"model": m, "feature_names": FEATURE_NAMES, "sklearn": __import__("sklearn").__version__}, open(fn, "wb"))
         print(f"saved {fn}")
 
-if args.out:
+def export_final(name, path):
     t0 = time.time()
-    final = hgb().fit(X, y)
+    final = families[name]().fit(X, y)
+    off = prior_offset(name, y)
     meta = {
         "name": args.name,
+        "kind": KIND[name],
         "trained_on": ", ".join(Path(p).name for p in args.poses),
         "students": int(len(y)),
         "lesson_groups": int(len(set(groups))),
         "det_thr": args.det_thr,
-        "cv_gradient_boosted_trees": {k: round(float(v), 4) for k, v in cv["gradient-boosted trees"].items()},
+        "cv": {k: round(float(v), 4) for k, v in cv[name].items()},
         "sklearn": __import__("sklearn").__version__,
         "created": time.strftime("%Y-%m-%d %H:%M"),
         "host": platform.node(),
     }
-    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    export_hgb(final, args.out, meta)
-    rt = TreeEnsemble.load(args.out)
-    err = np.abs(rt.predict_proba(X) - final.predict_proba(X)[:, 1]).max()
-    print(f"\nexported {args.out} ({Path(args.out).stat().st_size / 1e6:.2f} MB, {len(final._predictors)} trees, "
-          f"{time.time() - t0:.1f}s); NumPy runtime vs sklearn max |diff| = {err:.2e}")
-    assert err < 1e-6, "exported model does not reproduce sklearn"
+    path = Path(path)
+    previous = None
+    if path.is_file():
+        try:
+            previous = load_model(str(path)).predict_proba(X)
+        except (ValueError, KeyError) as e:
+            print(f"  (existing {path.name} not comparable: {e})")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    export_model(final, str(path), meta, logit_offset=off)
+    rt = load_model(str(path))
+    want = shift(final.predict_proba(X)[:, 1], off)
+    err = np.abs(rt.predict_proba(X) - want).max()
+    note = ""
+    if previous is not None:
+        d = np.abs(previous - rt.predict_proba(X)).max()
+        note = f"; vs previous {path.name}: max |diff| {d:.1e}" + (" (identical)" if d < 1e-9 else "")
+    print(f"exported {path} ({path.stat().st_size / 1e6:.2f} MB, {time.time() - t0:.1f}s); "
+          f"NumPy runtime vs sklearn max |diff| = {err:.1e}{note}")
+    assert err < 1e-5, f"exported {KIND[name]} model does not reproduce sklearn"
     assert len(FEATURE_NAMES) == X.shape[1]
+
+
+if args.export_dir or args.out:
+    print()
+if args.export_dir:
+    for name in families:
+        export_final(name, Path(args.export_dir) / f"scb_{KIND[name]}.json")
+elif args.out:
+    export_final("gradient-boosted trees", args.out)

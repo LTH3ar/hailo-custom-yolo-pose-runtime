@@ -86,7 +86,7 @@ Coordinates are pixels in the processed frame (`w`×`h`). Boxes and keypoints ar
 
 ## Engagement analysis (focused / distracted)
 
-Turns each student's skeleton into **focused**, **distracted** or **unknown**, and the class into a live percentage ("65% distracted, 17 of 20 students counted"). It uses keypoints only, so no images are stored.
+Turns each student's skeleton into **focused**, **distracted** or **unknown**, and the class into a live estimate with a range ("43% distracted (20-65%) | 14 of ~30 students"). It uses keypoints only, so no images are stored.
 
 ```bash
 # live, both labels and percentage on screen, camera at the front-left of the room
@@ -99,8 +99,15 @@ Turns each student's skeleton into **focused**, **distracted** or **unknown**, a
 # all settings in a file
 ./hcpose.sh run models/upper_body_s.hef --input usb --engagement configs/engagement.yaml
 
+# far rows too small to detect: also run the model on zoomed-in tiles of the top 60% of the frame
+# (full frame + 3 tiles = 4 inferences per frame, in either engine)
+./hcpose.sh run models/upper_body_m.hef --input usb --engagement --tiles auto --score-threshold 0.3
+
+# choose the per-student classifier: trees (default), logistic, mlp, or none (rules)
+./hcpose.sh run models/upper_body_m.hef --input usb --engagement --classifier mlp
+
 # offline: replay a skeleton file recorded with --save-json (no Hailo needed)
-./hcpose.sh analyze skeletons.jsonl -o labelled.jsonl --camera-position left
+./hcpose.sh analyze skeletons.jsonl -o labelled.jsonl --camera-position left --classifier logistic
 ```
 
 **How it decides** (`hcpose/engagement/`):
@@ -113,10 +120,20 @@ Turns each student's skeleton into **focused**, **distracted** or **unknown**, a
    - torso rotated
    - hand at the face
 
-   A raised hand always counts as focused. Strong cues decide alone; weak cues (head down, torso, hand at face) need a second cue, because writing notes also looks like "head down".
+   A raised hand always counts as focused. These cues name the *reason* shown for a distracted student.
+   **The per-frame decision** comes from a classifier trained on SCB classroom images ([`research/scb/`](research/scb/README.md)), switchable with `--classifier`:
+
+   | Value | Model |
+   |---|---|
+   | `trees` / `auto` (default) | gradient-boosted trees |
+   | `logistic` | logistic regression |
+   | `mlp` | small neural net |
+   | `none` | the hand-written cue weights |
+
+   All run in NumPy on the Pi. They are trained on the m HEF's poses of SCB students, with and without tiles. On SCB front-view students they reach a within-image AUC of about 0.74–0.84, against 0.54 for the rules. They depend on good poses: on a real exam-hall clip, trees gave about 9–13% distracted with the m model, but 36% with n without tiles (16% with tiles), while the rules stayed at 5–11% with either model. With the n model, prefer `--tiles auto` or `--classifier none`.
 3. **Attentive baseline per seat.** Each seat learns its own "looking at the board" pose from its first `calibration_seconds` of observation (median, so glances don't matter). Until then the seat's running history and the room's typical direction are used. That works with a camera at the front center, front-left or front-right, without telling it where. `--camera-position` adds a check against a class that is mostly distracted from the very start. `--calibration room.json` saves what was learned for that classroom and loads it next time; use `--recalibrate` after moving the camera.
 4. **Decisions over time.** The per-frame score is smoothed and switches state with hysteresis: distracted after about 2.5 s, focused again after about 1.5 s. A glance doesn't flip a student. Students without usable keypoints for 2 s are **unknown** and left out of the percentage.
-5. **Class percentage** is distracted ÷ (focused + distracted), averaged over the last 5 s on screen. The count of students included is always shown with it.
+5. **Class estimate.** The camera misses students, mostly in far rows, and the misses aren't random, so a plain percentage of *detected* students is biased. The estimate counts every recently seen seat with its last state (seat memory, `presence_seconds`). It weights near, middle and far rows by their number of seats, not by how many students happen to be detected there. It shows a 95% range around the number on screen. The range covers students that weren't counted, not classifier mistakes. `--class-size N` gives it the real head count; only then does counting most of the class narrow the range, because a size inferred from the seats seen so far may be too small.
 
 Settings, with explanations: [`configs/engagement.yaml`](configs/engagement.yaml). The `--display` switch is `students | class | both | none`; `class` deliberately shows no per-student state.
 
@@ -125,7 +142,7 @@ With `--save-json`, each person gets `"engagement": {"seat", "state", "score", "
 **Assumptions.** These are worth stating in the thesis:
 - During the first minute or two, most students mostly look toward the board, unless `--camera-position` is set.
 - "Head down" can't separate writing from a phone; that's why it has a lower weight.
-- The rules are a baseline. A learned classifier trained on labelled data is the next step.
+- The classifiers learn SCB's *action* labels (reading, turning, discussing …) as a proxy for attention. SCB is mostly Chinese K-12 classrooms.
 
 ## Building on it
 
@@ -147,6 +164,7 @@ run("models/upper_body_n.hef", source="/dev/video0", on_frame=on_frame, engageme
 
 - **Double sigmoid fixed.** The `.alls` applies sigmoid to the class-score outputs inside the HEF, and the old C++ post-process applied it again. That compresses confidences into 0.5–0.73, so a 0.6 threshold behaved like ~0.4 and displayed scores were wrong. The Python standalone path didn't do this, so the two paths disagreed. Now detected per HEF (`hcpose inspect` shows which case your HEF is).
 - **NMS now sorts by score first.** The inherited Hailo code assumed candidates were sorted but never sorted them, so overlapping boxes were resolved by anchor position instead of confidence.
+- **Same-skeleton duplicates removed.** YOLO-pose often outputs a tight box and a loose box for one student with the same skeleton. Their box IoU is low, so NMS keeps both, and the engagement analyzer then counts one student twice. After NMS, a box lying inside a stronger one with a matching skeleton is dropped (`pose_dedup`, default 0.1; 0 turns it off). On 1,500 SCB images this removed 6.5% of detections, about one per image.
 - No hard-coded keypoint count (it was 13 in four places), class count, strides, tensor order or output dtype.
 - Box clamping clamps corners rather than width/height independently (which could shift boxes at the frame edge).
 - Recording finalizes the MP4 on end-of-file and on Ctrl+C.
@@ -156,13 +174,15 @@ run("models/upper_body_n.hef", source="/dev/video0", on_frame=on_frame, engageme
 
 ```bash
 .venv/bin/pip install pytest
-# C++ test harness (needs the TAPPAS/HailoRT headers, present after hailo-all):
-g++ -std=c++17 -O2 $(pkg-config --cflags hailo-tappas-core) \
-    -I"$(pkg-config --variable=rapidjson_includedir hailo-tappas-core)" tests/cpp_harness.cpp cpp/yolov8_pose_postprocess.cpp -o build/cpp_harness
+# C++ test harnesses (need the TAPPAS/HailoRT headers, present after hailo-all):
+mkdir -p build
+G="-std=c++17 -O2 -Wno-psabi $(pkg-config --cflags hailo-tappas-core) -I$(pkg-config --variable=rapidjson_includedir hailo-tappas-core)"
+g++ $G tests/cpp_harness.cpp cpp/yolov8_pose_postprocess.cpp cpp/tiling.cpp -o build/cpp_harness
+g++ $G tests/tile_harness.cpp cpp/yolov8_pose_postprocess.cpp cpp/tiling.cpp -o build/tile_harness
 .venv/bin/python -m pytest -q tests
 ```
 
-The fixture is the raw head output of the official `yolov8n-pose` on Ultralytics' `bus.jpg`. The NumPy decoder matches Ultralytics' own decode+NMS exactly. The C++ post-process matches the NumPy decoder for float32, uint8/uint16-quantized, sigmoid-in-HEF, shuffled-order and 13-keypoint variants, and for the letterbox mapping. `tests/check_gst_pipeline.py` runs the generated GStreamer pipeline end-to-end on a machine without Hailo using stand-in elements. `tests/check_gst_engagement.py` does the same with a fake `hailo` bindings module that feeds a synthetic class through the engagement path: re-labelling for the overlay, the class text and the JSONL. `tests/test_engagement.py` covers the rules on synthetic classrooms:
+The fixture is the raw head output of the official `yolov8n-pose` on Ultralytics' `bus.jpg`. The NumPy decoder matches Ultralytics' own decode+NMS exactly. The C++ post-process matches the NumPy decoder for float32, uint8/uint16-quantized, sigmoid-in-HEF, shuffled-order and 13-keypoint variants, and for the letterbox mapping, including on a tile. `tests/test_tiling.py` checks the tile geometry and the merge, and that the C++ merge in the GStreamer pipeline gives the same result as the Python one on random scenes. `tests/check_gst_pipeline.py` runs the generated GStreamer pipeline end-to-end on a machine without Hailo using stand-in elements. `tests/check_gst_engagement.py` does the same with a fake `hailo` bindings module that feeds a synthetic class through the engagement path: re-labelling for the overlay, the class text and the JSONL. `tests/test_engagement.py` covers the rules on synthetic classrooms:
 - turning away, glances, each cue
 - corner cameras
 - most of the class distracted

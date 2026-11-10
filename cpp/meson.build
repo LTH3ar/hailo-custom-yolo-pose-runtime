@@ -52,7 +52,7 @@ else
 endif
 
 shared_library('hcpose_yolov8_pose',
-  'yolov8_pose_postprocess.cpp',
+  ['yolov8_pose_postprocess.cpp', 'tiling.cpp'],
   dependencies : tappas_dep,
   include_directories : extra_inc,
   gnu_symbol_visibility : 'default',

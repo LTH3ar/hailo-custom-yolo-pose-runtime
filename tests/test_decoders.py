@@ -151,6 +151,22 @@ def test_cpp_letterbox_mapping():
 
 
 @pytest.mark.skipif(not (FIXTURE.exists() and os.path.isfile(HARNESS)), reason="fixture or C++ harness missing")
+def test_cpp_letterbox_on_a_tile_roi_is_tile_relative():
+    """On a tile ROI (bbox != whole frame), detections are relative to the tile: the same
+    numbers as on the whole-frame ROI. merge_tiles maps them to the frame afterwards."""
+    raw, _ = load()
+    top, h = 0.21875, 0.5625
+    scaling = [0.0, -top / h, 1.0, 1.0 / h]
+    with tempfile.TemporaryDirectory() as tmp:
+        full, _ = run_cpp(raw, tmp, None, letterbox=scaling)
+        tile, _ = run_cpp(raw, tmp, None, letterbox=scaling + [0.3, 0.1, 0.4, 0.5])
+    assert len(full) == len(tile) > 0
+    for a, b in zip(full, tile):
+        np.testing.assert_allclose(a["box"], b["box"], atol=1e-6)
+        np.testing.assert_allclose(a["kpts"], b["kpts"], atol=1e-6)
+
+
+@pytest.mark.skipif(not (FIXTURE.exists() and os.path.isfile(HARNESS)), reason="fixture or C++ harness missing")
 def test_cpp_forced_activation_and_sidecar_counts():
     raw, _ = load()
     with tempfile.TemporaryDirectory() as tmp:
@@ -160,3 +176,49 @@ def test_cpp_forced_activation_and_sidecar_counts():
         # wrong forced activation must change results (proves the flag is honoured)
         c, _ = run_cpp(raw, tmp, None, extra_cfg={"score_activation": "none"})
         assert len(c) != len(b)
+
+
+def _duplicate_pair(raw):
+    """Two anchors at stride 8: a tight 48x48 box and a loose 96x96 box around it (IoU 0.25,
+    so NMS keeps both), with the same decoded skeleton. A third person elsewhere."""
+    layout = resolve_layout([(n, a.shape) for n, a in raw.items()], input_hw=(640, 640))
+    s = min(layout.scales, key=lambda x: x.stride_x)
+    out = {k: v.copy() for k, v in raw.items()}
+    out[s.score][:] = -10.0
+    for sc in layout.scales:
+        if sc is not s:
+            out[sc.score][:] = -10.0
+    R, K = layout.reg_max, layout.num_keypoints
+
+    def put(r, c, ltrb, kpt_px):
+        out[s.score][r, c, 0] = 5.0
+        d = np.full((4, R), -10.0, np.float32)
+        for side, b in enumerate(ltrb):
+            d[side, b] = 10.0
+        out[s.box][r, c] = d.reshape(-1)
+        k = np.zeros((K, 3), np.float32)
+        k[:, 0] = kpt_px[:, 0] / 8 / 2 - c / 2  # inverse of (x * 2 + col) * stride
+        k[:, 1] = kpt_px[:, 1] / 8 / 2 - r / 2
+        k[:, 2] = 5.0
+        out[s.kpt][r, c] = k.reshape(-1)
+
+    rng = np.random.default_rng(0)
+    pts = np.array([300, 200]) + rng.uniform(-20, 20, (K, 2))
+    put(25, 37, (3, 3, 3, 3), pts)  # centre (300, 204), 48x48
+    put(25, 38, (5, 4, 7, 8), pts + 0.5)  # centre (308, 204): x 268..364, y 172..268
+    put(60, 20, (3, 3, 3, 3), np.array([164, 484]) + rng.uniform(-20, 20, (K, 2)))
+    return out
+
+
+@pytest.mark.skipif(not FIXTURE.exists(), reason="fixture missing")
+def test_pose_dedup_drops_same_skeleton_box():
+    raw, _ = load()
+    outs = _duplicate_pair(raw)
+    _, on, _ = decode(outs)
+    _, off, _ = decode(outs, pose_dedup=0)
+    assert len(off) == 3 and len(on) == 2
+    if os.path.isfile(HARNESS):
+        with tempfile.TemporaryDirectory() as tmp:
+            cpp_on, _ = run_cpp(outs, tmp)
+            cpp_off, _ = run_cpp(outs, tmp, extra_cfg={"pose_dedup": 0})
+        assert len(cpp_on) == 2 and len(cpp_off) == 3

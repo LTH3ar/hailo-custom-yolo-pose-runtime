@@ -349,3 +349,179 @@ def test_analyzer_with_classifier(tmp_path):
     st, res = states_at(hist, 34)
     assert st[:3] == [DISTRACTED] * 3 and st.count(FOCUSED) == 9, st
     assert res.persons[0].engagement["reason"] == "head_turned"  # reasons still come from the rule cues
+
+
+# ---------------------------------------------------------------- whole-class estimate
+def _biased_visibility_run(**overrides):
+    """12 students in 3 rows; the back row is detected in 1 of 4 frames, the middle in 3 of 5.
+    True distracted share: back 2/4, middle 1/4, front 0/4 -> 3/12 = 25%."""
+    distracted = {8, 9, 4}  # seats_grid: 0-3 front, 4-7 middle, 8-11 back
+
+    def script(i, t):
+        k = int(round(t * 10))
+        row = i // 4
+        if row == 2 and (k + i) % 4:
+            return None
+        if row == 1 and (k + i) % 5 >= 3:
+            return None
+        return {"yaw": 1.0} if i in distracted and t >= 10 else {}
+
+    s = load_settings(overrides={"classifier": "none", **overrides})
+    return run_class(script, settings=s, seconds=70)
+
+
+def test_class_estimate_corrects_detection_bias():
+    an, hist = _biased_visibility_run()
+    c = hist[-1][1].extra["class"]
+    raw = c["pct_distracted_smoothed"]
+    est = c["class_pct_distracted"]
+    assert raw < 20, raw  # per-frame share over-represents the always-visible, focused front row
+    assert abs(est - 25.0) <= 3.0, (est, c["zones"])
+    lo, hi = c["class_ci"]
+    assert lo <= 25.0 <= hi and hi - lo < 50  # 12 students, class size unknown: wide on purpose
+    assert c["class_size"] == 12 and c["class_counted"] == 12
+    assert [z["zone"] for z in c["zones"]] == ["far", "middle", "near"]
+    assert [z["seats"] for z in c["zones"]] == [4, 4, 4]
+
+
+def test_class_estimate_without_zones_is_plain_memory():
+    an, hist = _biased_visibility_run(zones=1)
+    c = hist[-1][1].extra["class"]
+    assert abs(c["class_pct_distracted"] - 25.0) <= 3.0  # memory alone fixes this case (all seats get counted)
+
+
+def test_class_size_setting_and_banner():
+    an, hist = _biased_visibility_run(class_size=30)
+    c = hist[-1][1].extra["class"]
+    assert c["class_size"] == 30 and c["class_size_from"] == "setting"
+    txt = an.class_text()
+    assert "of 30 students" in txt and "%" in txt and "(" in txt, txt
+    an2, hist2 = _biased_visibility_run()
+    assert "of ~12 students" in an2.class_text()
+
+
+def test_unseen_students_weight_the_far_zone():
+    an, hist = _biased_visibility_run(class_size=16)  # 4 students never detected
+    c = hist[-1][1].extra["class"]
+    assert c["zones"][0]["seats"] == 8
+    assert abs(c["class_pct_distracted"] - 31.25) <= 3.0, c  # (8*0.5 + 4*0.25 + 4*0) / 16
+
+
+def _synthetic_xy():
+    from hcpose.engagement.classifier import feature_vector
+    from hcpose.engagement.features import Baseline
+
+    rng = np.random.default_rng(1)
+    X, y = [], []
+    for _ in range(1200):
+        dis = rng.random() < 0.25
+        yaw = rng.choice([-1.0, 1.0]) * rng.uniform(0.8, 1.2) if dis else rng.normal(0, 0.1)
+        p = synth_person(rng.uniform(200, 1000), rng.uniform(300, 600), rng.uniform(50, 120), yaw=yaw,
+                         jitter=0.02, rng=rng)
+        f = compute(p.keypoints, p.box, IDX, 0.5)
+        X.append(feature_vector(p.keypoints, p.box, f, Baseline(0.0, 0.9, 0.38), IDX, 0.5))
+        y.append(dis)
+    X = np.vstack(X)
+    X[::9, -6] = np.nan  # some missing yaw_dev values
+    return X, np.array(y)
+
+
+@pytest.mark.parametrize("kind", ["logistic", "mlp"])
+def test_pipeline_export_matches_sklearn(tmp_path, kind):
+    pytest.importorskip("sklearn")
+    from sklearn.impute import SimpleImputer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    from hcpose.engagement.classifier import export_model, load_model
+
+    X, y = _synthetic_xy()
+    model = (LogisticRegression(max_iter=2000, class_weight="balanced") if kind == "logistic"
+             else MLPClassifier((16, 8), max_iter=300, random_state=0))
+    est = make_pipeline(SimpleImputer(keep_empty_features=True), StandardScaler(), model).fit(X, y)
+    path = tmp_path / f"{kind}.json"
+    off = 0.0 if kind == "logistic" else 1.1
+    export_model(est, str(path), {"name": "synthetic"}, logit_offset=off)
+    rt = load_model(str(path))
+    assert rt.kind == kind
+    p = np.clip(est.predict_proba(X)[:, 1], 1e-12, 1 - 1e-12)
+    want = 1 / (1 + np.exp(-(np.log(p / (1 - p)) + off)))
+    assert np.abs(rt.predict_proba(X) - want).max() < 1e-5
+    # plain SimpleImputer (drops all-NaN columns) is refused rather than exported wrong
+    bad = make_pipeline(SimpleImputer(), StandardScaler(), LogisticRegression(max_iter=500)).fit(X, y)
+    with pytest.raises(ValueError):
+        export_model(bad, str(tmp_path / "bad.json"))
+
+
+def test_classifier_names_resolve(tmp_path, monkeypatch):
+    from hcpose.engagement import classifier as C
+
+    assert C.resolve("none") is None and C.resolve("rules") is None
+    auto = C.resolve("auto")
+    assert auto is None or auto.kind == "trees"
+    monkeypatch.setattr(C, "BUNDLED", {k: tmp_path / f"scb_{k}.json" for k in ("trees", "logistic", "mlp")})
+    with pytest.raises(FileNotFoundError):
+        C.resolve("mlp")
+
+
+def test_analyzer_switches_between_learned_models(tmp_path):
+    pytest.importorskip("sklearn")
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.impute import SimpleImputer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    from hcpose.engagement.classifier import export_model
+
+    X, y = _synthetic_xy()
+    models = {
+        "trees": HistGradientBoostingClassifier(max_iter=50, class_weight="balanced", random_state=0),
+        "logistic": make_pipeline(SimpleImputer(keep_empty_features=True), StandardScaler(),
+                                  LogisticRegression(max_iter=2000, class_weight="balanced")),
+        "mlp": make_pipeline(SimpleImputer(keep_empty_features=True), StandardScaler(),
+                             MLPClassifier((16, 8), max_iter=400, random_state=0)),
+    }
+    for kind, est in models.items():
+        est.fit(X, y)
+        path = tmp_path / f"{kind}.json"
+        off = float(np.log((1 - y.mean()) / y.mean())) if kind == "mlp" else 0.0
+        export_model(est, str(path), {"name": kind}, logit_offset=off)
+        an, hist = run_class(lambda i, t: {"yaw": 1.0} if i < 3 and t >= 20 else {},
+                             settings=load_settings(overrides={"classifier": str(path)}), seconds=35)
+        assert an.classifier.kind == kind
+        st, _ = states_at(hist, 34)
+        assert st[:3] == [DISTRACTED] * 3 and st.count(FOCUSED) == 9, (kind, st)
+
+
+def test_class_interval_contains_the_shown_estimate_every_frame():
+    an, hist = _biased_visibility_run()
+    seen = 0
+    for _, res in hist:
+        c = res.extra.get("class") or {}
+        if c.get("class_pct_distracted") is None:
+            continue
+        lo, hi = c["class_ci"]
+        assert lo - 0.1 <= c["class_pct_distracted"] <= hi + 0.1, c
+        seen += 1
+    assert seen > 100
+
+
+def test_class_interval_only_census_with_known_class_size():
+    from hcpose.engagement.analyzer import class_interval
+
+    # all 31 known seats counted, size inferred from seats: still a real range
+    lo, hi = class_interval(0.03, 31, 31, finite_population=False)
+    assert lo < 3.0 < hi and hi - lo > 5
+    # head count given and everyone counted: census, the range collapses onto p
+    assert class_interval(0.03, 31, 31, finite_population=True) == [3.0, 3.0]
+    # half the class counted: narrower than without the correction, and contains p
+    a = class_interval(0.25, 15, 30, finite_population=True)
+    b = class_interval(0.25, 15, 30, finite_population=False)
+    assert b[0] < a[0] <= 25.0 <= a[1] < b[1]
+    # the banner shows a range when the size is inferred
+    an, _ = _biased_visibility_run()
+    assert "(" in an.class_text(), an.class_text()

@@ -9,6 +9,8 @@ iou_threshold: 0.7          # NMS overlap
 keypoint_threshold: 0.5     # joints below this are hidden in the overlay
 max_detections: 100
 class_agnostic_nms: true
+pose_dedup: 0.1             # after NMS, drop a box whose skeleton matches a stronger one
+                            # (box inside it, mean joint distance < 0.1 x box size); 0 = off
 
 # Whether the HEF already applies sigmoid to the class-score outputs.
 # auto = detect from the output values (recommended). Force with sigmoid/none.

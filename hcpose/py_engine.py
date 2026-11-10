@@ -18,6 +18,7 @@ from .hef import HefInfo, import_hailo_platform
 from .layout import Layout
 from .results import FpsCounter, FrameCallback, FrameResult, Person
 from .sources import classify, usb_device
+from .tiling import make_tiles, merge, offset, parse_region, parse_spec
 from .tracker import IouTracker
 
 log = logging.getLogger("hcpose")
@@ -154,6 +155,8 @@ class PyRunner:
         callbacks: Optional[List[FrameCallback]] = None,
         show_fps: bool = True,
         engagement=None,
+        tiles: Optional[str] = None,
+        tile_region: str = "0:0.6",
     ):
         self.cfg, self.info, self.layout = cfg, info, layout
         self.source, self.width, self.height, self.fps = source, width, height, fps
@@ -166,6 +169,9 @@ class PyRunner:
         self.overlay = overlay
         self.callbacks = list(callbacks or [])
         self.engagement = engagement
+        self.tile_grid = parse_spec(tiles)
+        self.tile_region = parse_region(tile_region)
+        self._tiles_cache = {}
         self.display_mode = engagement.s.display if engagement else "none"
         if engagement:
             self.callbacks.insert(0, engagement)
@@ -178,6 +184,8 @@ class PyRunner:
             class_agnostic_nms=cfg.class_agnostic_nms,
             score_activation=cfg.score_activation,
             keypoint_activation=cfg.keypoint_activation,
+            keypoint_threshold=cfg.keypoint_threshold,
+            pose_dedup=cfg.pose_dedup,
         )
 
     def run(self) -> int:
@@ -200,11 +208,21 @@ class PyRunner:
                         fh, fw = frame.shape[:2]
                         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                         net_in, s, px, py = letterbox(rgb, in_w, in_h)
-                        out = pipe.infer({self.info.input_name: net_in[None]})
+                        tiles = self._tiles(fw, fh)
+                        crops = [letterbox(rgb[t.y0:t.y1, t.x0:t.x1], in_w, in_h) for t in tiles]
+                        batch = np.stack([net_in] + [c[0] for c in crops])
+                        out = pipe.infer({self.info.input_name: batch})
                         if idx == 0:
                             self._report_activation(out)
                         poses = self.decoder({k: v[0] for k, v in out.items()})
                         persons = poses_to_persons(poses, self.layout, s, px, py, fw, fh, self.cfg.labels)
+                        if tiles:
+                            tiled = []
+                            for j, (t, (_, ts, tpx, tpy)) in enumerate(zip(tiles, crops), start=1):
+                                tp = self.decoder({k: v[j] for k, v in out.items()})
+                                tiled += [(offset(q, t), t) for q in
+                                          poses_to_persons(tp, self.layout, ts, tpx, tpy, t.w, t.h, self.cfg.labels)]
+                            persons = merge(persons, tiled, fw, fh)
                         if self.tracker:
                             for p, tid in zip(persons, self.tracker.update([p.box for p in persons])):
                                 p.track_id = tid
@@ -264,6 +282,16 @@ class PyRunner:
                     return 0  # window closed: continue
             except cv2.error:
                 return 0
+
+    def _tiles(self, w: int, h: int):
+        if not self.tile_grid:
+            return []
+        if (w, h) not in self._tiles_cache:
+            self._tiles_cache[(w, h)] = make_tiles(w, h, self.tile_grid, self.tile_region)
+            ts = self._tiles_cache[(w, h)]
+            print(f"[hcpose] tiling: full frame + {len(ts)} tile(s) over rows {self.tile_region[0]:.0%}-"
+                  f"{self.tile_region[1]:.0%} ({ts[0].w}x{ts[0].h} px each)")
+        return self._tiles_cache[(w, h)]
 
     def _report_activation(self, out) -> None:
         self.decoder({k: v[0] for k, v in out.items()})  # resolves auto activations

@@ -20,6 +20,7 @@ from .config import ModelConfig
 from .layout import Layout
 from .results import FpsCounter, FrameCallback, FrameResult, Person
 from .sources import classify, gst_source
+from .tiling import make_tiles, parse_region, parse_spec
 
 log = logging.getLogger("hcpose")
 
@@ -59,6 +60,8 @@ class GstRunner:
         callbacks: Optional[List[FrameCallback]] = None,
         show_fps: bool = True,
         engagement=None,
+        tiles: Optional[str] = None,
+        tile_region: str = "0:0.6",
     ):
         import gi
 
@@ -99,7 +102,20 @@ class GstRunner:
                 f"{env.POSTPROCESS_SO_NAME} not found. Run ./install.sh (it builds the C++ post-process), "
                 "or use --engine python."
             )
-        self.cropper = env.find_whole_buffer_cropper()
+        # tiling: our own crop function (full frame + tiles) replaces libwhole_buffer.so
+        self.tiles = []
+        grid = parse_spec(tiles)
+        if grid:
+            self.tiles = make_tiles(width, height, grid, parse_region(tile_region))
+            print(f"[hcpose] tiling: full frame + {len(self.tiles)} tile(s) over rows "
+                  f"{parse_region(tile_region)[0]:.0%}-{parse_region(tile_region)[1]:.0%} "
+                  f"({self.tiles[0].w}x{self.tiles[0].h} px each); {1 + len(self.tiles)} inferences per frame")
+            if sync is None and self.sync:
+                # with 4 inferences per frame the bigger models run below the file's frame rate;
+                # a display synced to the file clock would then drop most frames (and warn on each)
+                self.sync = False
+                print("[hcpose] tiling: playing the file as fast as it is processed (--sync to force real time)")
+        self.cropper = self.so_path if self.tiles else env.find_whole_buffer_cropper()
         if not self.cropper:
             raise RuntimeError("TAPPAS libwhole_buffer.so not found (part of hailo-tappas-core). Run `hcpose doctor`.")
         missing = [e for e in ("hailonet", "hailofilter", "hailocropper", "hailoaggregator") if not Gst.ElementFactory.find(e)]
@@ -132,7 +148,11 @@ class GstRunner:
 
         fd, self.pp_config = tempfile.mkstemp(prefix="hcpose_pp_", suffix=".json")
         with os.fdopen(fd, "w") as f:
-            json.dump(cfg.postprocess_json(layout.input_width, layout.input_height), f)
+            pp = cfg.postprocess_json(layout.input_width, layout.input_height)
+            if self.tiles:
+                pp["tile_merge"] = {"frame_width": width, "frame_height": height, "iou": 0.5, "ios": 0.7,
+                                    "edge_margin": 0.02, "kpt_thr": cfg.keypoint_threshold}
+            json.dump(pp, f)
 
     # ------------------------------------------------------------------ pipeline
     def pipeline_string(self) -> str:
@@ -143,6 +163,8 @@ class GstRunner:
             f"{_q('pre_convert_q')} ! videoconvert name=pre_convert n-threads=3 qos=false ! "
             f"video/x-raw, format=RGB, pixel-aspect-ratio=1/1, width={self.width}, height={self.height} ! "
         )
+        n_crops = 1 + len(self.tiles)
+        crop_fn = "create_tile_crops" if self.tiles else "create_crops"
         inner = (
             f"{_q('inf_scale_q')} ! videoscale name=inf_scale n-threads=2 qos=false ! "
             f"{_q('inf_convert_q')} ! video/x-raw, pixel-aspect-ratio=1/1 ! videoconvert name=inf_convert n-threads=2 ! "
@@ -150,17 +172,22 @@ class GstRunner:
             # inf_filter_q is larger than everything the branch can hold in flight
             # (bypass_q=20): hailonet then never blocks on push, which is when it
             # discards in-flight frames at EOS (they came out with no detections).
-            f"{_q('inf_filter_q', 30)} ! hailofilter name=pose so-path=\"{self.so_path}\" config-path=\"{self.pp_config}\" "
+            # (with tiles every frame sends n_crops buffers through this branch)
+            f"{_q('inf_filter_q', 30 * n_crops)} ! hailofilter name=pose so-path=\"{self.so_path}\" config-path=\"{self.pp_config}\" "
             f"function-name=filter_letterbox qos=false ! {_q('inf_out_q')} "
         )
         infer = (
-            f"{_q('wrap_in_q')} ! hailocropper name=crop so-path=\"{self.cropper}\" function-name=create_crops "
+            f"{_q('wrap_in_q')} ! hailocropper name=crop so-path=\"{self.cropper}\" function-name={crop_fn} "
             f"use-letterbox=true resize-method=inter-area internal-offset=true "
             f"hailoaggregator name=agg "
             f"crop. ! {_q('bypass_q', 20)} ! agg.sink_0 "
             f"crop. ! {inner} ! agg.sink_1 "
             f"agg. ! {_q('wrap_out_q')} ! "
         )
+        if self.tiles:
+            # tile detections -> frame coordinates, drop edge-cut ones, merge duplicates
+            infer += (f"hailofilter name=tile_merge so-path=\"{self.so_path}\" config-path=\"{self.pp_config}\" "
+                      f"function-name=merge_tiles qos=false ! {_q('merge_q')} ! ")
         post = ""
         if self.tracker:
             post += (
@@ -410,6 +437,12 @@ class GstRunner:
         desc = self.pipeline_string()
         log.debug("pipeline: %s", desc)
         try:
+            if self.tiles:
+                W, H = self.width, self.height
+                os.environ["HCPOSE_TILES"] = ";".join(
+                    f"{t.x0 / W:.6f},{t.y0 / H:.6f},{t.w / W:.6f},{t.h / H:.6f}" for t in self.tiles)
+            else:
+                os.environ.pop("HCPOSE_TILES", None)
             self.pipeline = Gst.parse_launch(desc)
         except GLib.Error as e:
             print(f"[hcpose] failed to build pipeline: {e.message}\n  pipeline: {desc}")
