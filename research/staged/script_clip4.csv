@@ -1,0 +1,8 @@
+start,end,seats,behaviour,label
+00:58,01:47,all,write notes,focused
+01:47,02:15,S2,look to the side,distracted
+02:15,02:45,S1,phone under the table,distracted
+02:45,03:17,S1 S2,talk to each other,distracted
+03:27,04:28,S2,phone on the table,distracted
+03:38,04:00,S1,look to the side,distracted
+04:00,04:28,S1,turn around,distracted

@@ -104,7 +104,7 @@ def find_start(header: dict, frames: List[dict], search: float = 120.0) -> Optio
             k = p["keypoints"]
             if all(k[i][2] >= 0.3 for i in (nose, lw, rw)) and k[lw][1] < k[nose][1] and k[rw][1] < k[nose][1]:
                 up += 1
-        hits.append((fr["t"], len(P) >= 3 and up >= 0.6 * len(P)))
+        hits.append((fr["t"], len(P) >= 2 and up >= 0.6 * len(P)))
     for i, (t, ok) in enumerate(hits):
         if ok:
             run = [h for tt, h in hits[i:] if tt < t + 1.0]
