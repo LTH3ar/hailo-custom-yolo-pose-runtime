@@ -265,7 +265,7 @@ A 3 min 18 s clip (about 35 middle-school students, camera high at the front lik
 
 | | No tiles | Tiles |
 |---|---|---|
-| Students per frame | – | 19.3 |
+| Students per frame | 14.5 | 19.3 |
 | Class size inferred from seats | 19 | 28 |
 | Trees | 60% | 62% |
 | Logistic | 89% | 89% |
