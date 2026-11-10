@@ -36,6 +36,8 @@ class EngagementSettings:
     window_seconds: float = 5.0  # rolling window for the class percentage on screen
 
     # whole-class estimate (see analyzer._class_estimate)
+    seat_forget_seconds: float = 60.0  # a seat not seen for this long no longer counts toward the class size
+    min_presence: float = 0.15  # an uncalibrated seat must be detected in this share of frames to count
     presence_seconds: float = 15.0  # a seat counts with its last decision for this long after it was seen
     zones: int = 3  # near / middle / far rows, each weighted by its number of seats (1 = no weighting)
     class_size: Optional[int] = None  # real number of students, if known; else the number of seats found

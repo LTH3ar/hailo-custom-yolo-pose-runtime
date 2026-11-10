@@ -525,3 +525,22 @@ def test_class_interval_only_census_with_known_class_size():
     # the banner shows a range when the size is inferred
     an, _ = _biased_visibility_run()
     assert "(" in an.class_text(), an.class_text()
+
+
+def test_class_size_ignores_departed_and_flickering_seats():
+    """Student 0 leaves at 20 s; student 11 is a box seen in only 1 of 10 frames (a spurious
+    detection). Neither should count toward the inferred class size at the end."""
+    def script(i, t):
+        k = int(round(t * 10))
+        if i == 0 and t >= 20:
+            return None
+        if i == 11 and k % 10:
+            return None
+        return {}
+
+    an, hist = run_class(script, seconds=90)
+    c = hist[-1][1].extra["class"]
+    assert c["class_size_from"] == "seats" and c["class_size"] == 10, c
+    # while student 0 was still there (and within the 60 s memory) it counted
+    c50 = min(hist, key=lambda h: abs(h[0] - 50))[1].extra["class"]
+    assert c50["class_size"] == 11, c50

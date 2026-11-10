@@ -237,3 +237,24 @@ The same clip through `best.pt` (n, FP32) and `hcpose analyze` on a PC, with `po
 - An earlier Pi run with m untiled gave 10.5% for trees and 11.0% for the rules.
 
 So the learned classifiers transfer to this room only when the poses are good: the m model, or n with tiles. With n's full-frame poses they over-call heavily. Retraining on the n model's poses with head-height cues removed didn't fix it in a quick test, so the cause is pose quality, not the SCB label definitions. The rules are less accurate on SCB but much more stable across models. This is single-clip evidence, so it calls for a small labelled set from the target classrooms before choosing the classifier for deployment.
+
+## Check on a dense self-study room with a low camera
+
+A 6 min study-hall clip (about 50 students, all reading or writing, camera at desk height on the teacher's desk; not in the repo), with `best.pt` (n, FP32) at 10 FPS, `pose_dedup`, `--camera-position center`:
+
+| | No tiles | Tiles |
+|---|---|---|
+| Students per frame | 9.7 | 23.7 |
+| Class size inferred from seats, before the seat fix | 28 | 78 |
+| Class size inferred from seats, after the seat fix | 19 | 52 |
+| Class % after 2:30, trees | 24% | 37% |
+| Class % after 2:30, rules | 37% | 44% |
+| Class % after 2:30, rules, `face_hidden` 0.4 | – | 23% |
+| Class % after 2:30, rules, `face_hidden` 0 | – | 16% |
+
+**What this shows:**
+- **Tiling** more than doubles the students found in a dense room.
+- **Seat fix.** Before it, every box that persisted about 1.5 s became a permanent seat, so the inferred class size grew to 78. Now a seat counts only if seen in the last 60 s and, before calibration, in at least 15% of frames. That gives 52, close to the real count.
+- **Low camera.** Most "distracted" labels here (two thirds, rules) come from `face_hidden`. A head bowed over the desk toward a low camera hides the face, so it looks like turning away. Shoulder left/right order doesn't separate the two: the model guesses a back view for most bowed heads. With a camera high on the wall (the ALTIMA clip) faces stay visible while writing, and the weight barely matters there (rules 5.4% → 4.2% at 0.4).
+- **Default kept.** It stays at 0.9 for the intended high mounting, and the setting is documented for low cameras.
+- **Calibration.** Only 20 of 52 seats had finished calibrating after 6 min. Far students are detected intermittently and need 120 s of usable observation, so a session needs to be longer than a few minutes before per-seat baselines apply to most of the room.

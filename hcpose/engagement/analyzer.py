@@ -50,6 +50,7 @@ class Seat:
     first_seen: float
     last_seen: float
     hits: int = 0
+    first_frame: int = 0  # analyzer frame count when first seen (for the presence ratio)
     observed: float = 0.0  # seconds this seat had usable features
     samples: Dict[str, List[float]] = field(default_factory=lambda: {k: [] for k in BASELINE_KEYS})
     partial: Optional[Baseline] = None  # running median while calibrating (refreshed ~1/s)
@@ -98,6 +99,7 @@ class EngagementAnalyzer:
         self.index = KeypointIndex(keypoint_names)
         self.seats: List[Seat] = []
         self._next_id = 1
+        self._frames = 0
         self._pct_hist: Deque[Tuple[float, float]] = deque()
         self._prior_warned = False
         self._room_yaw: Optional[float] = None
@@ -138,7 +140,7 @@ class EngagementAnalyzer:
         for di, (cx, cy, w, h) in enumerate(dets):
             seat = assigned.get(di)
             if seat is None:
-                seat = Seat(self._next_id, cx, cy, w, h, first_seen=t, last_seen=t)
+                seat = Seat(self._next_id, cx, cy, w, h, first_seen=t, last_seen=t, first_frame=self._frames)
                 self._next_id += 1
                 self.seats.append(seat)
             else:
@@ -263,6 +265,7 @@ class EngagementAnalyzer:
 
     def update(self, result: FrameResult) -> dict:
         t = result.timestamp
+        self._frames += 1
         dt = 0.0 if self._t_last is None else max(0.0, min(1.0, t - self._t_last))
         self._t_last = t
         W, H = result.width, result.height
@@ -369,9 +372,17 @@ class EngagementAnalyzer:
         return txt
 
     # ------------------------------------------------------------------ whole-class estimate
-    def _established(self, seat: Seat) -> bool:
-        """A real seat, not a passer-by: seen repeatedly over a few seconds."""
-        return seat.calibrated or (seat.hits >= 10 and seat.last_seen - seat.first_seen >= 3.0)
+    def _established(self, seat: Seat, t: float) -> bool:
+        """A real, current seat: seen within seat_forget_seconds and, unless calibrated,
+        seen repeatedly over a few seconds and in at least min_presence of the frames since
+        it first appeared. Spurious boxes (a box spanning two students, a hand, a passer-by)
+        otherwise pile up as seats over a long session and inflate the class size."""
+        if t - seat.last_seen > self.s.seat_forget_seconds:
+            return False
+        if seat.calibrated:
+            return True
+        frames = max(1, self._frames - seat.first_frame)
+        return seat.hits >= 10 and seat.last_seen - seat.first_seen >= 3.0 and seat.hits / frames >= self.s.min_presence
 
     def _class_estimate(self, t: float) -> dict:
         """Distracted share of the *whole class*, correcting for who the camera misses.
@@ -387,7 +398,7 @@ class EngagementAnalyzer:
            estimate so the interval always contains the number shown.
         """
         S = self.s
-        seats = [x for x in self.seats if self._established(x)]
+        seats = [x for x in self.seats if self._established(x, t)]
         recent = [x for x in seats if x.last_state is not None and t - x.last_state_t <= S.presence_seconds]
         size_from = "setting" if S.class_size else "seats"
         N = max(S.class_size or 0, len(seats)) if S.class_size else len(seats)
