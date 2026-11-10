@@ -162,4 +162,27 @@ The test used 1,500 front-view SCB images (500 per subset) with the stand-in yol
 
 Detections per image went from 12.9 to 26.0 at threshold 0.3. Visual checks show the extra detections are mostly real back-row students with usable skeletons. Tiling also narrows the gap between behaviors, which reduces the bias toward attentive poses noted earlier.
 
-The cost is one extra inference per tile: full frame plus 3 tiles is four passes per frame, which is fine at the 5–10 FPS that engagement needs.
+**Same test with the project's own upper_body_n** (`best.pt`, 13 keypoints, PyTorch FP32, same 1,500 images, 11,903 labelled students):
+
+| Students | No tiling @0.3 | Tiles @0.3 | No tiling @0.5 | Tiles @0.5 |
+|---|---|---|---|---|
+| **All** | 48.6% | **75.5%** | 30.7% | 58.9% |
+| Small (far third) | 17.0% | **74.4%** | 5.8% | 52.9% |
+| Medium | 57.2% | 78.3% | 31.0% | 62.0% |
+| Large (near third) | 71.6% | 73.9% | 55.3% | 61.9% |
+| BowHead | 28.4% | 62.2% | 17.7% | 44.9% |
+| TurnHead | 56.1% | 89.2% | 32.3% | 70.5% |
+| discuss | 40.3% | 60.8% | 25.4% | 48.4% |
+| hand-raising | 49.9% | 70.6% | 33.7% | 53.6% |
+| read | 57.1% | 84.4% | 38.3% | 66.3% |
+| write | 52.6% | 74.3% | 35.8% | 57.0% |
+
+Detections per image went from 14.7 to 27.6 at threshold 0.3. The upper-body model starts a little higher than the stock one, and with tiles the far third is detected about as often as the near third (74% vs 74%), so coverage no longer depends much on distance. No model weights were changed; this is only how the frame is fed to the model.
+
+```bash
+python research/scb/extract_pt.py best.pt ub_tiles_none.jsonl --conf 0.25 <SCB dirs...>
+python research/scb/extract_pt.py best.pt ub_tiles_auto.jsonl --conf 0.25 --tiles auto <SCB dirs...>
+python research/scb/compare_coverage.py ub_tiles_none.jsonl ub_tiles_auto.jsonl --names none,tiles --det-thr 0.3
+```
+
+The cost is one extra inference per tile: full frame plus 3 tiles is four passes per frame, which is fine at the 5–10 FPS that engagement needs. Both engines support it; the gst engine does the crops and the merge in C++ (`cpp/tiling.cpp`), with the same rules as the Python engine.
