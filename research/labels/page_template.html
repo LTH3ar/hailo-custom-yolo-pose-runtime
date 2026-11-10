@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Moment Labels</title>
+<style>
+:root { --bg:#f7f6f3; --panel:#fff; --ink:#1d1d1b; --quiet:#6b6a66; --line:#dddbd5; --focus:#2f7d4f; --dis:#b8452e; --unsure:#7a7770; --accent:#2b5fa8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#171716; --panel:#212120; --ink:#ecebe7; --quiet:#a3a19b; --line:#3a3936; --focus:#5fb784; --dis:#e07a62; --unsure:#a3a19b; --accent:#7aa7e6; } }
+:root[data-theme="dark"] { --bg:#171716; --panel:#212120; --ink:#ecebe7; --quiet:#a3a19b; --line:#3a3936; --focus:#5fb784; --dis:#e07a62; --unsure:#a3a19b; --accent:#7aa7e6; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--line); background:var(--panel); position:sticky; top:0; z-index:2; }
+h1 { font-size:16px; margin:0; font-weight:600; }
+.progress { color:var(--quiet); font-variant-numeric:tabular-nums; }
+.bar { height:4px; background:var(--line); width:100%; } .bar > div { height:100%; background:var(--accent); width:0; }
+main { max-width:980px; margin:0 auto; padding:16px; }
+details { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin-bottom:16px; }
+summary { cursor:pointer; font-weight:600; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; }
+.crops { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; }
+.crops figure { margin:0; } .crops img { display:block; width:220px; max-width:100%; border-radius:6px; }
+figcaption { font-size:12px; color:var(--quiet); text-align:center; margin-top:4px; }
+.context { margin-top:12px; } .context img { width:400px; max-width:100%; border-radius:6px; display:block; }
+.buttons { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+button { font:inherit; border-radius:8px; border:1px solid var(--line); background:var(--panel); color:var(--ink); padding:10px 16px; cursor:pointer; }
+button.f { border-color:var(--focus); color:var(--focus); } button.d { border-color:var(--dis); color:var(--dis); } button.u { color:var(--unsure); }
+button.sel { color:#fff; } button.f.sel { background:var(--focus); } button.d.sel { background:var(--dis); } button.u.sel { background:var(--unsure); }
+kbd { font:12px ui-monospace, monospace; border:1px solid var(--line); border-radius:4px; padding:0 5px; margin-left:6px; }
+.meta { color:var(--quiet); font-size:13px; margin-top:10px; }
+.done { text-align:center; padding:40px 16px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Student moments: focused or distracted?</h1>
+  <span class="progress" id="progress"></span>
+  <span><button id="export">Export answers (JSON)</button></span>
+</header>
+<div class="bar"><div id="barfill"></div></div>
+<main>
+  <details>
+    <summary>How to label</summary>
+    <p>Look at the marked student across the three frames (about 2 seconds) and judge their attention <b>during the lesson</b>. You don't see what the system decided.</p>
+    <ul>
+      <li><b>Focused</b>: looking at the board or teacher, reading or writing class material, raising a hand, or briefly glancing then returning.</li>
+      <li><b>Distracted</b>: turned away or talking to a neighbour, looking somewhere unrelated, using a phone, head down on the desk, for most of the 2 seconds.</li>
+      <li><b>Can't tell</b>: face and body too hidden or too small to judge, or the box is not on one student.</li>
+    </ul>
+    <p>Keys: <kbd>1</kbd> focused, <kbd>2</kbd> distracted, <kbd>3</kbd> can't tell, <kbd>←</kbd> back, <kbd>→</kbd> next. Answers are kept in this browser; export them when done, or any time.</p>
+  </details>
+  <div id="view"></div>
+</main>
+<script>
+const ITEMS = /*ITEMS*/[];
+const KEY = "hcpose-labels-" + ITEMS.length + "-" + (ITEMS[0] ? ITEMS[0].clip + ITEMS[0].t : "");
+let answers = {};
+try { answers = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { answers = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(answers)); } catch (e) {} };
+let i = ITEMS.findIndex(it => !(it.id in answers)); if (i < 0) i = ITEMS.length;
+const view = document.getElementById("view");
+const LABELS = [["focused", "f", "Focused", "1"], ["distracted", "d", "Distracted", "2"], ["unsure", "u", "Can't tell", "3"]];
+
+function render() {
+  const n = Object.keys(answers).length;
+  document.getElementById("progress").textContent = `${n} of ${ITEMS.length} labelled`;
+  document.getElementById("barfill").style.width = (100 * n / Math.max(1, ITEMS.length)) + "%";
+  if (i >= ITEMS.length) {
+    view.innerHTML = `<div class="card done"><h2>All ${ITEMS.length} items done</h2><p>Export the answers and send the JSON file back.</p><button id="export2">Export answers (JSON)</button> <button id="back">Back to the last item</button></div>`;
+    document.getElementById("export2").onclick = exportJson;
+    document.getElementById("back").onclick = () => { i = ITEMS.length - 1; render(); };
+    return;
+  }
+  const it = ITEMS[i], a = answers[it.id];
+  view.innerHTML = `<div class="card">
+    <div class="crops">${it.crops.map((src, k) => `<figure><img src="${src}" alt="student, frame ${k + 1}"><figcaption>${["−1 s", "now", "+1 s"][k]}</figcaption></figure>`).join("")}</div>
+    <div class="context"><img src="${it.context}" alt="whole room, student marked"><div class="meta">Item ${i + 1} of ${ITEMS.length} · the whole room, student marked</div></div>
+    <div class="buttons">${LABELS.map(([v, c, t, k]) => `<button class="${c}${a === v ? " sel" : ""}" data-v="${v}">${t}<kbd>${k}</kbd></button>`).join("")}
+      <button id="prev" ${i === 0 ? "disabled" : ""}>Back<kbd>←</kbd></button><button id="next">Next<kbd>→</kbd></button></div></div>`;
+  view.querySelectorAll("button[data-v]").forEach(b => b.onclick = () => pick(b.dataset.v));
+  document.getElementById("prev").onclick = () => { if (i > 0) { i--; render(); } };
+  document.getElementById("next").onclick = () => { i++; render(); };
+}
+function pick(v) { answers[ITEMS[i].id] = v; save(); i++; render(); }
+function exportJson() {
+  const out = ITEMS.filter(it => it.id in answers).map(({crops, context, ...m}) => ({...m, label: answers[m.id]}));
+  const blob = new Blob([JSON.stringify({labelled: out.length, of: ITEMS.length, items: out}, null, 1)], {type: "application/json"});
+  const url = URL.createObjectURL(blob), a = document.createElement("a");
+  a.href = url; a.download = "student_labels.json"; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+document.getElementById("export").onclick = exportJson;
+document.addEventListener("keydown", e => {
+  if (i >= ITEMS.length && e.key !== "ArrowLeft") return;
+  if (e.key === "1") pick("focused"); else if (e.key === "2") pick("distracted"); else if (e.key === "3") pick("unsure");
+  else if (e.key === "ArrowLeft" && i > 0) { i--; render(); } else if (e.key === "ArrowRight" && i < ITEMS.length) { i++; render(); }
+});
+render();
+</script>
+</body>
+</html>
