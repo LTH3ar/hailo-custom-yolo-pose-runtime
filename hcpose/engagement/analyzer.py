@@ -27,7 +27,7 @@ from typing import Deque, Dict, List, Optional, Sequence, Tuple
 import numpy as np
 
 from ..results import FrameResult, Person
-from .classifier import feature_vector, resolve as resolve_classifier
+from .classifier import describe as describe_classifier, feature_vector, resolve as resolve_classifier
 from .features import Baseline, Features, KeypointIndex, compute, score
 from .settings import CAMERA_YAW_PRIOR, EngagementSettings
 
@@ -85,8 +85,8 @@ class EngagementAnalyzer:
         self._est_hist: Deque[Tuple[float, float]] = deque()
         self.classifier = resolve_classifier(settings.classifier)
         if self.classifier is not None:
-            m = self.classifier.meta
-            log.info("engagement: learned classifier (%s, trained on %s)", m.get("name", "custom"), m.get("trained_on", "?"))
+            log.info("engagement: learned classifier %s, trained on %s", describe_classifier(self.classifier),
+                     self.classifier.meta.get("trained_on", "?"))
         else:
             log.info("engagement: rule-based cues")
         self.last_class: dict = {}

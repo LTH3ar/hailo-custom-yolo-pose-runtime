@@ -1,10 +1,19 @@
-"""Learned focused/distracted classifier: features + a dependency-free tree-ensemble runtime.
+"""Learned focused/distracted classifiers: features + dependency-free runtimes.
 
-Training happens offline with scikit-learn (research/scb/train_classifier.py);
-the fitted HistGradientBoostingClassifier is exported to JSON and evaluated here
-with NumPy only. No scikit-learn on the Pi, and no pickle/version coupling.
-All trees are traversed together, one vectorized step per tree level, so a
-frame with 30 students costs well under a millisecond.
+Training happens offline with scikit-learn (research/scb/train_classifier.py).
+Three model kinds are exported to JSON and evaluated here with NumPy only, so
+there is no scikit-learn on the Pi and no pickle/version coupling:
+
+  trees     HistGradientBoostingClassifier (default). All trees are traversed
+            together, one vectorized step per tree level.
+  logistic  SimpleImputer -> StandardScaler -> LogisticRegression
+  mlp       SimpleImputer -> StandardScaler -> MLPClassifier
+
+Every model returns a "balanced" probability: 0.5 means equally likely under
+equal class priors. Trees and logistic regression are trained with balanced
+class weights; the MLP can't be, so its logit is shifted by the training prior
+(logit_offset). That keeps the analyzer's on/off thresholds meaningful for all
+three. A frame with 30 students costs well under a millisecond with any of them.
 
 feature_vector() is the single definition of the classifier input, used by the
 training script and by the live analyzer, so they can't drift apart.
@@ -52,16 +61,43 @@ def feature_vector(kp: np.ndarray, box, f: Features, base: Baseline, index: Keyp
     return np.concatenate([rel.ravel(), k[:, 2], np.asarray(extra, np.float32)]).astype(np.float32)
 
 
-class TreeEnsemble:
-    """Binary gradient-boosted trees exported by export_hgb()."""
+class _Model:
+    kind = "?"
 
-    def __init__(self, data: dict):
-        if data.get("format") != "hcpose-hgb-1":
-            raise ValueError("not an hcpose classifier file")
+    def _common(self, data: dict, fmt: str) -> None:
+        if data.get("format") != fmt:
+            raise ValueError(f"not an hcpose {self.kind} classifier file (format {data.get('format')!r})")
         if data.get("feature_version") != FEATURE_VERSION:
             raise ValueError(f"classifier was trained on feature version {data.get('feature_version')}, "
                              f"runtime has {FEATURE_VERSION}; retrain it")
         self.meta = data.get("meta", {})
+        self.n_features = int(data["n_features"])
+        self.logit_offset = float(data.get("logit_offset", 0.0))
+
+    def _check(self, X) -> np.ndarray:
+        X = np.atleast_2d(np.asarray(X, np.float64))
+        if X.shape[1] != self.n_features:
+            raise ValueError(f"expected {self.n_features} features, got {X.shape[1]}")
+        return X
+
+    def decision(self, X: np.ndarray) -> np.ndarray:  # raw logit, before logit_offset
+        raise NotImplementedError
+
+    def predict_proba(self, X: np.ndarray) -> np.ndarray:
+        return 1.0 / (1.0 + np.exp(-(self.decision(X) + self.logit_offset)))
+
+    @classmethod
+    def load(cls, path: str):
+        return cls(json.loads(Path(path).read_text()))
+
+
+class TreeEnsemble(_Model):
+    """Binary gradient-boosted trees exported by export_hgb()."""
+
+    kind = "trees"
+
+    def __init__(self, data: dict):
+        self._common(data, "hcpose-hgb-1")
         self.baseline = float(data["baseline"])
         trees = data["trees"]
         offs = np.cumsum([0] + [len(t["feature"]) for t in trees[:-1]])
@@ -75,16 +111,9 @@ class TreeEnsemble:
         self.missing_left = cat("missing_left", bool)
         self.roots = offs.astype(np.int64)
         self.depth = int(data.get("max_depth", 64))
-        self.n_features = int(data["n_features"])
-
-    @classmethod
-    def load(cls, path: str) -> "TreeEnsemble":
-        return cls(json.loads(Path(path).read_text()))
 
     def decision(self, X: np.ndarray) -> np.ndarray:
-        X = np.atleast_2d(np.asarray(X, np.float64))
-        if X.shape[1] != self.n_features:
-            raise ValueError(f"expected {self.n_features} features, got {X.shape[1]}")
+        X = self._check(X)
         n = X.shape[0]
         node = np.broadcast_to(self.roots, (n, len(self.roots))).copy()
         rows = np.arange(n)[:, None]
@@ -97,11 +126,87 @@ class TreeEnsemble:
             node = np.where(leaf, node, np.where(go_left, self.left[node], self.right[node]))
         return self.baseline + self.value[node].sum(axis=1)
 
-    def predict_proba(self, X: np.ndarray) -> np.ndarray:
-        return 1.0 / (1.0 + np.exp(-self.decision(X)))
+
+class _Scaled(_Model):
+    """Shared preprocessing of the logistic and MLP pipelines: mean-impute, then standardize."""
+
+    def _prep(self, data: dict) -> None:
+        self.impute = np.asarray(data["impute"], np.float64)
+        self.mean = np.asarray(data["mean"], np.float64)
+        self.scale = np.asarray(data["scale"], np.float64)
+
+    def _transform(self, X: np.ndarray) -> np.ndarray:
+        X = self._check(X).copy()
+        nan = np.isnan(X)
+        if nan.any():
+            X[nan] = np.broadcast_to(self.impute, X.shape)[nan]
+        return (X - self.mean) / self.scale
 
 
-def export_hgb(est, path: str, meta: Optional[dict] = None) -> None:
+class LogisticModel(_Scaled):
+    kind = "logistic"
+
+    def __init__(self, data: dict):
+        self._common(data, "hcpose-linear-1")
+        self._prep(data)
+        self.coef = np.asarray(data["coef"], np.float64)
+        self.intercept = float(data["intercept"])
+
+    def decision(self, X: np.ndarray) -> np.ndarray:
+        return self._transform(X) @ self.coef + self.intercept
+
+
+_ACT = {
+    "relu": lambda z: np.maximum(z, 0.0),
+    "tanh": np.tanh,
+    "logistic": lambda z: 1.0 / (1.0 + np.exp(-z)),
+    "identity": lambda z: z,
+}
+
+
+class MLPModel(_Scaled):
+    kind = "mlp"
+
+    def __init__(self, data: dict):
+        self._common(data, "hcpose-mlp-1")
+        self._prep(data)
+        self.layers = [(np.asarray(L["W"], np.float64), np.asarray(L["b"], np.float64)) for L in data["layers"]]
+        if data["activation"] not in _ACT:
+            raise ValueError(f"unsupported activation {data['activation']}")
+        self.act = _ACT[data["activation"]]
+
+    def decision(self, X: np.ndarray) -> np.ndarray:
+        h = self._transform(X)
+        for W, b in self.layers[:-1]:
+            h = self.act(h @ W + b)
+        W, b = self.layers[-1]
+        return (h @ W + b).ravel()  # output unit is logistic: this is its logit
+
+
+_FORMATS = {"hcpose-hgb-1": TreeEnsemble, "hcpose-linear-1": LogisticModel, "hcpose-mlp-1": MLPModel}
+
+
+def load_model(path: str) -> _Model:
+    data = json.loads(Path(path).read_text())
+    cls = _FORMATS.get(data.get("format"))
+    if cls is None:
+        raise ValueError(f"{path}: not an hcpose classifier file (format {data.get('format')!r})")
+    return cls(data)
+
+
+# ---------------------------------------------------------------------------- export
+def _header(fmt: str, n_features: int, meta: Optional[dict], logit_offset: float) -> dict:
+    return {
+        "format": fmt,
+        "feature_version": FEATURE_VERSION,
+        "feature_names": FEATURE_NAMES,
+        "n_features": int(n_features),
+        "logit_offset": float(logit_offset),
+        "meta": meta or {},
+    }
+
+
+def export_hgb(est, path: str, meta: Optional[dict] = None, logit_offset: float = 0.0) -> None:
     """Write a fitted binary sklearn HistGradientBoostingClassifier to hcpose's JSON format."""
     if len(est.classes_) != 2:
         raise ValueError("only binary classifiers are supported")
@@ -120,29 +225,97 @@ def export_hgb(est, path: str, meta: Optional[dict] = None) -> None:
             "value": [float(v) for v in nodes["value"]],
             "missing_left": nodes["missing_go_to_left"].astype(bool).tolist(),
         })
-    data = {
-        "format": "hcpose-hgb-1",
-        "feature_version": FEATURE_VERSION,
-        "feature_names": FEATURE_NAMES,
-        "n_features": int(est.n_features_in_),
-        "baseline": float(np.ravel(est._baseline_prediction)[0]),
-        "max_depth": max_depth,
-        "trees": trees,
-        "meta": meta or {},
-    }
+    data = _header("hcpose-hgb-1", est.n_features_in_, meta, logit_offset)
+    data.update(baseline=float(np.ravel(est._baseline_prediction)[0]), max_depth=max_depth, trees=trees)
     Path(path).write_text(json.dumps(data, separators=(",", ":")))
 
 
-BUNDLED = Path(__file__).resolve().parent / "models" / "scb_classifier.json"
+def _pipeline_parts(pipe):
+    from sklearn.impute import SimpleImputer
+    from sklearn.preprocessing import StandardScaler
+
+    steps = [s for _, s in pipe.steps]
+    if len(steps) != 3 or not isinstance(steps[0], SimpleImputer) or not isinstance(steps[1], StandardScaler):
+        raise ValueError("expected a pipeline SimpleImputer -> StandardScaler -> model")
+    imp, sc, model = steps
+    if imp.strategy != "mean" or not getattr(imp, "keep_empty_features", False):
+        # without keep_empty_features an all-NaN training column would be silently dropped
+        raise ValueError("SimpleImputer must use strategy='mean' and keep_empty_features=True")
+    if len(imp.statistics_) != len(sc.mean_):
+        raise ValueError("imputer and scaler disagree on the number of features")
+    scale = np.asarray(sc.scale_ if sc.with_std else np.ones_like(sc.mean_), np.float64)
+    mean = np.asarray(sc.mean_ if sc.with_mean else np.zeros_like(sc.mean_), np.float64)
+    return imp, mean, scale, model
 
 
-def resolve(setting: Optional[str]) -> Optional[TreeEnsemble]:
-    """settings.classifier: 'auto' (bundled model if present, else rules), 'none', or a path."""
+def export_pipeline(pipe, path: str, meta: Optional[dict] = None, logit_offset: float = 0.0) -> None:
+    """Write a fitted SimpleImputer -> StandardScaler -> LogisticRegression | MLPClassifier pipeline."""
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neural_network import MLPClassifier
+
+    imp, mean, scale, model = _pipeline_parts(pipe)
+    if len(model.classes_) != 2:
+        raise ValueError("only binary classifiers are supported")
+    prep = {"impute": [float(v) for v in imp.statistics_], "mean": mean.tolist(), "scale": scale.tolist()}
+    if isinstance(model, LogisticRegression):
+        data = _header("hcpose-linear-1", len(mean), meta, logit_offset)
+        data.update(prep, coef=[float(v) for v in np.ravel(model.coef_)], intercept=float(np.ravel(model.intercept_)[0]))
+    elif isinstance(model, MLPClassifier):
+        if model.out_activation_ != "logistic":
+            raise ValueError(f"unexpected MLP output activation {model.out_activation_}")
+        data = _header("hcpose-mlp-1", len(mean), meta, logit_offset)
+        data.update(prep, activation=model.activation,
+                    layers=[{"W": np.asarray(W, np.float64).tolist(), "b": np.asarray(b, np.float64).tolist()}
+                            for W, b in zip(model.coefs_, model.intercepts_)])
+    else:
+        raise ValueError(f"unsupported model {type(model).__name__}")
+    Path(path).write_text(json.dumps(data, separators=(",", ":")))
+
+
+def export_model(est, path: str, meta: Optional[dict] = None, logit_offset: float = 0.0) -> None:
+    from sklearn.ensemble import HistGradientBoostingClassifier
+
+    if isinstance(est, HistGradientBoostingClassifier):
+        export_hgb(est, path, meta, logit_offset)
+    else:
+        export_pipeline(est, path, meta, logit_offset)
+
+
+# ---------------------------------------------------------------------------- bundled models
+MODELS_DIR = Path(__file__).resolve().parent / "models"
+BUNDLED = {k: MODELS_DIR / f"scb_{k}.json" for k in ("trees", "logistic", "mlp")}
+LEGACY_TREES = MODELS_DIR / "scb_classifier.json"
+CHOICES = ("auto", "trees", "logistic", "mlp", "none")
+
+
+def resolve(setting: Optional[str]) -> Optional[_Model]:
+    """settings.classifier:
+    auto      the bundled trees if present, else the rules
+    trees | logistic | mlp   the bundled model of that kind (error if not exported yet)
+    none      the rules
+    a path    any hcpose classifier JSON
+    """
     if setting in (None, "none", "rules"):
         return None
     if setting == "auto":
-        return TreeEnsemble.load(str(BUNDLED)) if BUNDLED.is_file() else None
-    return TreeEnsemble.load(str(Path(setting).expanduser()))
+        for p in (BUNDLED["trees"], LEGACY_TREES):
+            if p.is_file():
+                return load_model(str(p))
+        return None
+    if setting in BUNDLED:
+        p = BUNDLED[setting]
+        if not p.is_file():
+            raise FileNotFoundError(
+                f"no bundled {setting} classifier ({p}). Export it with research/scb/train_classifier.py "
+                "--export-dir hcpose/engagement/models")
+        return load_model(str(p))
+    return load_model(str(Path(setting).expanduser()))
+
+
+def describe(model: Optional[_Model]) -> str:
+    if model is None:
+        return "rules"
+    return f"{model.kind} ({model.meta.get('name', 'custom')})"
 
 
 def stack(vectors: List[np.ndarray]) -> np.ndarray:

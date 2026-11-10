@@ -52,10 +52,20 @@ The classifier takes the keypoints and pose cues computed by `hcpose.engagement.
 ```bash
 # on the Pi: pose caches from the deployed m HEF, at the runtime detection threshold
 .venv/bin/python research/scb/train_classifier.py ~/scb/poses_hef_m.jsonl --det-thr 0.3 \
-    --name scb-m-int8 --out hcpose/engagement/models/scb_classifier.json
+    --name scb-m-int8 --export-dir hcpose/engagement/models
 ```
 
-`classifier: auto` (the default) picks that file up. `--classifier none` uses the rules.
+This writes three models to `hcpose/engagement/models/`, all trained on the same students and features:
+
+| File | Model | Select with |
+|---|---|---|
+| `scb_trees.json` | gradient-boosted trees | `--classifier trees`, or `auto` (the default) |
+| `scb_logistic.json` | logistic regression | `--classifier logistic` |
+| `scb_mlp.json` | MLP 64-32 | `--classifier mlp` |
+
+`--classifier none` uses the rules. Each export is checked against scikit-learn (max difference below 1e-5). If a model file already exists, the script also reports how far the new predictions are from the old file's; for the trees it should say "identical", because training is deterministic.
+
+All three output a *balanced* probability: 0.5 means equally likely under equal class priors. The trees and logistic regression get this from balanced class weights. The MLP can't use class weights, so its logit is shifted by the training prior (`logit_offset` in its JSON). The analyzer's thresholds therefore mean the same thing for all three. Cross-validated balanced accuracy for the MLP is now measured at 0.5 on that scale, rather than at a prevalence-matched threshold as before.
 
 **For the report:**
 - `--save-cv cv_m.npz` keeps every family's out-of-fold predictions, the labels, the lesson groups and the feature matrix, plus a `.json` with the metrics. Every table, ROC curve or confusion matrix can be redrawn from them without retraining.

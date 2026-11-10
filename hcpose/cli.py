@@ -71,8 +71,9 @@ def build_parser() -> argparse.ArgumentParser:
                     help="ignore the existing calibration file and learn it again (camera moved)")
     eg.add_argument("--class-size", type=int, metavar="N",
                     help="real number of students in the room (improves the class estimate and its range)")
-    eg.add_argument("--classifier", metavar="auto|none|JSON",
-                    help="per-frame decision: bundled learned model (auto, default), rules (none), or a model file")
+    eg.add_argument("--classifier", metavar="auto|trees|logistic|mlp|none|JSON",
+                    help="per-frame decision: auto (= trees, default), trees, logistic, mlp (bundled learned "
+                         "models), none (rules), or a model file")
     r.add_argument("-v", "--verbose", action="store_true")
 
     i = sub.add_parser("inspect", help="show what the runtime detects in a HEF")
@@ -85,7 +86,7 @@ def build_parser() -> argparse.ArgumentParser:
     a.add_argument("--camera-position", choices=["auto", "center", "left", "right"])
     a.add_argument("--calibration", metavar="JSON", help="calibration file to load (if it exists) and save")
     a.add_argument("--recalibrate", action="store_true", default=None)
-    a.add_argument("--classifier", metavar="auto|none|JSON")
+    a.add_argument("--classifier", metavar="auto|trees|logistic|mlp|none|JSON")
     a.add_argument("--class-size", type=int, metavar="N")
     a.add_argument("--output", "-o", help="write the skeletons with engagement labels to this JSONL")
     a.add_argument("--every", type=float, default=10.0, help="timeline step in seconds (default 10)")
@@ -178,7 +179,9 @@ def _engagement(args, keypoint_names):
     })
     an = EngagementAnalyzer(settings, keypoint_names)
     loaded = sum(1 for s in an.seats if s.calibrated)
-    decision = f"learned classifier ({an.classifier.meta.get('name', 'custom')})" if an.classifier else "rules"
+    from .engagement.classifier import describe
+
+    decision = f"learned classifier {describe(an.classifier)}" if an.classifier else "rules"
     print(f"[hcpose] engagement: {decision}, display={settings.display} camera={settings.camera_position} "
           + (f"calibration {settings.calibration} ({loaded} seats loaded)" if settings.calibration else
              "no calibration file (pass --calibration room.json to keep what it learns)"))

@@ -86,7 +86,7 @@ Coordinates are pixels in the processed frame (`w`×`h`). Boxes and keypoints ar
 
 ## Engagement analysis (focused / distracted)
 
-Turns each student's skeleton into **focused**, **distracted** or **unknown**, and the class into a live percentage ("65% distracted, 17 of 20 students counted"). It uses keypoints only, so no images are stored.
+Turns each student's skeleton into **focused**, **distracted** or **unknown**, and the class into a live estimate with a range ("43% distracted (20-65%) | 14 of ~30 students"). It uses keypoints only, so no images are stored.
 
 ```bash
 # live, both labels and percentage on screen, camera at the front-left of the room
@@ -99,8 +99,14 @@ Turns each student's skeleton into **focused**, **distracted** or **unknown**, a
 # all settings in a file
 ./hcpose.sh run models/upper_body_s.hef --input usb --engagement configs/engagement.yaml
 
+# far rows too small to detect: also run the model on zoomed-in tiles of the back half
+./hcpose.sh run models/upper_body_m.hef --input usb --engagement --tiles auto --score-threshold 0.3
+
+# choose the per-student classifier: trees (default), logistic, mlp, or none (rules)
+./hcpose.sh run models/upper_body_m.hef --input usb --engagement --classifier mlp
+
 # offline: replay a skeleton file recorded with --save-json (no Hailo needed)
-./hcpose.sh analyze skeletons.jsonl -o labelled.jsonl --camera-position left
+./hcpose.sh analyze skeletons.jsonl -o labelled.jsonl --camera-position left --classifier logistic
 ```
 
 **How it decides** (`hcpose/engagement/`):
@@ -113,10 +119,20 @@ Turns each student's skeleton into **focused**, **distracted** or **unknown**, a
    - torso rotated
    - hand at the face
 
-   A raised hand always counts as focused. Strong cues decide alone; weak cues (head down, torso, hand at face) need a second cue, because writing notes also looks like "head down".
+   A raised hand always counts as focused. These cues name the *reason* shown for a distracted student.
+   **The per-frame decision** comes from a classifier trained on SCB classroom images ([`research/scb/`](research/scb/README.md)), switchable with `--classifier`:
+
+   | Value | Model |
+   |---|---|
+   | `trees` / `auto` (default) | gradient-boosted trees |
+   | `logistic` | logistic regression |
+   | `mlp` | small neural net |
+   | `none` | the hand-written cue weights |
+
+   All run in NumPy on the Pi. On SCB front-view students the learned models reach a within-image AUC of about 0.72–0.81, against 0.54 for the rules.
 3. **Attentive baseline per seat.** Each seat learns its own "looking at the board" pose from its first `calibration_seconds` of observation (median, so glances don't matter). Until then the seat's running history and the room's typical direction are used. That works with a camera at the front center, front-left or front-right, without telling it where. `--camera-position` adds a check against a class that is mostly distracted from the very start. `--calibration room.json` saves what was learned for that classroom and loads it next time; use `--recalibrate` after moving the camera.
 4. **Decisions over time.** The per-frame score is smoothed and switches state with hysteresis: distracted after about 2.5 s, focused again after about 1.5 s. A glance doesn't flip a student. Students without usable keypoints for 2 s are **unknown** and left out of the percentage.
-5. **Class percentage** is distracted ÷ (focused + distracted), averaged over the last 5 s on screen. The count of students included is always shown with it.
+5. **Class estimate.** The camera misses students, mostly in far rows, and the misses aren't random, so a plain percentage of *detected* students is biased. The estimate counts every recently seen seat with its last state (seat memory, `presence_seconds`). It weights near, middle and far rows by their number of seats, not by how many students happen to be detected there. It shows a 95% range. `--class-size N` gives it the real head count.
 
 Settings, with explanations: [`configs/engagement.yaml`](configs/engagement.yaml). The `--display` switch is `students | class | both | none`; `class` deliberately shows no per-student state.
 
@@ -125,7 +141,7 @@ With `--save-json`, each person gets `"engagement": {"seat", "state", "score", "
 **Assumptions.** These are worth stating in the thesis:
 - During the first minute or two, most students mostly look toward the board, unless `--camera-position` is set.
 - "Head down" can't separate writing from a phone; that's why it has a lower weight.
-- The rules are a baseline. A learned classifier trained on labelled data is the next step.
+- The classifiers learn SCB's *action* labels (reading, turning, discussing …) as a proxy for attention. SCB is mostly Chinese K-12 classrooms.
 
 ## Building on it
 

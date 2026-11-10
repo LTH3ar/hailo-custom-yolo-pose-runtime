@@ -405,3 +405,93 @@ def test_unseen_students_weight_the_far_zone():
     c = hist[-1][1].extra["class"]
     assert c["zones"][0]["seats"] == 8
     assert abs(c["class_pct_distracted"] - 31.25) <= 3.0, c  # (8*0.5 + 4*0.25 + 4*0) / 16
+
+
+def _synthetic_xy():
+    from hcpose.engagement.classifier import feature_vector
+    from hcpose.engagement.features import Baseline
+
+    rng = np.random.default_rng(1)
+    X, y = [], []
+    for _ in range(1200):
+        dis = rng.random() < 0.25
+        yaw = rng.choice([-1.0, 1.0]) * rng.uniform(0.8, 1.2) if dis else rng.normal(0, 0.1)
+        p = synth_person(rng.uniform(200, 1000), rng.uniform(300, 600), rng.uniform(50, 120), yaw=yaw,
+                         jitter=0.02, rng=rng)
+        f = compute(p.keypoints, p.box, IDX, 0.5)
+        X.append(feature_vector(p.keypoints, p.box, f, Baseline(0.0, 0.9, 0.38), IDX, 0.5))
+        y.append(dis)
+    X = np.vstack(X)
+    X[::9, -6] = np.nan  # some missing yaw_dev values
+    return X, np.array(y)
+
+
+@pytest.mark.parametrize("kind", ["logistic", "mlp"])
+def test_pipeline_export_matches_sklearn(tmp_path, kind):
+    pytest.importorskip("sklearn")
+    from sklearn.impute import SimpleImputer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    from hcpose.engagement.classifier import export_model, load_model
+
+    X, y = _synthetic_xy()
+    model = (LogisticRegression(max_iter=2000, class_weight="balanced") if kind == "logistic"
+             else MLPClassifier((16, 8), max_iter=300, random_state=0))
+    est = make_pipeline(SimpleImputer(keep_empty_features=True), StandardScaler(), model).fit(X, y)
+    path = tmp_path / f"{kind}.json"
+    off = 0.0 if kind == "logistic" else 1.1
+    export_model(est, str(path), {"name": "synthetic"}, logit_offset=off)
+    rt = load_model(str(path))
+    assert rt.kind == kind
+    p = np.clip(est.predict_proba(X)[:, 1], 1e-12, 1 - 1e-12)
+    want = 1 / (1 + np.exp(-(np.log(p / (1 - p)) + off)))
+    assert np.abs(rt.predict_proba(X) - want).max() < 1e-5
+    # plain SimpleImputer (drops all-NaN columns) is refused rather than exported wrong
+    bad = make_pipeline(SimpleImputer(), StandardScaler(), LogisticRegression(max_iter=500)).fit(X, y)
+    with pytest.raises(ValueError):
+        export_model(bad, str(tmp_path / "bad.json"))
+
+
+def test_classifier_names_resolve(tmp_path, monkeypatch):
+    from hcpose.engagement import classifier as C
+
+    assert C.resolve("none") is None and C.resolve("rules") is None
+    auto = C.resolve("auto")
+    assert auto is None or auto.kind == "trees"
+    monkeypatch.setattr(C, "BUNDLED", {k: tmp_path / f"scb_{k}.json" for k in ("trees", "logistic", "mlp")})
+    with pytest.raises(FileNotFoundError):
+        C.resolve("mlp")
+
+
+def test_analyzer_switches_between_learned_models(tmp_path):
+    pytest.importorskip("sklearn")
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.impute import SimpleImputer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    from hcpose.engagement.classifier import export_model
+
+    X, y = _synthetic_xy()
+    models = {
+        "trees": HistGradientBoostingClassifier(max_iter=50, class_weight="balanced", random_state=0),
+        "logistic": make_pipeline(SimpleImputer(keep_empty_features=True), StandardScaler(),
+                                  LogisticRegression(max_iter=2000, class_weight="balanced")),
+        "mlp": make_pipeline(SimpleImputer(keep_empty_features=True), StandardScaler(),
+                             MLPClassifier((16, 8), max_iter=400, random_state=0)),
+    }
+    for kind, est in models.items():
+        est.fit(X, y)
+        path = tmp_path / f"{kind}.json"
+        off = float(np.log((1 - y.mean()) / y.mean())) if kind == "mlp" else 0.0
+        export_model(est, str(path), {"name": kind}, logit_offset=off)
+        an, hist = run_class(lambda i, t: {"yaw": 1.0} if i < 3 and t >= 20 else {},
+                             settings=load_settings(overrides={"classifier": str(path)}), seconds=35)
+        assert an.classifier.kind == kind
+        st, _ = states_at(hist, 34)
+        assert st[:3] == [DISTRACTED] * 3 and st.count(FOCUSED) == 9, (kind, st)
