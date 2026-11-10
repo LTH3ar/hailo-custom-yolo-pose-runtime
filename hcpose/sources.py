@@ -71,4 +71,10 @@ def gst_source(src: str, width: int, height: int, fps: int, camera_raw: bool = F
     path = str(Path(src).expanduser().resolve())
     if not os.path.isfile(path):
         raise FileNotFoundError(f"input not found: {path}")
-    return f'filesrc name=src location="{path}" ! queue name=src_q max-size-buffers=5 ! decodebin ! '
+    src = f'filesrc name=src location="{path}" ! queue name=src_q max-size-buffers=5 ! decodebin ! '
+    if os.environ.get("HCPOSE_PACE_FILE") == "1":
+        # research/edge latency runs: release decoded frames at the clip's frame rate, like a
+        # live camera, so downstream queues stay empty and the latency from live_pace to the
+        # sink is processing time, not the backlog of a decoder running ahead (use --no-sync).
+        src += "identity name=live_pace sync=true ! "
+    return src
