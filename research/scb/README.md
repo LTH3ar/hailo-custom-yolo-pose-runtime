@@ -207,7 +207,7 @@ The fix is in the classifier, not the detector. Training on untiled and tiled po
 | Both, tiled pose | 55% | 44% | 52% | 0.728 → 0.748 |
 | Only with tiles | 65% | 38% | 53% | 0.646 → 0.689 |
 
-So the bundled classifiers should be trained on pooled caches from the deployed HEF:
+The bundled classifiers (`scb-m-int8-tiles`) are now trained this way, on pooled caches from the deployed m HEF. On the Pi, the pooled lesson-grouped CV gave AUC / within-image AUC / balanced accuracy of 0.855 / 0.840 / 77.0% for trees, 0.863 / 0.838 / 78.0% for the MLP and 0.772 / 0.735 / 71.3% for logistic regression. See [`results/pi_followup.md`](results/pi_followup.md), which also has the runtime recheck. Commands:
 
 ```bash
 # on the Pi: INT8 m caches with and without tiles (the decoder now applies pose_dedup)
@@ -219,3 +219,21 @@ So the bundled classifiers should be trained on pooled caches from the deployed 
 ```
 
 The cost is one extra inference per tile: full frame plus 3 tiles is four passes per frame, which is fine at the 5–10 FPS that engagement needs. Both engines support it; the gst engine does the crops and the merge in C++ (`cpp/tiling.cpp`), with the same rules as the Python engine.
+
+## Check on a real classroom clip
+
+A 72 s exam-hall CCTV clip (1280x720, about 30 students writing, camera high at the front corner; not in the repo). The true distracted share should be close to 0. Mean class distracted %, gst engine on the Pi, pooled classifiers:
+
+| Model | Tiles | Trees | Rules |
+|---|---|---|---|
+| m | none | 12.8% | – |
+| m | auto | 8.7% | – |
+| n | none | 35.8% | – |
+| n | auto | 15.6% | – |
+
+The same clip through `best.pt` (n, FP32) and `hcpose analyze` on a PC, with `pose_dedup`, gave:
+- Trees: 33% without tiles, 12% with them. Logistic: 43% / 26%. MLP: 43% / 14%.
+- Rules: 8% without tiles, 5% with them.
+- An earlier Pi run with m untiled gave 10.5% for trees and 11.0% for the rules.
+
+So the learned classifiers transfer to this room only when the poses are good: the m model, or n with tiles. With n's full-frame poses they over-call heavily. Retraining on the n model's poses with head-height cues removed didn't fix it in a quick test, so the cause is pose quality, not the SCB label definitions. The rules are less accurate on SCB but much more stable across models. This is single-clip evidence, so it calls for a small labelled set from the target classrooms before choosing the classifier for deployment.
