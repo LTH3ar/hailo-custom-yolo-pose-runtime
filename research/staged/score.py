@@ -182,6 +182,7 @@ def score(path: str, events: List[dict], rows: List[int], offset_arg: str, calib
     else:
         offset = float(offset_arg)
     seats = find_seats(frames, offset, rows, 10.0, calib - 10.0)
+    end = min(end, frames[-1]["t"] - offset)  # recording stopped before the script's end
     names = list(seats)
 
     # per seat-second: majority state; per second: mean class estimate + last range
@@ -290,7 +291,7 @@ def main(argv=None) -> int:
     ap.add_argument("--rows", required=True, help="seats per row, front to back, e.g. 3,4,3")
     ap.add_argument("--offset", default="auto", help="video time of script 00:00 in seconds, or auto (hands-up signal)")
     ap.add_argument("--calib", type=float, default=180.0, help="calibration minutes at the start, not scored (s)")
-    ap.add_argument("--end", type=float, default=900.0, help="script end (s)")
+    ap.add_argument("--end", type=float, default=900.0, help="script end (s); the recording's end if earlier")
     ap.add_argument("--margin", type=float, default=5.0, help="seconds ignored on each side of every scripted change")
     ap.add_argument("--out", help="also write the summary as markdown here")
     args = ap.parse_args(argv)
