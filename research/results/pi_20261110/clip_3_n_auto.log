@@ -1,0 +1,87 @@
+[hcpose] post-process loaded (filter_letterbox), score>=0.3 iou=0.7 kpt>=0.5
+[hcpose] model: 13 keypoints, 1 class(es), reg_max 16, input 640x640
+[hcpose]   stride 8: boxes=best/conv43 scores=best/conv44 kpts=best/conv45
+[hcpose]   stride 16: boxes=best/conv57 scores=best/conv58 kpts=best/conv59
+[hcpose]   stride 32: boxes=best/conv70 scores=best/conv71 kpts=best/conv72
+[hcpose] class scores: already sigmoid in HEF
+[hcpose] keypoint visibility: logits -> sigmoid applied here
+[hcpose] end of stream
+[hcpose] /home/raven/models/upper_body_n.hef: 13 keypoints, 1 class(es), input 640x640
+[hcpose] tiling: full frame + 3 tile(s) over rows 0%-60% (493x432 px each); 4 inferences per frame
+FPS:   29.2  persons: 0
+FPS:   32.9  persons: 0
+FPS:   32.8  persons: 22
+FPS:   32.9  persons: 21
+FPS:   33.0  persons: 6
+FPS:   32.9  persons: 3
+FPS:   32.9  persons: 3
+FPS:   32.8  persons: 22
+FPS:   32.9  persons: 22
+FPS:   32.9  persons: 21
+FPS:   33.0  persons: 0
+FPS:   32.9  persons: 0
+FPS:   32.8  persons: 19
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 19
+FPS:   32.9  persons: 22
+FPS:   32.9  persons: 21
+FPS:   32.9  persons: 21
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 21
+FPS:   32.9  persons: 22
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 21
+FPS:   32.9  persons: 22
+FPS:   32.9  persons: 21
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 21
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 19
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 22
+FPS:   32.9  persons: 23
+FPS:   32.9  persons: 19
+FPS:   32.9  persons: 21
+FPS:   32.9  persons: 23
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 19
+FPS:   32.9  persons: 19
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 17
+FPS:   32.9  persons: 18
+FPS:   32.9  persons: 19
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 22
+FPS:   32.9  persons: 18
+FPS:   32.9  persons: 19
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 17
+FPS:   32.9  persons: 18
+FPS:   32.9  persons: 20
+FPS:   33.0  persons: 0
+FPS:   32.8  persons: 23
+FPS:   32.9  persons: 23
+FPS:   32.9  persons: 23
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 17
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 18
+FPS:   32.9  persons: 20
+FPS:   32.9  persons: 20
+FPS:   33.0  persons: 0
+FPS:   32.8  persons: 21
+FPS:   33.0  persons: 0
+FPS:   32.9  persons: 0
+FPS:   32.8  persons: 20
+FPS:   32.9  persons: 24
+FPS:   32.9  persons: 22
+FPS:   32.9  persons: 23
+FPS:   32.9  persons: 22
+[hcpose] 4952 frames in 150.8s (32.8 FPS avg)
+[hcpose] skeletons saved to /home/raven/clips_results/clip_3_n_auto.skeleton.jsonl

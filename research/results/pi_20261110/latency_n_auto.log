@@ -1,0 +1,50 @@
+[hcpose] engagement: rule-based cues
+[hcpose] post-process loaded (filter_letterbox), score>=0.3 iou=0.7 kpt>=0.5
+[hcpose] model: 13 keypoints, 1 class(es), reg_max 16, input 640x640
+[hcpose]   stride 8: boxes=best/conv43 scores=best/conv44 kpts=best/conv45
+[hcpose]   stride 16: boxes=best/conv57 scores=best/conv58 kpts=best/conv59
+[hcpose]   stride 32: boxes=best/conv70 scores=best/conv71 kpts=best/conv72
+[hcpose] class scores: already sigmoid in HEF
+[hcpose] keypoint visibility: logits -> sigmoid applied here
+[hcpose] end of stream
+[hcpose] /home/raven/models/upper_body_n.hef: 13 keypoints, 1 class(es), input 640x640
+[hcpose] engagement: rules, display=both camera=center no calibration file (pass --calibration room.json to keep what it learns)
+[hcpose] tiling: full frame + 3 tile(s) over rows 0%-60% (493x432 px each); 4 inferences per frame
+FPS:   24.2  Engagement: waiting for students
+FPS:   25.0  Engagement: waiting for students
+FPS:   24.9  Engagement: waiting for students
+FPS:   25.0  Engagement: waiting for students
+FPS:   24.9  0% distracted (0-15%) | 22 of ~23 students | calibrating
+FPS:   25.0  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:   25.2  1% distracted (0-15%) | 26 of ~26 students | calibrating
+FPS:   25.0  3% distracted (0-18%) | 27 of ~27 students
+FPS:   25.0  6% distracted (2-22%) | 28 of ~28 students | calibrating
+FPS:   24.9  9% distracted (3-25%) | 30 of ~30 students | calibrating
+FPS:   25.0  13% distracted (5-30%) | 30 of ~32 students | calibrating
+FPS:   25.0  16% distracted (7-32%) | 30 of ~32 students | calibrating
+FPS:   25.0  14% distracted (6-30%) | 30 of ~32 students | calibrating
+FPS:   25.0  12% distracted (4-30%) | 25 of ~31 students | calibrating
+FPS:   25.1  12% distracted (4-30%) | 25 of ~31 students
+FPS:   25.0  14% distracted (5-34%) | 23 of ~31 students
+FPS:   24.9  13% distracted (4-33%) | 22 of ~30 students | calibrating
+FPS:   24.9  11% distracted (3-29%) | 23 of ~31 students | calibrating
+FPS:   25.0  8% distracted (2-26%) | 23 of ~31 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 22 of ~30 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 22 of ~30 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 22 of ~30 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 22 of ~30 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 21 of ~29 students | calibrating
+FPS:   25.0  7% distracted (2-26%) | 21 of ~29 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 21 of ~28 students | calibrating
+FPS:   25.0  6% distracted (2-24%) | 22 of ~27 students | calibrating
+FPS:   25.0  6% distracted (2-24%) | 22 of ~27 students | calibrating
+FPS:   25.0  6% distracted (2-24%) | 22 of ~27 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 22 of ~27 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 22 of ~27 students | calibrating
+FPS:   25.0  7% distracted (2-25%) | 22 of ~27 students | calibrating
+FPS:   25.1  7% distracted (2-24%) | 22 of ~26 students | calibrating
+FPS:   25.0  6% distracted (1-24%) | 22 of ~26 students | calibrating
+
+[hcpose] stopping (finishing output)...
+[hcpose] 1743 frames in 69.8s (25.0 FPS avg)
+[hcpose] engagement: 5.4% of counted student-time distracted (1009.4 student-seconds, 35 seats)
