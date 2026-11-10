@@ -118,10 +118,13 @@ class EngagementAnalyzer:
 
     # ------------------------------------------------------------------ seats
     def _match_seats(self, persons: List[Person], W: int, H: int, t: float) -> List[Seat]:
+        # A seat is anchored at the top centre of the box (the head), not the box centre:
+        # when a student turns around or leans, the box shrinks to head and shoulders and its
+        # centre jumps by a third of its height, but the head stays where it was.
         dets = []
         for p in persons:
             x1, y1, x2, y2 = p.box
-            dets.append(((x1 + x2) / 2 / W, (y1 + y2) / 2 / H, max(1e-3, (x2 - x1) / W), max(1e-3, (y2 - y1) / H)))
+            dets.append(((x1 + x2) / 2 / W, y1 / H, max(1e-3, (x2 - x1) / W), max(1e-3, (y2 - y1) / H)))
         pairs = []
         for di, (cx, cy, w, h) in enumerate(dets):
             for si, s in enumerate(self.seats):
@@ -278,7 +281,8 @@ class EngagementAnalyzer:
         self._room_yaw = self._compute_room_yaw()
 
         bases = [self._baseline_for(seat, class_now) for seat in seats]
-        rule = [score(f, b, self.s.weights, self.s.hand_raised_is_focused) if f.valid else (0.0, None)
+        rule = [score(f, b, self.s.weights, self.s.hand_raised_is_focused, (self.s.head_turn_start, self.s.head_turn_full))
+                if f.valid else (0.0, None)
                 for f, b in zip(feats, bases)]
         if self.classifier is not None and persons:
             # learned per-frame probability; the rule cues still name the reason

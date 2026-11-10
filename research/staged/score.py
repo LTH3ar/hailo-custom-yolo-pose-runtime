@@ -114,8 +114,10 @@ def find_start(header: dict, frames: List[dict], search: float = 120.0) -> Optio
 
 
 def center(p: dict, W: float, H: float) -> Tuple[float, float, float]:
+    """Top centre of the box (the head), as hcpose anchors seats: it stays put when a
+    student turns around and the box shrinks to head and shoulders."""
     x1, y1, x2, y2 = p["box"]
-    return (x1 + x2) / 2 / W, (y1 + y2) / 2 / H, max(1e-3, (x2 - x1) / W)
+    return (x1 + x2) / 2 / W, y1 / H, max(1e-3, (x2 - x1) / W)
 
 
 def find_seats(frames: List[dict], offset: float, rows: List[int], t0: float, t1: float) -> Dict[str, Tuple[float, float, float]]:
@@ -145,7 +147,7 @@ def find_seats(frames: List[dict], offset: float, rows: List[int], t0: float, t1
         seats.append((len(members), *np.median(P[members], axis=0)))
     if len(seats) < n:
         raise ValueError(f"found only {len(seats)} seats, expected {n}")
-    seats.sort(key=lambda s: -s[2])  # front row = lowest in the image = largest y
+    seats.sort(key=lambda s: -s[2])  # front row = lowest in the image = largest y (of the head)
     out, k = {}, 0
     for size in rows:
         row = sorted(seats[k:k + size], key=lambda s: s[1])

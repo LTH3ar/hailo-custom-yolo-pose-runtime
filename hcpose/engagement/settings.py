@@ -55,6 +55,10 @@ class EngagementSettings:
         }
     )
     hand_raised_is_focused: bool = True  # a raised hand overrides the other cues
+    # head_turned cue: 0 at this change of yaw from the seat's attentive yaw, full at head_turn_full
+    # (yaw = nose offset between the ears, -1..1)
+    head_turn_start: float = 0.35
+    head_turn_full: float = 0.85
 
     # Per-frame decision: "auto" / "none" (= the rules, the default),
     # "trees" | "logistic" | "mlp" (bundled SCB-trained models, opt-in),
@@ -72,6 +76,8 @@ class EngagementSettings:
             raise ValueError(f"camera_position must be one of {CAMERA_POSITIONS}, got {self.camera_position!r}")
         if not 0 <= self.off_threshold <= self.on_threshold <= 1:
             raise ValueError("need 0 <= off_threshold <= on_threshold <= 1")
+        if not 0 <= self.head_turn_start < self.head_turn_full:
+            raise ValueError("need 0 <= head_turn_start < head_turn_full")
         unknown = set(self.weights) - set(EngagementSettings().weights)
         if unknown:
             raise ValueError(f"unknown weights {sorted(unknown)}")

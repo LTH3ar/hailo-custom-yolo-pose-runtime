@@ -174,11 +174,12 @@ class Baseline:
         return cls(yaw=med("yaw"), head_height=med("head_height"), torso_ratio=med("torso_ratio"))
 
 
-def score(f: Features, base: Baseline, weights: Dict[str, float], hand_raised_is_focused: bool):
+def score(f: Features, base: Baseline, weights: Dict[str, float], hand_raised_is_focused: bool,
+          head_turn: tuple = (0.35, 0.85)):
     """Per-frame distraction score 0..1 and the cue that produced it."""
     cues = {}
     if f.yaw is not None and base.yaw is not None:
-        cues["head_turned"] = ramp(abs(f.yaw - base.yaw), 0.35, 0.85)
+        cues["head_turned"] = ramp(abs(f.yaw - base.yaw), head_turn[0], head_turn[1])
     if f.face_hidden:
         cues["face_hidden"] = 1.0
     if f.head_height is not None and base.head_height is not None:
