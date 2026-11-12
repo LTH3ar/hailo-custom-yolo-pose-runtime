@@ -1,0 +1,37 @@
+# Tests and thesis build on every push and pull request. The thesis PDF is kept as a build artifact.
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        # hailo_platform, GStreamer and the TAPPAS bindings only exist on the Pi; tests that need them skip
+        run: pip install -e ".[test,eval]" opencv-python-headless scikit-learn
+      - name: Test
+        run: pytest -q tests
+
+  thesis:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install TeX Live (pdfLaTeX, vntex)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends latexmk texlive-latex-recommended \
+            texlive-latex-extra texlive-fonts-recommended texlive-lang-other
+      - name: Build the PDF and the Overleaf bundle
+        run: thesis/tools/package.sh dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: thesis
+          path: dist/

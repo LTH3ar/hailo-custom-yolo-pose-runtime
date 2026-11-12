@@ -1,0 +1,45 @@
+# Release on a version tag (e.g. git tag -a v1.0-thesis -m ... && git push origin v1.0-thesis):
+# the runtime as a Python sdist and wheel, the thesis PDF and the Overleaf bundle.
+# The C++ post-process and Hailo libraries are built on the Pi by install.sh, not here.
+name: Release
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test
+        run: |
+          pip install -e ".[test,eval]" opencv-python-headless scikit-learn
+          pytest -q tests
+      - name: Build the runtime (sdist and wheel)
+        run: |
+          pip install build
+          python -m build --outdir dist
+      - name: Install TeX Live (pdfLaTeX, vntex)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends latexmk texlive-latex-recommended \
+            texlive-latex-extra texlive-fonts-recommended texlive-lang-other
+      - name: Build the thesis PDF and the Overleaf bundle
+        run: thesis/tools/package.sh dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: dist/
+      - name: Publish the release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
