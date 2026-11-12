@@ -1,23 +1,51 @@
 % Layout of the HUST master's thesis template ĐT.QT12.BM01 (Lần ban hành 02, 30/6/2025),
-% rebuilt for XeLaTeX from the school's Word template:
+% rebuilt in LaTeX from the school's Word template:
 %   A4; margins top 2 cm, bottom 2 cm, left 3.5 cm, right 2.5 cm
-%   Times New Roman 13 pt, justified, line spacing 1.1, 3 pt before each paragraph
-%   chapters "CHƯƠNG n. TITLE" in capitals, on a new page; at most 3 heading levels
-%   figure captions below ("Hình n.m"), table captions above ("Bảng n.m"),
-%   equations numbered "PT n.m"; IEEE references in order of citation
+%   Times 13 pt, justified, line spacing 1.1, 3 pt before each paragraph
+%   chapters "CHAPTER n. TITLE" (CHƯƠNG) in capitals, on a new page; at most 3 heading levels
+%   figure captions below, table captions above; IEEE references in order of citation
+% Compiles with pdfLaTeX (Overleaf's default), the same base as HUST's own LaTeX template:
+% inputenc utf8 + T5 font encoding (vntex) for Vietnamese + mathptmx for Times.
+% XeLaTeX and LuaLaTeX also work (fontspec, TeX Gyre Termes).
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{hust-thesis}[2026/11/12 HUST master's thesis layout]
 
 \RequirePackage[fontsize=13pt]{scrextend}
 \RequirePackage[a4paper,top=2cm,bottom=2cm,left=3.5cm,right=2.5cm,footskip=1cm]{geometry}
-\RequirePackage{fontspec}
-% Times New Roman if installed (Windows, macOS, Overleaf with the font uploaded); else its metric clone
-\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{TeX Gyre Termes}}
-\RequirePackage{polyglossia}
-\setdefaultlanguage{english}
-\setotherlanguage{vietnamese}
+\RequirePackage{iftex}
+\ifPDFTeX
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage[T5]{fontenc}   % Vietnamese letters
+  \RequirePackage{mathptmx}      % Times
+  \RequirePackage{textcomp}
+  \DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+  \DeclareUnicodeCharacter{2190}{\ensuremath{\leftarrow}}
+  \DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+  \DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
+  \DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+  \DeclareUnicodeCharacter{221A}{\ensuremath{\surd}}
+  \DeclareUnicodeCharacter{2212}{\ensuremath{-}}
+  \DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+  \DeclareUnicodeCharacter{00B1}{\ensuremath{\pm}}
+  \DeclareUnicodeCharacter{00B0}{\ensuremath{^\circ}}
+  \DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}}
+  \DeclareUnicodeCharacter{03C4}{\ensuremath{\tau}}
+  \DeclareUnicodeCharacter{2026}{\ldots}
+  \DeclareUnicodeCharacter{2713}{\ensuremath{\checkmark}}
+\else
+  \RequirePackage{fontspec}
+  \setmainfont{TeX Gyre Termes}
+  \RequirePackage{newunicodechar}
+  \newunicodechar{→}{\ensuremath{\rightarrow}}
+  \newunicodechar{←}{\ensuremath{\leftarrow}}
+  \newunicodechar{≥}{\ensuremath{\geq}}
+  \newunicodechar{≤}{\ensuremath{\leq}}
+  \newunicodechar{≈}{\ensuremath{\approx}}
+  \newunicodechar{√}{\ensuremath{\surd}}
+  \newunicodechar{τ}{\ensuremath{\tau}}
+  \newunicodechar{✓}{\ensuremath{\checkmark}}
+\fi
 \RequirePackage{amsmath,amssymb}
-\RequirePackage{newunicodechar}
 \RequirePackage{setspace}
 \setstretch{1.1}
 \setlength{\parindent}{0pt}
@@ -37,16 +65,6 @@
 \RequirePackage[hidelinks]{hyperref}
 \RequirePackage{xurl}
 
-% characters TeX Gyre Termes / Times may lack
-\newunicodechar{→}{\ensuremath{\rightarrow}}
-\newunicodechar{←}{\ensuremath{\leftarrow}}
-\newunicodechar{≥}{\ensuremath{\geq}}
-\newunicodechar{≤}{\ensuremath{\leq}}
-\newunicodechar{≈}{\ensuremath{\approx}}
-\newunicodechar{√}{\ensuremath{\surd}}
-\newunicodechar{τ}{\ensuremath{\tau}}
-\newunicodechar{✓}{\ensuremath{\checkmark}}
-
 % Vietnamese labels of the template
 % Language of the labels: English by default; \vietnamesetrue in info.tex switches to the
 % template's Vietnamese labels (CHƯƠNG, Hình, Bảng, MỤC LỤC, PT ...).
@@ -62,8 +80,6 @@
   \renewcommand{\bibname}{\hustlang{REFERENCES}{TÀI LIỆU THAM KHẢO}}%
   \renewcommand{\appendixname}{\hustlang{APPENDIX}{PHỤ LỤC}}%
   \renewcommand{\chaptername}{\hustchaptername}}
-% polyglossia resets the caption names at \begin{document}; re-apply ours after it
-\gappto\captionsenglish{\hustcaptions}
 \AtBeginDocument{\hustcaptions}
 
 % equations: "(n.m)" in English, "PT n.m" as in the Vietnamese template

@@ -8,11 +8,22 @@ in `generated/` are produced from it and are overwritten on every update.
 
 ```bash
 ./build.sh                      # re-render generated/ from src/*.md, then compile main.pdf
-latexmk -xelatex main.tex       # compile only
+latexmk -pdf main.tex           # compile only
 ```
 
-On Overleaf: upload this folder, set *Menu → Compiler → XeLaTeX*, main document `main.tex`.
-Times New Roman is used if installed, otherwise its metric clone TeX Gyre Termes (on Overleaf by default).
+It compiles with **pdfLaTeX**, Overleaf's default, on the same base as HUST's own LaTeX template:
+`inputenc` utf8, the T5 font encoding (vntex) for Vietnamese letters and `mathptmx` for Times.
+XeLaTeX and LuaLaTeX work too (they switch to TeX Gyre Termes).
+
+On Overleaf: *New project → Upload project*, upload `thesis_overleaf.zip` (or a zip of this folder),
+and leave the compiler on pdfLaTeX. The main document is `main.tex`.
+
+## Releases
+
+`.github/workflows/release.yml` runs on a version tag (`git tag -a v1.0-thesis -m ... && git push origin v1.0-thesis`).
+It runs the tests and builds the runtime as a Python sdist and wheel. It also compiles this thesis with
+`tools/package.sh`, then attaches `thesis.pdf` and `thesis_overleaf.zip` to the GitHub release. On every push and
+pull request, `ci.yml` runs the same tests and thesis build and keeps the PDF as a build artifact.
 
 ## What is generated and what is yours
 

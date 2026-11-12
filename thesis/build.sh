@@ -3,5 +3,5 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 python3 tools/doc2tex.py
-latexmk -xelatex -interaction=nonstopmode -halt-on-error main.tex >/dev/null
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex >/dev/null
 echo "built $(pwd)/main.pdf"
