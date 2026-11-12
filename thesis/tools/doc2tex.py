@@ -23,7 +23,12 @@ CFG = json.loads((ROOT / "tools" / "captions.json").read_text(encoding="utf8"))
 WARN = []
 
 
+FIXUPS = {"p\u0303": "\\ensuremath{\\tilde{p}}"}  # combining characters pdfLaTeX can't set
+
+
 def pandoc(md: str) -> str:
+    for a, b in FIXUPS.items():
+        md = md.replace(a, b)
     r = subprocess.run(["pandoc", "-f", "markdown+raw_tex-auto_identifiers+smart", "-t", "latex", "--wrap=preserve"],
                        input=md, capture_output=True, text=True, check=True)
     return r.stdout

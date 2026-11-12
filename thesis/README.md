@@ -8,11 +8,15 @@ in `generated/` are produced from it and are overwritten on every update.
 
 ```bash
 ./build.sh                      # re-render generated/ from src/*.md, then compile main.pdf
-latexmk -xelatex main.tex       # compile only
+latexmk -pdf main.tex           # compile only
 ```
 
-On Overleaf: upload this folder, set *Menu → Compiler → XeLaTeX*, main document `main.tex`.
-Times New Roman is used if installed, otherwise its metric clone TeX Gyre Termes (on Overleaf by default).
+It compiles with **pdfLaTeX**, Overleaf's default, on the same base as HUST's own LaTeX template:
+`inputenc` utf8, the T5 font encoding (vntex) for Vietnamese letters and `mathptmx` for Times.
+XeLaTeX and LuaLaTeX work too (they switch to TeX Gyre Termes).
+
+On Overleaf: *New project → Upload project*, upload `thesis_overleaf.zip` (or a zip of this folder),
+and leave the compiler on pdfLaTeX. The main document is `main.tex`.
 
 ## What is generated and what is yours
 
