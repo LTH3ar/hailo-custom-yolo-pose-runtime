@@ -69,7 +69,8 @@
 % equations: "(n.m)" in English, "PT n.m" as in the Vietnamese template
 \renewcommand{\theequation}{\thechapter.\arabic{equation}}
 \makeatletter
-\AtBeginDocument{\ifvietnamese\def\tagform@##1{\maketag@@@{PT~\ignorespaces##1\unskip\@@italiccorr}}\fi}
+\def\hust@pttag#1{\maketag@@@{PT~\ignorespaces#1\unskip\@@italiccorr}}
+\AtBeginDocument{\ifvietnamese\let\tagform@\hust@pttag\fi}
 \makeatother
 
 % headings: chapter centred, bold capitals "CHƯƠNG n. TITLE"; sections bold
