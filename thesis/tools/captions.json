@@ -1,0 +1,56 @@
+{
+  "_comment": "Captions the doc does not hold. Tables are matched by their header row (cells joined with ' | ', after removing markdown escapes). Embedded widgets and pictures are matched by the start of their caption in the doc. Unmatched tables get a TODO caption and a warning from doc2tex.py.",
+  "tables": {
+    "Work | Sensing | Where it runs": "Prior systems and studies compared with this thesis",
+    "Model | Best epoch | Training time (h)": "Training of the three pose models",
+    "Model | Stock 17-point model, on the 13 points": "Keypoint AP on COCO val2017, 13 upper-body keypoints, COCO tolerances",
+    "Model | Hailo-8 FPS | Hardware latency (ms)": "Throughput and latency of the INT8 HEFs on the Hailo-8 alone",
+    "Source | What it is | What it measures": "Sources of evidence used in the evaluation",
+    "Clip | Model (INT8, Pi) | No tiles": "Students detected per frame on the classroom clips, without and with tiles",
+    "Measure | Before | After": "Effect of same-skeleton duplicate removal",
+    "Decision | AUC | Within-image AUC": "Per-student decisions on SCB (lesson-grouped 5-fold cross-validation)",
+    "Decision | False alarms on focused moments": "Per-student decisions against 301 blind human labels (lecture and exam-hall clips)",
+    "Model, tiles on | Decision | False alarms on focused": "Per-student decisions against 150 blind human labels on the held-out class (clip_5)",
+    "Decision | Distracted seconds caught | Precision": "Staged two-person session (clip_4), INT8 m model",
+    "Moment | Person | Ear-based yaw": "Ear-based yaw and nose offset at attentive and turned moments of clip_4",
+    " | n, before → after | m, before → after": "Effect of the head-offset measure across all evidence",
+    "Model | FPS | Hardware latency (ms)": "Hailo-8 throughput and latency per model (hailortcli benchmark)",
+    "Model | Tiles | FPS | CPU, whole Pi": "End-to-end performance on the Raspberry Pi 5 (lecture clip, 1280×720)",
+    "Run | FPS | SoC temperature after 5 / 10 / 15 min (°C)": "Thermal behaviour over 15-minute runs",
+    "Part | Figure | Source": "Vendor power figures used to complete the measured board power",
+    "Provision | What it says | Consequence for the system": "Provisions of Law 91/2025/QH15 and Decree 356/2025/ND-CP and their consequences for the system"
+  },
+  "embeds": {
+    "hcpose architecture": {
+      "file": "figures/architecture.png",
+      "caption": "Architecture of hcpose: frames stay in memory, and skeletons drive anonymous seats and a class-level share",
+      "width": 1.0
+    },
+    "research/scb/README.md · 1,500 SCB": {
+      "file": "figures/scb_coverage.png",
+      "caption": "Labelled SCB front-view students detected, by size in the image, without and with tiles (upper_body_n, threshold 0.3)",
+      "width": 0.75
+    },
+    "research/scb/README.md · lecture clip": {
+      "file": "figures/clips_rules_vs_learned.png",
+      "caption": "Mean class distracted share on the lecture and exam-hall clips: rules against learned classifiers (upper_body_n with tiles, FP32)",
+      "width": 0.75
+    },
+    "data flow in hcpose": {
+      "file": "figures/dataflow.png",
+      "caption": "Data flow in hcpose with default settings; optional outputs are dashed",
+      "width": 0.9
+    },
+    "clip_4 frames": {
+      "file": "figures/clip4_overview.png",
+      "caption": null,
+      "width": 1.0
+    }
+  },
+  "manual_figures": {
+    "The device": "device",
+    "The tiles": "tiles",
+    "The two displays": "displays",
+    "A same-skeleton duplicate": "dedup"
+  }
+}

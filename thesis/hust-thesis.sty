@@ -1,0 +1,132 @@
+% Layout of the HUST master's thesis template ĐT.QT12.BM01 (Lần ban hành 02, 30/6/2025),
+% rebuilt for XeLaTeX from the school's Word template:
+%   A4; margins top 2 cm, bottom 2 cm, left 3.5 cm, right 2.5 cm
+%   Times New Roman 13 pt, justified, line spacing 1.1, 3 pt before each paragraph
+%   chapters "CHƯƠNG n. TITLE" in capitals, on a new page; at most 3 heading levels
+%   figure captions below ("Hình n.m"), table captions above ("Bảng n.m"),
+%   equations numbered "PT n.m"; IEEE references in order of citation
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hust-thesis}[2026/11/12 HUST master's thesis layout]
+
+\RequirePackage[fontsize=13pt]{scrextend}
+\RequirePackage[a4paper,top=2cm,bottom=2cm,left=3.5cm,right=2.5cm,footskip=1cm]{geometry}
+\RequirePackage{fontspec}
+% Times New Roman if installed (Windows, macOS, Overleaf with the font uploaded); else its metric clone
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{TeX Gyre Termes}}
+\RequirePackage{polyglossia}
+\setdefaultlanguage{english}
+\setotherlanguage{vietnamese}
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{newunicodechar}
+\RequirePackage{setspace}
+\setstretch{1.1}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt plus 1pt}
+\RequirePackage{graphicx,xcolor}
+\RequirePackage{booktabs,array,tabularx,xltabular}
+\RequirePackage{enumitem}
+\setlist{itemsep=1pt,topsep=3pt,parsep=0pt}
+\RequirePackage{fvextra}
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+\RequirePackage{tocloft}
+\RequirePackage[labelsep=space,font={it,small},justification=centering]{caption}
+\captionsetup[table]{position=top,skip=4pt}
+\captionsetup[figure]{position=bottom,skip=6pt}
+\RequirePackage{cite}
+\RequirePackage[hidelinks]{hyperref}
+\RequirePackage{xurl}
+
+% characters TeX Gyre Termes / Times may lack
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{←}{\ensuremath{\leftarrow}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{√}{\ensuremath{\surd}}
+\newunicodechar{τ}{\ensuremath{\tau}}
+\newunicodechar{✓}{\ensuremath{\checkmark}}
+
+% Vietnamese labels of the template
+\newcommand{\hustchaptername}{CHƯƠNG}
+\newcommand{\hustcaptions}{%
+  \renewcommand{\figurename}{Hình}%
+  \renewcommand{\tablename}{Bảng}%
+  \renewcommand{\contentsname}{MỤC LỤC}%
+  \renewcommand{\listfigurename}{DANH MỤC HÌNH VẼ}%
+  \renewcommand{\listtablename}{DANH MỤC BẢNG BIỂU}%
+  \renewcommand{\bibname}{TÀI LIỆU THAM KHẢO}%
+  \renewcommand{\appendixname}{PHỤ LỤC}%
+  \renewcommand{\chaptername}{CHƯƠNG}}
+% polyglossia resets the caption names at \begin{document}; re-apply ours after it
+\gappto\captionsenglish{\hustcaptions}
+\AtBeginDocument{\hustcaptions}
+
+% equations: "PT n.m" in place of "(n.m)"
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}
+\makeatletter
+\def\tagform@#1{\maketag@@@{PT~\ignorespaces#1\unskip\@@italiccorr}}
+\makeatother
+
+% headings: chapter centred, bold capitals "CHƯƠNG n. TITLE"; sections bold
+\titleformat{\chapter}[block]{\centering\bfseries\fontsize{14}{17}\selectfont}
+  {\MakeUppercase{\hustchaptername}~\thechapter.}{0.5em}{\MakeUppercase}
+\titleformat{name=\chapter,numberless}[block]{\centering\bfseries\fontsize{14}{17}\selectfont}{}{0pt}{\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{0pt}{18pt}
+\titleformat{\section}{\bfseries}{\thesection}{1.2em}{}
+\titlespacing*{\section}{0pt}{10pt}{4pt}
+\titleformat{\subsection}{\bfseries}{\thesubsection}{1.2em}{}
+\titlespacing*{\subsection}{0.8cm}{8pt}{3pt}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+% table of contents in the template's look
+\renewcommand{\cfttoctitlefont}{\hfill\bfseries\fontsize{14}{17}\selectfont}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftloftitlefont}{\hfill\bfseries\fontsize{14}{17}\selectfont}
+\renewcommand{\cftafterloftitle}{\hfill}
+\renewcommand{\cftlottitlefont}{\hfill\bfseries\fontsize{14}{17}\selectfont}
+\renewcommand{\cftafterlottitle}{\hfill}
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftchappagefont}{\bfseries}
+\renewcommand{\cftchapleader}{\bfseries\cftdotfill{\cftdotsep}}
+\renewcommand{\cftchappresnum}{\MakeUppercase{\hustchaptername}~}
+\renewcommand{\cftchapaftersnum}{.}
+\setlength{\cftchapnumwidth}{6.2em}
+\setlength{\cftsecindent}{0pt}
+\setlength{\cftsecnumwidth}{2.6em}
+\setlength{\cftsubsecindent}{2.6em}
+\setlength{\cftsubsecnumwidth}{3.2em}
+\renewcommand{\cftfigpresnum}{\figurename~}
+\renewcommand{\cfttabpresnum}{\tablename~}
+\setlength{\cftfignumwidth}{4.6em}
+\setlength{\cfttabnumwidth}{4.6em}
+\setlength{\cftfigindent}{0pt}
+\setlength{\cfttabindent}{0pt}
+
+% pages: the form code on the front matter, page numbers bottom right in the chapters
+\fancypagestyle{form}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0.4pt}
+  \fancyfoot[L]{\footnotesize ĐT.QT12.BM01}\fancyfoot[C]{\footnotesize Lần ban hành: 02}
+  \fancyfoot[R]{\footnotesize Ngày ban hành: 30/6/2025}}
+\fancypagestyle{main}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0pt}\fancyfoot[R]{\thepage}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0pt}\fancyfoot[R]{\thepage}}
+
+% code listings (JSON excerpt)
+\DefineVerbatimEnvironment{codeblock}{Verbatim}{fontsize=\footnotesize,breaklines,breakanywhere,frame=single,framesep=6pt}
+
+% pandoc compatibility
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\newcommand{\passthrough}[1]{#1}
+
+% figures still to be made by hand: shows the picture once figures/manual/<name>.(png|jpg|pdf) exists,
+% otherwise a framed placeholder that says what is missing
+\newcommand{\manualfigure}[4]{%
+  \begin{figure}[htbp]\centering
+  \IfFileExists{#1.png}{\includegraphics[width=0.9\textwidth]{#1.png}}{%
+  \IfFileExists{#1.jpg}{\includegraphics[width=0.9\textwidth]{#1.jpg}}{%
+  \IfFileExists{#1.pdf}{\includegraphics[width=0.9\textwidth]{#1.pdf}}{%
+    \fbox{\parbox[c][4.5cm][c]{0.8\textwidth}{\centering\color{red!60!black}\textbf{Figure to add: #2}\\[4pt]
+    \footnotesize put the image at \texttt{\detokenize{#1}.png} (or .jpg/.pdf)}}}}}
+  \caption{#3}\label{#4}
+  \end{figure}}
+\endinput

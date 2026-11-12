@@ -1,0 +1,21 @@
+% HUST master's thesis (template ĐT.QT12.BM01), compiled with XeLaTeX:
+%   latexmk -xelatex main.tex      or on Overleaf: Menu > Compiler > XeLaTeX
+% The chapters in generated/ are rendered from the Claude doc by tools/doc2tex.py; don't edit them.
+% Edit info.tex (names, supervisor) and acknowledgements.tex by hand.
+\documentclass[a4paper,oneside]{report}
+\usepackage{hust-thesis}
+\input{info}
+
+\begin{document}
+\pagenumbering{gobble}
+\input{frontmatter}
+
+\pagestyle{main}
+\pagenumbering{arabic}
+\input{generated/chapters}
+
+% Phụ lục (nếu có) would go here, before the references, as the template lists them
+\cleardoublepage
+\phantomsection\addcontentsline{toc}{chapter}{TÀI LIỆU THAM KHẢO}
+\input{generated/references}
+\end{document}

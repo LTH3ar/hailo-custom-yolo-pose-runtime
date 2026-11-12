@@ -1,0 +1,80 @@
+% Front matter in the order of the template: cover, (revision form), topic form,
+% acknowledgements + summary (one signed page), contents, lists of figures and tables.
+
+% ---- Cover ------------------------------------------------------------------------
+\begin{titlepage}
+\thispagestyle{form}
+\centering
+{\bfseries\fontsize{14}{17}\selectfont ĐẠI HỌC BÁCH KHOA HÀ NỘI\par}
+\vspace*{0.30\textheight}
+{\bfseries\fontsize{24}{29}\selectfont LUẬN VĂN THẠC SĨ\par}
+\vspace{1.2em}
+{\bfseries\fontsize{20}{25}\selectfont\thesistitle\par}
+\vspace{1.4em}
+{\bfseries\fontsize{14}{17}\selectfont\MakeUppercase{\studentname}\par}
+{\studentemail\par}
+\vspace{0.6em}
+{\bfseries\major\par}
+\vfill
+\begin{tabular}{@{}p{0.33\textwidth}p{0.36\textwidth}p{0.25\textwidth}@{}}
+\textbf{Giảng viên hướng dẫn:} & \supervisor & \rule{0.25\textwidth}{0.4pt}\newline{\footnotesize\centering Chữ ký của GVHD\par}\\[1.2em]
+\textbf{Trường/Khoa:} & \multicolumn{2}{@{}l}{\school}\\
+\end{tabular}
+\vspace{3em}
+
+{\bfseries \placeyear\par}
+\end{titlepage}
+
+% ---- Revision form (after the defence) ---------------------------------------------
+\ifshowrevisionform
+\clearpage\thispagestyle{form}
+\begin{center}
+{\bfseries CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM}\\
+{\bfseries Độc lập -- Tự do -- Hạnh phúc}\\[2em]
+{\bfseries\fontsize{14}{17}\selectfont BẢN XÁC NHẬN CHỈNH SỬA LUẬN VĂN THẠC SĨ}
+\end{center}
+\vspace{1em}
+Họ và tên tác giả luận văn: \studentname\par
+Đề tài luận văn: \thesistitle\par
+Ngành: \major\par
+Mã số SV: \studentid\par
+\vspace{1em}
+Tác giả, Người hướng dẫn khoa học và Hội đồng chấm luận văn xác nhận tác giả đã sửa chữa, bổ sung luận văn theo biên bản họp Hội đồng ngày \dotfill{} với các nội dung sau:\par
+\vspace{8cm}
+\hfill Ngày \quad tháng \quad năm\par
+\vspace{1em}
+\begin{tabular}{@{}p{0.45\textwidth}p{0.45\textwidth}@{}}
+\centering Giáo viên hướng dẫn & \centering Tác giả luận văn\tabularnewline
+\end{tabular}\par
+\vspace{4em}
+\centering CHỦ TỊCH HỘI ĐỒNG\par
+\fi
+
+% ---- Topic form signed by the supervisor (scan) -------------------------------------
+\ifshowtopicform
+\clearpage\thispagestyle{form}
+\IfFileExists{figures/manual/topic_form.pdf}{\includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{figures/manual/topic_form.pdf}}{%
+\begin{center}{\bfseries\fontsize{14}{17}\selectfont ĐỀ TÀI LUẬN VĂN}\end{center}
+\vspace{2em}
+\fbox{\parbox[c][10cm][c]{0.95\textwidth}{\centering\color{red!60!black}\textbf{To add by hand:} the topic form in your school's format,\\ signed by the supervisor (scan to \texttt{figures/manual/topic\_form.pdf}).}}}
+\fi
+
+% ---- Acknowledgements + summary, one page, signed ------------------------------------
+% The template asks for this page to fit on one side; it is set a size smaller to get there.
+\clearpage\thispagestyle{form}
+{\small\setstretch{1.0}\setlength{\parskip}{2pt}
+\begin{center}\bfseries\normalsize Lời cảm ơn\end{center}
+\input{acknowledgements}
+\begin{center}\bfseries\normalsize Tóm tắt nội dung luận văn\end{center}
+\input{generated/abstract}\par
+\vspace{0.5em}
+\hfill\begin{tabular}{c}HỌC VIÊN\\ {\footnotesize Ký và ghi rõ họ tên}\\[2.5em]\studentname\end{tabular}\par}
+
+% ---- Contents and lists --------------------------------------------------------------
+\clearpage\pagestyle{form}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
