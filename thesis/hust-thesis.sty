@@ -48,24 +48,28 @@
 \newunicodechar{✓}{\ensuremath{\checkmark}}
 
 % Vietnamese labels of the template
-\newcommand{\hustchaptername}{CHƯƠNG}
+% Language of the labels: English by default; \vietnamesetrue in info.tex switches to the
+% template's Vietnamese labels (CHƯƠNG, Hình, Bảng, MỤC LỤC, PT ...).
+\newif\ifvietnamese \vietnamesefalse
+\newcommand{\hustlang}[2]{\ifvietnamese#2\else#1\fi}
+\newcommand{\hustchaptername}{\hustlang{CHAPTER}{CHƯƠNG}}
 \newcommand{\hustcaptions}{%
-  \renewcommand{\figurename}{Hình}%
-  \renewcommand{\tablename}{Bảng}%
-  \renewcommand{\contentsname}{MỤC LỤC}%
-  \renewcommand{\listfigurename}{DANH MỤC HÌNH VẼ}%
-  \renewcommand{\listtablename}{DANH MỤC BẢNG BIỂU}%
-  \renewcommand{\bibname}{TÀI LIỆU THAM KHẢO}%
-  \renewcommand{\appendixname}{PHỤ LỤC}%
-  \renewcommand{\chaptername}{CHƯƠNG}}
+  \renewcommand{\figurename}{\hustlang{Figure}{Hình}}%
+  \renewcommand{\tablename}{\hustlang{Table}{Bảng}}%
+  \renewcommand{\contentsname}{\hustlang{CONTENTS}{MỤC LỤC}}%
+  \renewcommand{\listfigurename}{\hustlang{LIST OF FIGURES}{DANH MỤC HÌNH VẼ}}%
+  \renewcommand{\listtablename}{\hustlang{LIST OF TABLES}{DANH MỤC BẢNG BIỂU}}%
+  \renewcommand{\bibname}{\hustlang{REFERENCES}{TÀI LIỆU THAM KHẢO}}%
+  \renewcommand{\appendixname}{\hustlang{APPENDIX}{PHỤ LỤC}}%
+  \renewcommand{\chaptername}{\hustchaptername}}
 % polyglossia resets the caption names at \begin{document}; re-apply ours after it
 \gappto\captionsenglish{\hustcaptions}
 \AtBeginDocument{\hustcaptions}
 
-% equations: "PT n.m" in place of "(n.m)"
+% equations: "(n.m)" in English, "PT n.m" as in the Vietnamese template
 \renewcommand{\theequation}{\thechapter.\arabic{equation}}
 \makeatletter
-\def\tagform@#1{\maketag@@@{PT~\ignorespaces#1\unskip\@@italiccorr}}
+\AtBeginDocument{\ifvietnamese\def\tagform@##1{\maketag@@@{PT~\ignorespaces##1\unskip\@@italiccorr}}\fi}
 \makeatother
 
 % headings: chapter centred, bold capitals "CHƯƠNG n. TITLE"; sections bold
@@ -106,8 +110,8 @@
 
 % pages: the form code on the front matter, page numbers bottom right in the chapters
 \fancypagestyle{form}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0.4pt}
-  \fancyfoot[L]{\footnotesize ĐT.QT12.BM01}\fancyfoot[C]{\footnotesize Lần ban hành: 02}
-  \fancyfoot[R]{\footnotesize Ngày ban hành: 30/6/2025}}
+  \fancyfoot[L]{\footnotesize ĐT.QT12.BM01}\fancyfoot[C]{\footnotesize \hustlang{Issue}{Lần ban hành}: 02}
+  \fancyfoot[R]{\footnotesize \hustlang{Issued}{Ngày ban hành}: 30/6/2025}}
 \fancypagestyle{main}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0pt}\fancyfoot[R]{\thepage}}
 \fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0pt}\fancyfoot[R]{\thepage}}
 

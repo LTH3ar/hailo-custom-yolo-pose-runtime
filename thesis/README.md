@@ -30,11 +30,17 @@ How updates work: when the doc changes, Claude exports the changed tabs into `sr
 `./build.sh`, checks the PDF and commits. It's a step Claude does with each edit, not an automatic sync.
 If you edit the doc yourself, ask Claude to refresh the LaTeX version.
 
+## Language
+
+Labels are in English by default (CHAPTER, Figure, Table, CONTENTS, the cover and forms). Set
+`\vietnamesetrue` in `info.tex` to switch every label to the template's Vietnamese (CHƯƠNG, Hình, Bảng,
+MỤC LỤC, equations as PT n.m). The body text comes from the doc, in whatever language it is written.
+
 ## Template rules applied
 
 - A4; margins top 2 cm, bottom 2 cm, left 3.5 cm, right 2.5 cm; 13 pt Times; justified; line spacing 1.1
-- chapters "CHƯƠNG n. TITLE" in capitals on a new page; at most three heading levels
-- captions: figures below ("Hình n.m"), tables above ("Bảng n.m"); equations numbered "PT n.m"
+- chapters "CHAPTER n. TITLE" (CHƯƠNG) in capitals on a new page; at most three heading levels
+- captions: figures below (Figure/Hình n.m), tables above (Table/Bảng n.m); equations (n.m), or PT n.m in Vietnamese
 - order: cover → (Bản xác nhận chỉnh sửa) → Đề tài → Lời cảm ơn + Tóm tắt (one signed page) → Mục lục →
   Danh mục hình vẽ → Danh mục bảng biểu → chapters → (Phụ lục) → Tài liệu tham khảo
 - IEEE references numbered in order of citation

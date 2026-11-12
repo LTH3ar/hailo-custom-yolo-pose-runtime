@@ -5,9 +5,9 @@
 \begin{titlepage}
 \thispagestyle{form}
 \centering
-{\bfseries\fontsize{14}{17}\selectfont ĐẠI HỌC BÁCH KHOA HÀ NỘI\par}
+{\bfseries\fontsize{14}{17}\selectfont \hustlang{HANOI UNIVERSITY OF SCIENCE AND TECHNOLOGY}{ĐẠI HỌC BÁCH KHOA HÀ NỘI}\par}
 \vspace*{0.30\textheight}
-{\bfseries\fontsize{24}{29}\selectfont LUẬN VĂN THẠC SĨ\par}
+{\bfseries\fontsize{24}{29}\selectfont \hustlang{MASTER'S THESIS}{LUẬN VĂN THẠC SĨ}\par}
 \vspace{1.2em}
 {\bfseries\fontsize{20}{25}\selectfont\thesistitle\par}
 \vspace{1.4em}
@@ -17,8 +17,8 @@
 {\bfseries\major\par}
 \vfill
 \begin{tabular}{@{}p{0.33\textwidth}p{0.36\textwidth}p{0.25\textwidth}@{}}
-\textbf{Giảng viên hướng dẫn:} & \supervisor & \rule{0.25\textwidth}{0.4pt}\newline{\footnotesize\centering Chữ ký của GVHD\par}\\[1.2em]
-\textbf{Trường/Khoa:} & \multicolumn{2}{@{}l}{\school}\\
+\textbf{\hustlang{Supervisor:}{Giảng viên hướng dẫn:}} & \supervisor & \rule{0.25\textwidth}{0.4pt}\newline{\footnotesize\centering \hustlang{Supervisor's signature}{Chữ ký của GVHD}\par}\\[1.2em]
+\textbf{\hustlang{School/Faculty:}{Trường/Khoa:}} & \multicolumn{2}{@{}l}{\school}\\
 \end{tabular}
 \vspace{3em}
 
@@ -29,32 +29,32 @@
 \ifshowrevisionform
 \clearpage\thispagestyle{form}
 \begin{center}
-{\bfseries CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM}\\
-{\bfseries Độc lập -- Tự do -- Hạnh phúc}\\[2em]
-{\bfseries\fontsize{14}{17}\selectfont BẢN XÁC NHẬN CHỈNH SỬA LUẬN VĂN THẠC SĨ}
+{\bfseries \hustlang{SOCIALIST REPUBLIC OF VIETNAM}{CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM}}\\
+{\bfseries \hustlang{Independence -- Freedom -- Happiness}{Độc lập -- Tự do -- Hạnh phúc}}\\[2em]
+{\bfseries\fontsize{14}{17}\selectfont \hustlang{CONFIRMATION OF REVISIONS TO THE MASTER'S THESIS}{BẢN XÁC NHẬN CHỈNH SỬA LUẬN VĂN THẠC SĨ}}
 \end{center}
 \vspace{1em}
-Họ và tên tác giả luận văn: \studentname\par
-Đề tài luận văn: \thesistitle\par
-Ngành: \major\par
-Mã số SV: \studentid\par
+\hustlang{Author}{Họ và tên tác giả luận văn}: \studentname\par
+\hustlang{Thesis title}{Đề tài luận văn}: \thesistitle\par
+\hustlang{Major}{Ngành}: \major\par
+\hustlang{Student ID}{Mã số SV}: \studentid\par
 \vspace{1em}
-Tác giả, Người hướng dẫn khoa học và Hội đồng chấm luận văn xác nhận tác giả đã sửa chữa, bổ sung luận văn theo biên bản họp Hội đồng ngày \dotfill{} với các nội dung sau:\par
+\hustlang{The author, the supervisor and the examination committee confirm that the author has revised and supplemented the thesis according to the committee minutes of \dotfill{} as follows:}{Tác giả, Người hướng dẫn khoa học và Hội đồng chấm luận văn xác nhận tác giả đã sửa chữa, bổ sung luận văn theo biên bản họp Hội đồng ngày \dotfill{} với các nội dung sau:}\par
 \vspace{8cm}
-\hfill Ngày \quad tháng \quad năm\par
+\hfill \hustlang{Date: \qquad\qquad}{Ngày \quad tháng \quad năm}\par
 \vspace{1em}
 \begin{tabular}{@{}p{0.45\textwidth}p{0.45\textwidth}@{}}
-\centering Giáo viên hướng dẫn & \centering Tác giả luận văn\tabularnewline
+\centering \hustlang{Supervisor}{Giáo viên hướng dẫn} & \centering \hustlang{Author}{Tác giả luận văn}\tabularnewline
 \end{tabular}\par
 \vspace{4em}
-\centering CHỦ TỊCH HỘI ĐỒNG\par
+\centering \hustlang{CHAIR OF THE COMMITTEE}{CHỦ TỊCH HỘI ĐỒNG}\par
 \fi
 
 % ---- Topic form signed by the supervisor (scan) -------------------------------------
 \ifshowtopicform
 \clearpage\thispagestyle{form}
 \IfFileExists{figures/manual/topic_form.pdf}{\includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{figures/manual/topic_form.pdf}}{%
-\begin{center}{\bfseries\fontsize{14}{17}\selectfont ĐỀ TÀI LUẬN VĂN}\end{center}
+\begin{center}{\bfseries\fontsize{14}{17}\selectfont \hustlang{THESIS TOPIC}{ĐỀ TÀI LUẬN VĂN}}\end{center}
 \vspace{2em}
 \fbox{\parbox[c][10cm][c]{0.95\textwidth}{\centering\color{red!60!black}\textbf{To add by hand:} the topic form in your school's format,\\ signed by the supervisor (scan to \texttt{figures/manual/topic\_form.pdf}).}}}
 \fi
@@ -63,12 +63,12 @@ Tác giả, Người hướng dẫn khoa học và Hội đồng chấm luận v
 % The template asks for this page to fit on one side; it is set a size smaller to get there.
 \clearpage\thispagestyle{form}
 {\small\setstretch{1.0}\setlength{\parskip}{2pt}
-\begin{center}\bfseries\normalsize Lời cảm ơn\end{center}
+\begin{center}\bfseries\normalsize \hustlang{Acknowledgements}{Lời cảm ơn}\end{center}
 \input{acknowledgements}
-\begin{center}\bfseries\normalsize Tóm tắt nội dung luận văn\end{center}
+\begin{center}\bfseries\normalsize \hustlang{Abstract}{Tóm tắt nội dung luận văn}\end{center}
 \input{generated/abstract}\par
 \vspace{0.5em}
-\hfill\begin{tabular}{c}HỌC VIÊN\\ {\footnotesize Ký và ghi rõ họ tên}\\[2.5em]\studentname\end{tabular}\par}
+\hfill\begin{tabular}{c}\hustlang{STUDENT}{HỌC VIÊN}\\ {\footnotesize \hustlang{Signature and full name}{Ký và ghi rõ họ tên}}\\[2.5em]\studentname\end{tabular}\par}
 
 % ---- Contents and lists --------------------------------------------------------------
 \clearpage\pagestyle{form}
