@@ -1,0 +1,191 @@
+% generated from src/2 Related work.md by tools/doc2tex.py; do not edit
+\chapter{RELATED WORK}
+
+\section{Approaches to classroom engagement detection}
+
+Automatic engagement detection in classrooms has used four kinds of signal: faces, body pose, body orientation and wearable sensors. They trade accuracy against intrusiveness.
+
+\textbf{Faces.} Facial expressions and gaze carry rich information, but they need a frontal, well-resolved face for each student. That fails in large classes, where back rows are small and often occluded \cite{b1}. Face analysis also identifies the student, which is the root of the privacy problems in section 2.3.
+
+\textbf{Body pose.} Skeleton keypoints are less identifying and survive low resolution better.
+
+\begin{itemize}
+\tightlist
+\item
+  Tarigan et al.~\cite{b2} detect students with YOLOv8m, extract seven keypoints per person with MediaPipe, and classify them with a small fully connected network into engaged, bored, raising a hand and on the phone.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Data:} about 10,000 frames recorded with a laptop webcam in a small lab setting.
+  \item
+    \textbf{Result:} 0.70 accuracy, against 0.41 for a YOLOv4 and OpenPose baseline.
+  \item
+    \textbf{Weaknesses they report:} phone use was mostly confused with bored or engaged, and overlapping boxes caused double detections.
+  \item
+    \textbf{Gaps:} privacy and deployment hardware are not discussed.
+  \end{itemize}
+\item
+  Public datasets such as SCB \cite{b3} label classroom actions (reading, writing, raising a hand, turning the head, discussing) rather than attention, and are the usual training source.
+\end{itemize}
+
+\textbf{Body orientation.} Chen et al.~\cite{b1} estimate each student's body orientation jointly with detection, using a one-stage YOLOv11-based model (JointBDOE). They read engagement from how often orientation changes and whether it follows the teacher.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Orientation accuracy:} 10.6° mean error on MEBOW.
+\item
+  \textbf{Real classrooms:} ten lessons from kindergarten to university, with faces blurred.
+\item
+  \textbf{Gaps:} no per-student engagement labels and no quantitative engagement accuracy. The models were trained on six RTX 4090 GPUs, and inference hardware is not stated.
+\end{itemize}
+
+\textbf{Wearables.} EEG headbands such as BrainCo's FocusEDU measure brain activity directly, but they require every student to wear a device and drew strong objections (section 2.3).
+
+\textbf{Review.} The same group's systematic review \cite{b4} followed PRISMA 2020. It searched Scopus for 2019--2023 and narrowed 547 papers to 12 studies. Its main findings:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Methods:} YOLO detectors were the most used (5 of 12 studies), then VGG classifiers (4). Hybrids that split detection from pose did best among skeleton methods: YOLOv4 with OpenPose reached 86.1\% accuracy on four classes.
+\item
+  \textbf{Pose alone:} the pose-only study scored lowest. It found phone use with precision 0.22 and recall 0.11, the behaviour that the 13 keypoints here also cannot separate from writing (section 4).
+\item
+  \textbf{Challenges:} costly manual annotation, class imbalance, small and occluded students in crowded rooms, and compute cost. The review points to lightweight YOLOv8 models and notes that keypoints help preserve privacy.
+\item
+  \textbf{Comparability:} the studies use different classes and metrics, so their results cannot be ranked directly.
+\end{itemize}
+
+This thesis takes up the review's two open directions: a lightweight YOLOv8-pose model on edge hardware, and keypoints as a privacy measure.
+
+Two gaps run through this work:
+
+\begin{itemize}
+\tightlist
+\item
+  Accuracy is reported on lab or action datasets rather than on attention in real lessons.
+\item
+  Privacy and the computing platform are rarely part of the design.
+\end{itemize}
+
+\section{Pose estimation on edge hardware}
+
+Neural accelerators have made multi-person pose estimation feasible on small boards. The Hailo-8 delivers 26 TOPS at a typical 2.5 W \cite{b5}. As the Raspberry Pi AI HAT+, it attaches to a Raspberry Pi 5 over PCIe. Hailo's example applications run a YOLOv8-pose model in a GStreamer pipeline and hand each frame's detections to a Python callback.
+
+Core Electronics' guide \cite{b6} builds on that pipeline to read 17 COCO keypoints and drive single-person demos, such as gesture control and a game. It reports no frame rates. It also notes practical limits:
+
+\begin{itemize}
+\tightlist
+\item
+  some capture resolutions caused crashes
+\item
+  a start-up delay
+\item
+  extended use may need cooling
+\end{itemize}
+
+These examples target one stock COCO model and one or a few people near the camera. A classroom differs in four ways:
+
+\begin{itemize}
+\tightlist
+\item
+  a custom model (13 upper-body keypoints)
+\item
+  20-50 people at very different scales
+\item
+  a camera far from the back rows
+\item
+  the need to keep the full pipeline, including analysis, on the device
+\end{itemize}
+
+Section 3 describes the runtime built for that case.
+
+\section{Deployed systems and the controversies they raised}
+
+The best-documented deployments of attention monitoring in schools are from China in 2017-2019. All three below were criticised for exactly the properties this thesis avoids: identifying students, scoring them individually, and doing so without consent.
+
+\textbf{Hangzhou No.~11 High School, 2018. \cite{b7,b8,b9,b10}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Vendor:} Hikvision's ``smart classroom behavioural management system''.
+\item
+  \textbf{How it worked:} cameras above the blackboard scanned the class about every 30 seconds. They recognised each student and classified six behaviours (reading, writing, listening, standing, raising a hand, lying on the desk) and seven facial expressions.
+\item
+  \textbf{Who saw the scores:} they appeared on classroom screens, with attention rankings in the hallway.
+\item
+  \textbf{Data:} the school said data stayed on a local server and no images were kept.
+\item
+  \textbf{Response:} educators objected to the lack of consent and questioned whether expressions say anything about learning. After the media coverage in May 2018, the school stopped scoring facial expressions.
+\end{itemize}
+
+\textbf{Hanwang Education's Class Care System, 2017-2019. \cite{b10}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{How it worked:} a dome camera photographed the class once per second. The footage went to a server, where deep learning identified each face and sorted behaviour into listening, answering, writing, interacting and sleeping.
+\item
+  \textbf{Who saw the scores:} each student received a weekly score in an app for teachers and parents.
+\item
+  \textbf{Rollout:} piloted in seven schools without Ministry of Education approval.
+\item
+  \textbf{Students' response:} at one school students were not told about it. The company's own manager said students ``hate it'', and students at another school unplugged the cameras before exams.
+\end{itemize}
+
+\textbf{BrainCo FocusEDU headbands, Jinhua, 2019. \cite{b11}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{How it worked:} a primary school had pupils wear brainwave-sensing headbands during training sessions. According to the vendor, teachers saw only the class average.
+\item
+  \textbf{Response:} after a related Weibo topic passed 220 million views, Zhejiang education officials ordered the school to suspend their use.
+\end{itemize}
+
+Two lessons carry into this work:
+
+\begin{itemize}
+\tightlist
+\item
+  Identity and individual scores are what made these systems objectionable, more than the camera itself.
+\item
+  Centralising footage on servers widens who can see it and what it can be reused for.
+\end{itemize}
+
+At that time China had no specific law on facial or biometric data. Vietnam now does, through its Personal Data Protection Law (2025) \cite{b12}, discussed in section 4.
+
+\section{The gap this thesis addresses}
+
+No prior system combines the four properties this work targets:
+
+\begin{itemize}
+\tightlist
+\item
+  sensing without identity
+\item
+  processing entirely on a device in the room
+\item
+  an aggregate rather than per-student output
+\item
+  an evaluation of attention in real classrooms, including on the deployed hardware
+\end{itemize}
+
+\begin{table}[htbp]\footnotesize
+\caption{Prior systems and studies compared with this thesis}\label{tab:prior-systems-and-studies-compared-with-}
+\begin{tabularx}{\textwidth}{*{7}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Work} & \textbf{Sensing} & \textbf{Where it runs} & \textbf{Output for the teacher} & \textbf{Identifies students} & \textbf{Evaluated on real lessons} & \textbf{Measured on edge hardware} \\
+\midrule
+Hangzhou No.~11 / Hikvision (2018) & faces, behaviour & local server & per-student scores, rankings & yes & not published & no \\
+Hanwang Class Care System & faces, behaviour & server & weekly per-student score & yes & not published & no \\
+BrainCo FocusEDU (2019) & EEG headband & device + app & class average (vendor) & per device & not published & -- \\
+Tarigan et al.~\cite{b2} & 7 keypoints & not stated & per-person class & no & no (lab webcam) & no \\
+Chen et al.~\cite{b1} & body orientation & GPU (not stated) & orientation patterns & no & qualitative only & no \\
+Core Electronics guide \cite{b6} & 17 keypoints & Pi 5 + Hailo-8 & demo only & no & no & partly \\
+\textbf{This thesis} & 13 upper-body keypoints & Pi 5 + Hailo-8, offline & class share + 95\% range & no (anonymous seats) & yes: clips, human labels, staged sessions & yes: FPS, latency, temperature, power \\
+\bottomrule
+\end{tabularx}
+\end{table}
