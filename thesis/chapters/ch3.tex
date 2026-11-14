@@ -23,7 +23,7 @@ The skeleton file (\texttt{-\/-save-json}) and an annotated video (\texttt{-\/-o
 
 \section{Pose models and compilation}
 
-The pose models are YOLOv8-pose networks in three sizes, n, s and m, that predict one class (person) and 13 upper-body keypoints: COCO keypoints 0-12 \cite{b13}, from the nose to the hips. Classroom desks hide the legs, so the lower-body points carry no information. The models were trained on COCO with Ultralytics \cite{b14}, in the companion repository \texttt{hailo-custom-yolo-pose}, and kept fixed for this thesis.
+The pose models are YOLOv8-pose networks in three sizes, n, s and m, that predict one class (person) and 13 upper-body keypoints: COCO keypoints 0-12 \cite{b13}, from the nose to the hips. Classroom desks hide the legs, so the lower-body points carry no information. The models were trained on COCO with Ultralytics \cite{b14}, in the companion repository \texttt{hailo-custom-yolo-pose}\footnote{Training and compilation scripts: \url{https://github.com/LTH3ar/hailo-custom-yolo-pose}}, and kept fixed for this thesis.
 
 \textbf{Training.} All three sizes start from Ultralytics' COCO-pretrained YOLOv8-pose weights. They were fine-tuned on COCO 2017 person keypoints: train2017 for training, val2017 for validation. The labels were converted with Ultralytics' \texttt{convert\_coco} and cut from 17 to 13 keypoints. The settings were the same for every size except the batch:
 
