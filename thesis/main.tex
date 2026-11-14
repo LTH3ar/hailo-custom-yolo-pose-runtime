@@ -1,6 +1,6 @@
 % HUST master's thesis (template ĐT.QT12.BM01). Compiles with pdfLaTeX, Overleaf's default:
 %   latexmk -pdf main.tex          (XeLaTeX and LuaLaTeX work too)
-% The chapters in generated/ are rendered from the Claude doc by tools/doc2tex.py; don't edit them.
+% The chapter text lives in chapters/ and is edited directly.
 % Edit info.tex (names, supervisor) and acknowledgements.tex by hand.
 \documentclass[a4paper,oneside]{report}
 \usepackage{hust-thesis}
@@ -12,10 +12,10 @@
 
 \pagestyle{main}
 \pagenumbering{arabic}
-\input{generated/chapters}
+\input{chapters/chapters}
 
 % An appendix (Phụ lục), if any, would go here, before the references, as the template lists them
 \cleardoublepage
 \phantomsection\addcontentsline{toc}{chapter}{\bibname}
-\input{generated/references}
+\input{chapters/references}
 \end{document}

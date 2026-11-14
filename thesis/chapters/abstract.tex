@@ -1,4 +1,4 @@
-% generated from src/Abstract.md
+% Abstract (edited directly)
 Camera-based attention monitoring in schools has sparked strong objections where it recognized students' faces, sent footage to servers and scored individual students. This thesis check whether the useful part, a class-level indicator of how many students appear distracted, can be built without that level of surveillance and only with local data processing on the edge devices.
 
 The system proposed by this thesis, hcpose, runs entirely on a Raspberry Pi 5 with a Hailo-8 accelerator. A YOLOv8-pose model reduced to 13 upper-body keypoints finds the students with no face is recognized, and frames stay in memory, and students exist only as anonymous seats.Using per-seat calibration, two head-turn measures and smoothed rules to decide whether each seat looks focused. The teachers see only the share of the class that appears distracted, with a 95\% Wilson interval.
