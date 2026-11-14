@@ -1,14 +1,15 @@
 # Thesis, LaTeX version (HUST template ĐT.QT12.BM01)
 
-This is a LaTeX rendering of the thesis doc in Claude in the layout of HUST's master's thesis
-template (ĐT.QT12.BM01, Lần ban hành 02, 30/6/2025). The doc is the source of truth: the chapters
-in `generated/` are produced from it and are overwritten on every update.
+The thesis in LaTeX, in the layout of HUST's master's thesis template (ĐT.QT12.BM01, Lần ban hành 02,
+30/6/2025). The `.tex` files are the master copy of the text: edit `chapters/` directly. (The text was
+first drafted in a Claude doc and converted once; the converter and that draft are kept in
+`tools/archive/` for reference only and are no longer used.)
 
 ## Build
 
 ```bash
-./build.sh                      # re-render generated/ from src/*.md, then compile main.pdf
-latexmk -pdf main.tex           # compile only
+./build.sh                      # compile main.pdf
+latexmk -pdf main.tex           # the same
 ```
 
 It compiles with **pdfLaTeX**, Overleaf's default, on the same base as HUST's own LaTeX template:
@@ -25,21 +26,17 @@ It runs the tests and builds the runtime as a Python sdist and wheel. It also co
 `tools/package.sh`, then attaches `thesis.pdf` and `thesis_overleaf.zip` to the GitHub release. On every push and
 pull request, `ci.yml` runs the same tests and thesis build and keeps the PDF as a build artifact.
 
-## What is generated and what is yours
+## Files
 
-| File | Who edits it |
+| File | What |
 |---|---|
-| `src/*.md` | exported from the Claude doc, one file per tab |
-| `generated/*.tex` | made by `tools/doc2tex.py` from `src/`; don't edit, changes are lost |
-| `figures/*.png` | renders of the doc's diagrams and charts, and the clip_4 figure |
-| `tools/captions.json` | table and figure captions that the doc doesn't hold |
-| `info.tex` | **you**: name, email, student ID, major, supervisor, school, year |
-| `acknowledgements.tex` | **you**: Lời cảm ơn, 100–150 words |
-| `figures/manual/` | **you**: the pictures listed below |
-
-How updates work: when the doc changes, Claude exports the changed tabs into `src/`, runs
-`./build.sh`, checks the PDF and commits. It's a step Claude does with each edit, not an automatic sync.
-If you edit the doc yourself, ask Claude to refresh the LaTeX version.
+| `chapters/ch1.tex` … `ch5.tex` | the chapters |
+| `chapters/abstract.tex`, `chapters/references.tex` | the abstract and the IEEE reference list |
+| `info.tex`, `acknowledgements.tex` | personal details and acknowledgements |
+| `frontmatter.tex`, `main.tex`, `hust-thesis.sty` | cover, front pages, layout |
+| `figures/` | figures; `figures/manual/` holds the ones made by hand |
+| `tools/package.sh` | builds `thesis.pdf` and `thesis_overleaf.zip` (used by the release workflow) |
+| `tools/archive/` | the original doc export and converter, no longer used |
 
 ## Language
 
