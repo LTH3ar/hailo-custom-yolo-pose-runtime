@@ -9,7 +9,7 @@
 % XeLaTeX and LuaLaTeX also work (fontspec, TeX Gyre Termes).
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{hust-thesis}[2026/11/12 HUST master's thesis layout]
-
+\usepackage{float}
 \RequirePackage[fontsize=13pt]{scrextend}
 \RequirePackage[a4paper,top=2cm,bottom=2cm,left=3.5cm,right=2.5cm,footskip=1cm]{geometry}
 \RequirePackage{iftex}
@@ -142,7 +142,7 @@
 % figures still to be made by hand: shows the picture once figures/manual/<name>.(png|jpg|pdf) exists,
 % otherwise a framed placeholder that says what is missing
 \newcommand{\manualfigure}[4]{%
-  \begin{figure}[htbp]\centering
+  \begin{figure}[H]\centering
   \IfFileExists{#1.png}{\includegraphics[width=0.9\textwidth]{#1.png}}{%
   \IfFileExists{#1.jpg}{\includegraphics[width=0.9\textwidth]{#1.jpg}}{%
   \IfFileExists{#1.pdf}{\includegraphics[width=0.9\textwidth]{#1.pdf}}{%

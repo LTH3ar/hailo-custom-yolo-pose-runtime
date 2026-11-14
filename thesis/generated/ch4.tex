@@ -43,7 +43,7 @@ Without tiling, the model misses most students in the far rows; running it again
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{figures/scb_coverage.png}
+\includegraphics[width=0.8\textwidth]{figures/scb_coverage.png}
 \caption{Labelled SCB front-view students detected, by size in the image, without and with tiles (upper\_body\_n, threshold 0.3)}\label{fig:labelled-scb-front-view-students-detecte}
 \end{figure}
 
@@ -73,7 +73,7 @@ Study hall & m & 10.6 & 21.0 \\
 
 \section{Duplicate boxes and the class estimate}
 
-Two post-processing fixes made the class-level number trustworthy: removing same-skeleton duplicate boxes, and counting only current, consistently seen seats. On the device, duplicates fell from 0.9-1.6 per frame to about 0.01, and the inferred class size now tracks the real head count.
+Two post-processing fixes made the class-level number more reliable: removing same-skeleton duplicate boxes, and counting only current, consistently seen seats. On the device, duplicates fell from 0.9-1.6 per frame to about 0.01, and the inferred class size now tracks the real head count.
 
 \textbf{Same-skeleton duplicates.} YOLO-pose often outputs a tight and a loose box for one student with the same skeleton. Their box IoU is low, so box NMS keeps both, and the analyzer then counts one student twice. After NMS, a box is dropped when it lies inside a stronger box (≥ 70\% of the smaller box) and at least three keypoints visible in both are, on average, closer than 0.1 × √(smaller box area). The same rule runs in the NumPy and the C++ post-process.
 
@@ -148,9 +148,9 @@ The within-image AUC is the figure to quote: most SCB images contain only one cl
 
 \textbf{On real classes} the ranking reverses:
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.75\textwidth]{figures/clips_rules_vs_learned.png}
+\includegraphics[width=0.9\textwidth]{figures/clips_rules_vs_learned.png}
 \caption{Mean class distracted share on the lecture and exam-hall clips: rules against learned classifiers (upper\_body\_n with tiles, FP32)}\label{fig:mean-class-distracted-share-on-the-lectu}
 \end{figure}
 
@@ -228,7 +228,7 @@ m & MLP & 37 / 121 & 69\% (61-77\%) & 9 / 28 & 20.0\% \\
   \end{itemize}
 \end{itemize}
 
-\textbf{Staged two-person session (clip\_4).} The author and a colleague, both adults, sat at one table filmed by a phone mounted high at the front, and followed a script for 4:45. Recording a script gives the true state of each person every second. After 55 s of attention, the script has seven distracted events:
+\textbf{Staged two-person session (clip\_4).} Me and a colleague, both adults, sat at one table filmed by a phone mounted high at the front, and followed a script for 4:45. Recording a script gives the true state of each person every second. After 55 s of attention, the script has seven distracted events:
 
 \begin{itemize}
 \tightlist
@@ -456,7 +456,7 @@ Breach notification & within 72 hours & With nothing stored by default there is 
 
 Sources: \cite{b12,b24,b25,b26,b27}. Article numbers follow the English translation; check them against the official Vietnamese text before citing.
 
-\section{Limitations and threats to validity}
+\section{Limitations}
 
 The largest gap is ground truth: no result so far measures per-student accuracy on a real lecture, only on SCB actions or through the context of mostly attentive clips.
 

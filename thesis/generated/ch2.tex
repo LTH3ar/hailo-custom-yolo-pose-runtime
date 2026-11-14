@@ -3,11 +3,11 @@
 
 \section{Approaches to classroom engagement detection}
 
-Automatic engagement detection in classrooms has used four kinds of signal: faces, body pose, body orientation and wearable sensors. They trade accuracy against intrusiveness.
+Automatic engagement detection in classrooms has used four kinds of target: faces, body pose, body orientation and wearable sensors.
 
-\textbf{Faces.} Facial expressions and gaze carry rich information, but they need a frontal, well-resolved face for each student. That fails in large classes, where back rows are small and often occluded \cite{b1}. Face analysis also identifies the student, which is the root of the privacy problems in section 2.3.
+\textbf{Faces.} Facial expressions and gaze carry rich information, but they need a frontal, well-resolved face for each student. That fails in large classes, where back rows are small and often occluded \cite{b1}. Face analysis also identifies the student, which is a privacy problems in section 2.3.
 
-\textbf{Body pose.} Skeleton keypoints are less identifying and survive low resolution better.
+\textbf{Body pose.} Skeleton keypoints are less identifiable but works better on low resolution.
 
 \begin{itemize}
 \tightlist
@@ -29,7 +29,7 @@ Automatic engagement detection in classrooms has used four kinds of signal: face
   Public datasets such as SCB \cite{b3} label classroom actions (reading, writing, raising a hand, turning the head, discussing) rather than attention, and are the usual training source.
 \end{itemize}
 
-\textbf{Body orientation.} Chen et al.~\cite{b1} estimate each student's body orientation jointly with detection, using a one-stage YOLOv11-based model (JointBDOE). They read engagement from how often orientation changes and whether it follows the teacher.
+\textbf{Body orientation.} Chen et al.~\cite{b1} estimate each student's body orientation jointly with detection, using a one-stage YOLOv11-based model (JointBDOE). They detect engagement from how often orientation changes and whether it follows the teacher.
 
 \begin{itemize}
 \tightlist
@@ -57,9 +57,9 @@ Automatic engagement detection in classrooms has used four kinds of signal: face
   \textbf{Comparability:} the studies use different classes and metrics, so their results cannot be ranked directly.
 \end{itemize}
 
-This thesis takes up the review's two open directions: a lightweight YOLOv8-pose model on edge hardware, and keypoints as a privacy measure.
+This thesis follow the review's two open directions: a lightweight YOLOv8-pose model on edge hardware, and keypoints as a privacy measure.
 
-Two gaps run through this work:
+Two gaps in this work:
 
 \begin{itemize}
 \tightlist
@@ -71,9 +71,9 @@ Two gaps run through this work:
 
 \section{Pose estimation on edge hardware}
 
-Neural accelerators have made multi-person pose estimation feasible on small boards. The Hailo-8 delivers 26 TOPS at a typical 2.5 W \cite{b5}. As the Raspberry Pi AI HAT+, it attaches to a Raspberry Pi 5 over PCIe. Hailo's example applications run a YOLOv8-pose model in a GStreamer pipeline and hand each frame's detections to a Python callback.
+Neural accelerators have made multi-person pose estimation more feasible on small boards. Hailo-8 delivers 26 TOPS at a typical 2.5 W \cite{b5} and it attaches to a Raspberry Pi 5 over PCIe. Hailo's example applications run a YOLOv8-pose model in a GStreamer pipeline and pass each frame's detections to a Python callback.
 
-Core Electronics' guide \cite{b6} builds on that pipeline to read 17 COCO keypoints and drive single-person demos, such as gesture control and a game. It reports no frame rates. It also notes practical limits:
+Core Electronics' guide \cite{b6} builds on that pipeline to read 17 COCO keypoints and drive single-person demos, such as gesture control and a game. It reports no frame rates. It also notes some limits:
 
 \begin{itemize}
 \tightlist
@@ -85,7 +85,7 @@ Core Electronics' guide \cite{b6} builds on that pipeline to read 17 COCO keypoi
   extended use may need cooling
 \end{itemize}
 
-These examples target one stock COCO model and one or a few people near the camera. A classroom differs in four ways:
+These examples target one stock COCO model and one or a few people near the camera. A classroom differs in four elements:
 
 \begin{itemize}
 \tightlist
@@ -103,7 +103,7 @@ Section 3 describes the runtime built for that case.
 
 \section{Deployed systems and the controversies they raised}
 
-The best-documented deployments of attention monitoring in schools are from China in 2017-2019. All three below were criticised for exactly the properties this thesis avoids: identifying students, scoring them individually, and doing so without consent.
+The best-documented deployments of attention monitoring in schools are from China in 2017-2019. All three below were criticized for exactly the properties this thesis avoids: identifying students, scoring them individually, and doing so without consent.
 
 \textbf{Hangzhou No.~11 High School, 2018. \cite{b7,b8,b9,b10}}
 
@@ -140,22 +140,22 @@ The best-documented deployments of attention monitoring in schools are from Chin
 \begin{itemize}
 \tightlist
 \item
-  \textbf{How it worked:} a primary school had pupils wear brainwave-sensing headbands during training sessions. According to the vendor, teachers saw only the class average.
+  \textbf{How it worked:} a primary school had students wear brainwave-sensing headbands during training sessions. According to the vendor, teachers saw only the class average.
 \item
   \textbf{Response:} after a related Weibo topic passed 220 million views, Zhejiang education officials ordered the school to suspend their use.
 \end{itemize}
 
-Two lessons carry into this work:
+Two lessons from the previous cases:
 
 \begin{itemize}
 \tightlist
 \item
-  Identity and individual scores are what made these systems objectionable, more than the camera itself.
+  Identity and individual scores are what made these systems questionable, more than the camera itself.
 \item
-  Centralising footage on servers widens who can see it and what it can be reused for.
+  Centralizing footage on servers increase the number of people who can see it and what it can be reused for.
 \end{itemize}
 
-At that time China had no specific law on facial or biometric data. Vietnam now does, through its Personal Data Protection Law (2025) \cite{b12}, discussed in section 4.
+At the time of those cases, China had no specific law on facial or biometric data. Vietnam now does, through its Personal Data Protection Law (2025) \cite{b12}, discussed in section 4.
 
 \section{The gap this thesis addresses}
 
@@ -168,7 +168,7 @@ No prior system combines the four properties this work targets:
 \item
   processing entirely on a device in the room
 \item
-  an aggregate rather than per-student output
+  an aggregate instead of per-student output
 \item
   an evaluation of attention in real classrooms, including on the deployed hardware
 \end{itemize}

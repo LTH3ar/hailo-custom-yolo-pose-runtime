@@ -5,7 +5,7 @@
 
 The system has two stages on one device. The detection runtime turns camera frames into skeletons on the Hailo-8, and the engagement analysis turns skeletons into a class-level share. Frames exist only in memory, and per-student states are never output by default.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=1.0\textwidth]{figures/architecture.png}
 \caption{Architecture of hcpose: frames stay in memory, and skeletons drive anonymous seats and a class-level share}\label{fig:architecture-of-hcpose-frames-stay-in-me}
@@ -14,6 +14,12 @@ The system has two stages on one device. The detection runtime turns camera fram
 The skeleton file (\texttt{-\/-save-json}) and an annotated video (\texttt{-\/-output}) can be written at the hand-off between the two stages for development and evaluation. Both are off by default. The data-flow view used for the privacy analysis is in chapter 4.
 
 \manualfigure{figures/manual/device}{The device}{The device: Raspberry Pi 5 with the Hailo-8 AI HAT+ (26 TOPS), active cooler and camera.}{fig:device}
+
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.7\textwidth]{figures/manual/device.jpg}
+% \caption{Raspberry Pi 5 with the Hailo-8 AI HAT+ (26 TOPS), active cooler and camera.}\label{fig:device}
+% \end{figure}
 
 \section{Pose models and compilation}
 
@@ -26,7 +32,7 @@ The pose models are YOLOv8-pose networks in three sizes, n, s and m, that predic
 \item
   100 epochs at 640×640; batch 16 for n and m, 32 for s; seed 0, deterministic mode, mixed precision.
 \item
-  \texttt{optimizer=auto}: Ultralytics chose the optimizer and learning rate itself, so the script's \texttt{lr0=0.01} and \texttt{momentum=0.937} were not used. The logged rates show a 3-epoch warm-up, then a linear fall to 1\% of the peak by epoch 100.
+  \texttt{optimizer=auto}: Ultralytics chose the optimizer and learning rate itself. The logged rates show a 3-epoch warm-up, then a linear fall to 1\% of the peak by epoch 100.
 \item
   Loss weights and augmentation at Ultralytics defaults: HSV jitter, scale 0.5, translate 0.1, and horizontal flip at 0.5 with left and right keypoints swapped. Mosaic was on except in the last 10 epochs.
 \end{itemize}
@@ -80,9 +86,9 @@ For the Hailo-8 each model is quantised to INT8 and compiled with the Hailo Data
 \begin{itemize}
 \tightlist
 \item
-  \textbf{No on-chip NMS.} The nine raw head outputs are exported as end nodes: box distribution (DFL), class score and keypoints at strides 8, 16 and 32. Decoding and NMS run on the host, which keeps the HEF independent of the model's keypoint count.
+  \textbf{No on-chip NMS.} nine raw head outputs are exported as end nodes: box distribution (DFL), class score and keypoints at strides 8, 16 and 32. Decoding and NMS run on the host CPU, which keeps the HEF independent of the model's keypoint count.
 \item
-  \textbf{Sigmoid inside the HEF.} The class scores are passed through sigmoid inside the HEF. The runtime detects this per model, which fixed a double sigmoid in the code it replaced.
+  \textbf{Sigmoid inside the HEF.} class scores are passed through sigmoid inside the HEF. Runtime detects this per model, which fixed a double sigmoid in the code it replaced.
 \end{itemize}
 
 \begin{table}[htbp]\small
@@ -102,9 +108,9 @@ m & 31.5 & 26.7 \\
 
 \section{Runtime: hcpose}
 
-hcpose runs any YOLOv8-pose HEF on a Raspberry Pi 5. It reads the keypoint count, strides, tensor order, output data type and score activation from the HEF at start-up, so the same command runs the 13-keypoint models, the stock 17-keypoint model or others.
+hcpose runs any YOLOv8-pose HEF on a Raspberry Pi 5. It reads the keypoint count, strides, tensor order, output data type and score activation from the HEF at start-up, so the same command could runs 13-keypoint models, the stock 17-keypoint model or others.
 
-\textbf{Two engines, one result.}
+\textbf{Engines.}
 
 \begin{itemize}
 \tightlist
@@ -112,8 +118,7 @@ hcpose runs any YOLOv8-pose HEF on a Raspberry Pi 5. It reads the keypoint count
   \textbf{GStreamer engine} (default, for live use): the camera or file source feeds \texttt{hailonet}. A C++ \texttt{hailofilter} decodes and post-processes the outputs, \texttt{hailotracker} assigns track ids, and \texttt{hailooverlay} draws.
 \item
   \textbf{Python engine} (for images, debugging and evaluation): OpenCV and HailoRT with a NumPy decoder.
-\item
-  \textbf{Equivalence:} the two decoders produce identical detections, checked by the tests on recorded model outputs.
+\item two decoders produce identical detections, checked by the tests on recorded model outputs.
 \end{itemize}
 
 \textbf{Post-processing.}
@@ -135,7 +140,7 @@ hcpose runs any YOLOv8-pose HEF on a Raspberry Pi 5. It reads the keypoint count
 \item
   \textbf{In the GStreamer engine:} a custom crop function hands \texttt{hailocropper} the full frame plus the tiles. A second \texttt{hailofilter} after the aggregator merges the results.
 \item
-  \textbf{The merge:} tile detections are mapped to frame coordinates, those cut by an inner tile edge are dropped, and duplicates across passes are merged by IoU, or by containment plus agreeing keypoints.
+  \textbf{Merge:} tile detections are mapped to frame coordinates, those cut by an inner tile edge are dropped, and duplicates across passes are merged by IoU, or by containment plus agreeing keypoints.
 \item
   \textbf{Checks:} the C++ merge equals the Python merge on 25 random scenes.
 \item
@@ -160,7 +165,7 @@ hcpose runs any YOLOv8-pose HEF on a Raspberry Pi 5. It reads the keypoint count
 
 \section{Engagement analysis}
 
-The analyzer turns each frame's skeletons into a focused, distracted or unknown state per student and a class-level share with a range. It works on keypoints alone and can replay a saved skeleton file (\texttt{hcpose\ analyze}) with any settings.
+The analyzer turns each frame's skeletons into a \textbf{focused}, \textbf{distracted} or \textbf{unknown} state per student and a class-level share with a range. It works on keypoints alone and can replay a saved skeleton file (\texttt{hcpose\ analyze}) with any settings.
 
 \textbf{Seats.} Students are tracked as anonymous seats, matched frame to frame by the top centre of their box (the head). The head stays put when a student leans or turns around, while the box centre jumps. A seat counts toward the class only while it is current and consistently seen.
 

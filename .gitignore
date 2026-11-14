@@ -11,3 +11,4 @@ models/*.onnx
 *.mkv
 *.jsonl
 hailort*.log
+.DS_Store
