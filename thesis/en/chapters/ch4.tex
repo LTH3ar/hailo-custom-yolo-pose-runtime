@@ -294,7 +294,7 @@ Exam-hall class \% & 3.6\% → 8.4\% & 11.7\% → 14.6\% \\
 \end{tabularx}
 \end{table}
 
-The only cost is 3-5 points on the exam clip. Some of that may be real, since the human labels found exam students looking around. Loosening the yaw thresholds alone reached only 25\% on clip\_4. The measure is now the default, and the 9-person session is kept as the held-out test.
+The only cost is 3-5 points on the exam clip. Some of that may be real, since the human labels found exam students looking around. Loosening the yaw thresholds alone reached only 25\% on clip\_4. The measure is now the default. The held-out test is clip\_5 above: a 10-student class recorded after this choice and every other threshold were fixed.
 
 The measure helps the rules only. The learned classifiers decide from the features they were trained on, which do not include it. It also cannot be learned from SCB: it needs a per-student baseline, and on SCB's single images with small faces it does not separate turned heads from reading (AUC 0.53).
 
