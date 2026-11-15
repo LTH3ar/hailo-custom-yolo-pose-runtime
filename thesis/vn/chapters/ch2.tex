@@ -1,0 +1,191 @@
+% Chương 2 (sửa trực tiếp; bản tiếng Việt)
+\chapter{CÁC NGHIÊN CỨU LIÊN QUAN}
+
+\section{Các hướng tiếp cận phát hiện mức độ tập trung trong lớp học}
+
+Các nghiên cứu phát hiện tự động mức độ tập trung trong lớp học đã dùng bốn loại đối tượng: khuôn mặt, tư thế cơ thể, hướng cơ thể và cảm biến đeo trên người.
+
+\textbf{Khuôn mặt.} Biểu cảm khuôn mặt và hướng nhìn mang nhiều thông tin, nhưng cần khuôn mặt chính diện, đủ rõ nét cho từng học sinh. Điều này không đạt được ở các lớp đông, nơi học sinh hàng cuối nhỏ và thường bị che khuất \cite{b1}. Phân tích khuôn mặt cũng định danh học sinh, một vấn đề về quyền riêng tư được bàn ở mục 2.3.
+
+\textbf{Tư thế cơ thể.} Các điểm khóa của bộ khung xương khó định danh hơn và hoạt động tốt hơn ở độ phân giải thấp.
+
+\begin{itemize}
+\tightlist
+\item
+  Tarigan và cộng sự~\cite{b2} phát hiện học sinh bằng YOLOv8m, trích xuất bảy điểm khóa cho mỗi người bằng MediaPipe, và phân loại bằng một mạng kết nối đầy đủ nhỏ thành bốn lớp: tập trung, chán, giơ tay và dùng điện thoại.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Dữ liệu:} khoảng 10.000 khung hình ghi bằng webcam máy tính xách tay trong một phòng thí nghiệm nhỏ.
+  \item
+    \textbf{Kết quả:} độ chính xác 0.70, so với 0.41 của mô hình cơ sở YOLOv4 kết hợp OpenPose.
+  \item
+    \textbf{Điểm yếu được tác giả nêu:} việc dùng điện thoại phần lớn bị nhầm thành chán hoặc tập trung, và các hộp chồng lấn gây ra phát hiện trùng.
+  \item
+    \textbf{Khoảng trống:} không bàn đến quyền riêng tư và phần cứng triển khai.
+  \end{itemize}
+\item
+  Các bộ dữ liệu công khai như SCB \cite{b3} gán nhãn hành động trong lớp học (đọc, viết, giơ tay, quay đầu, thảo luận) chứ không gán nhãn sự chú ý, và là nguồn huấn luyện thường dùng.
+\end{itemize}
+
+\textbf{Hướng cơ thể.} Chen và cộng sự~\cite{b1} ước lượng hướng cơ thể của từng học sinh đồng thời với việc phát hiện, bằng một mô hình một giai đoạn dựa trên YOLOv11 (JointBDOE). Họ phát hiện mức độ tập trung từ tần suất thay đổi hướng và việc hướng đó có theo giáo viên hay không.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Độ chính xác về hướng:} sai số trung bình 10.6° trên MEBOW.
+\item
+  \textbf{Lớp học thực:} mười tiết học từ mẫu giáo đến đại học, khuôn mặt đã được làm mờ.
+\item
+  \textbf{Khoảng trống:} không có nhãn mức độ tập trung cho từng học sinh và không có độ chính xác định lượng về mức độ tập trung. Các mô hình được huấn luyện trên sáu GPU RTX 4090, và phần cứng suy luận không được nêu.
+\end{itemize}
+
+\textbf{Thiết bị đeo.} Các băng đeo đầu EEG như FocusEDU của BrainCo đo trực tiếp hoạt động não, nhưng đòi hỏi mọi học sinh đều phải đeo thiết bị và đã vấp phải phản đối mạnh mẽ (mục 2.3).
+
+\textbf{Tổng quan hệ thống.} Bài tổng quan có hệ thống của cùng nhóm tác giả \cite{b4} tuân theo PRISMA 2020. Nghiên cứu tìm kiếm trên Scopus giai đoạn 2019--2023 và thu hẹp 547 bài báo xuống 12 nghiên cứu. Các phát hiện chính:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Phương pháp:} bộ phát hiện YOLO được dùng nhiều nhất (5 trên 12 nghiên cứu), tiếp theo là các bộ phân loại VGG (4). Các phương pháp lai tách phát hiện khỏi ước lượng tư thế cho kết quả tốt nhất trong nhóm dựa trên khung xương: YOLOv4 kết hợp OpenPose đạt độ chính xác 86.1\% trên bốn lớp.
+\item
+  \textbf{Chỉ dùng tư thế:} nghiên cứu chỉ dùng tư thế cho điểm thấp nhất. Nghiên cứu này phát hiện việc dùng điện thoại với precision 0.22 và recall 0.11, đúng là hành vi mà 13 điểm khóa ở đây cũng không phân biệt được với việc viết (chương 4).
+\item
+  \textbf{Thách thức:} chi phí gán nhãn thủ công cao, mất cân bằng lớp, học sinh nhỏ và bị che khuất trong phòng đông, và chi phí tính toán. Bài tổng quan hướng tới các mô hình YOLOv8 gọn nhẹ và lưu ý rằng điểm khóa giúp bảo vệ quyền riêng tư.
+\item
+  \textbf{Khả năng so sánh:} các nghiên cứu dùng các lớp và độ đo khác nhau, nên kết quả không thể xếp hạng trực tiếp.
+\end{itemize}
+
+Luận văn này đi theo hai hướng mở mà bài tổng quan nêu ra: một mô hình YOLOv8-pose gọn nhẹ trên phần cứng biên, và dùng điểm khóa như một biện pháp bảo vệ quyền riêng tư.
+
+Hai khoảng trống trong các nghiên cứu này:
+
+\begin{itemize}
+\tightlist
+\item
+  Độ chính xác được báo cáo trên các bộ dữ liệu phòng thí nghiệm hoặc hành động, chứ không phải trên sự chú ý trong tiết học thực.
+\item
+  Quyền riêng tư và nền tảng tính toán hiếm khi là một phần của thiết kế.
+\end{itemize}
+
+\section{Ước lượng tư thế trên phần cứng biên}
+
+Các bộ tăng tốc mạng nơ-ron đã giúp ước lượng tư thế nhiều người trên các bo mạch nhỏ trở nên khả thi hơn. Hailo-8 đạt 26 TOPS ở mức công suất điển hình 2.5 W \cite{b5} và kết nối với Raspberry Pi 5 qua PCIe. Các ứng dụng mẫu của Hailo chạy mô hình YOLOv8-pose trong một pipeline GStreamer và chuyển các phát hiện của mỗi khung hình tới một hàm callback Python.
+
+Hướng dẫn của Core Electronics \cite{b6} xây dựng trên pipeline đó để đọc 17 điểm khóa COCO và điều khiển các bản demo cho một người, như điều khiển bằng cử chỉ và một trò chơi. Hướng dẫn không báo cáo tốc độ khung hình, nhưng có nêu một số hạn chế:
+
+\begin{itemize}
+\tightlist
+\item
+  một số độ phân giải thu hình gây treo chương trình
+\item
+  có độ trễ khi khởi động
+\item
+  sử dụng kéo dài có thể cần tản nhiệt
+\end{itemize}
+
+Các ví dụ này nhắm tới một mô hình COCO gốc và một hoặc vài người ở gần camera. Lớp học khác ở bốn điểm:
+
+\begin{itemize}
+\tightlist
+\item
+  một mô hình tùy biến (13 điểm khóa phần thân trên)
+\item
+  20-50 người ở các tỷ lệ kích thước rất khác nhau
+\item
+  camera ở xa các hàng cuối
+\item
+  yêu cầu giữ toàn bộ quy trình, kể cả phân tích, trên thiết bị
+\end{itemize}
+
+Chương 3 mô tả runtime được xây dựng cho trường hợp đó.
+
+\section{Các hệ thống đã triển khai và những tranh cãi}
+
+Các đợt triển khai giám sát sự chú ý trong trường học được ghi nhận đầy đủ nhất là ở Trung Quốc giai đoạn 2017-2019. Cả ba hệ thống dưới đây đều bị chỉ trích vì chính những đặc điểm mà luận văn này tránh: định danh học sinh, chấm điểm từng em, và làm vậy khi không có sự đồng ý.
+
+\textbf{Trường Trung học số 11 Hàng Châu, 2018. \cite{b7,b8,b9,b10}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Nhà cung cấp:} ``hệ thống quản lý hành vi lớp học thông minh'' của Hikvision.
+\item
+  \textbf{Cách hoạt động:} camera đặt phía trên bảng quét lớp khoảng 30 giây một lần, nhận diện từng học sinh và phân loại sáu hành vi (đọc, viết, nghe giảng, đứng, giơ tay, nằm gục xuống bàn) cùng bảy biểu cảm khuôn mặt.
+\item
+  \textbf{Ai thấy điểm số:} điểm hiện trên màn hình trong lớp, kèm bảng xếp hạng sự chú ý ở hành lang.
+\item
+  \textbf{Dữ liệu:} nhà trường cho biết dữ liệu được lưu trên máy chủ cục bộ và không giữ lại hình ảnh.
+\item
+  \textbf{Phản ứng:} các nhà giáo dục phản đối việc thiếu sự đồng ý và đặt câu hỏi liệu biểu cảm có nói lên điều gì về việc học hay không. Sau khi báo chí đưa tin vào tháng 5/2018, nhà trường ngừng chấm điểm biểu cảm khuôn mặt.
+\end{itemize}
+
+\textbf{Hệ thống Class Care của Hanwang Education, 2017-2019. \cite{b10}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Cách hoạt động:} một camera mái vòm chụp ảnh lớp mỗi giây một lần. Video được gửi lên máy chủ, nơi học sâu nhận diện từng khuôn mặt và phân loại hành vi thành nghe giảng, trả lời, viết, tương tác và ngủ.
+\item
+  \textbf{Ai thấy điểm số:} mỗi học sinh nhận một điểm số hằng tuần trong một ứng dụng dành cho giáo viên và phụ huynh.
+\item
+  \textbf{Triển khai:} thí điểm ở bảy trường khi chưa được Bộ Giáo dục phê duyệt.
+\item
+  \textbf{Phản ứng của học sinh:} ở một trường, học sinh không được thông báo. Chính quản lý của công ty nói học sinh ``ghét nó'', và học sinh ở một trường khác đã rút điện camera trước kỳ thi.
+\end{itemize}
+
+\textbf{Băng đeo đầu FocusEDU của BrainCo, Kim Hoa, 2019. \cite{b11}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Cách hoạt động:} một trường tiểu học cho học sinh đeo băng đầu đo sóng não trong các buổi luyện tập. Theo nhà cung cấp, giáo viên chỉ thấy giá trị trung bình của cả lớp.
+\item
+  \textbf{Phản ứng:} sau khi một chủ đề liên quan trên Weibo vượt 220 triệu lượt xem, cơ quan giáo dục Chiết Giang yêu cầu nhà trường tạm dừng sử dụng.
+\end{itemize}
+
+Hai bài học từ các trường hợp trên:
+
+\begin{itemize}
+\tightlist
+\item
+  Chính việc định danh và chấm điểm cá nhân, hơn là bản thân chiếc camera, khiến các hệ thống này bị nghi ngại.
+\item
+  Tập trung video về máy chủ làm tăng số người có thể xem và các mục đích mà video có thể bị tái sử dụng.
+\end{itemize}
+
+Vào thời điểm đó, Trung Quốc chưa có luật riêng về dữ liệu khuôn mặt hay sinh trắc học. Việt Nam hiện đã có, thông qua Luật Bảo vệ dữ liệu cá nhân (2025) \cite{b12}, được bàn ở chương 4.
+
+\section{Khoảng trống luận văn giải quyết}
+
+Chưa có hệ thống nào trước đây kết hợp bốn đặc điểm mà luận văn này hướng tới:
+
+\begin{itemize}
+\tightlist
+\item
+  cảm nhận mà không định danh
+\item
+  xử lý hoàn toàn trên một thiết bị đặt trong lớp
+\item
+  đầu ra tổng hợp thay cho đầu ra theo từng học sinh
+\item
+  đánh giá sự chú ý trong lớp học thực, kể cả trên phần cứng triển khai
+\end{itemize}
+
+\begin{table}[htbp]\footnotesize
+\caption{So sánh các hệ thống và nghiên cứu trước với luận văn này}\label{tab:prior-systems-and-studies-compared-with-}
+\begin{tabularx}{\textwidth}{*{7}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Công trình} & \textbf{Đối tượng cảm nhận} & \textbf{Nơi chạy} & \textbf{Đầu ra cho giáo viên} & \textbf{Định danh học sinh} & \textbf{Đánh giá trên tiết học thực} & \textbf{Đo trên phần cứng biên} \\
+\midrule
+Trường số 11 Hàng Châu / Hikvision (2018) & khuôn mặt, hành vi & máy chủ cục bộ & điểm từng học sinh, xếp hạng & có & không công bố & không \\
+Hanwang Class Care System & khuôn mặt, hành vi & máy chủ & điểm hằng tuần từng học sinh & có & không công bố & không \\
+BrainCo FocusEDU (2019) & băng đầu EEG & thiết bị + ứng dụng & trung bình lớp (theo nhà cung cấp) & theo thiết bị & không công bố & -- \\
+Tarigan và cộng sự~\cite{b2} & 7 điểm khóa & không nêu & lớp hành vi từng người & không & không (webcam phòng thí nghiệm) & không \\
+Chen và cộng sự~\cite{b1} & hướng cơ thể & GPU (không nêu) & mẫu thay đổi hướng & không & chỉ định tính & không \\
+Hướng dẫn của Core Electronics \cite{b6} & 17 điểm khóa & Pi 5 + Hailo-8 & chỉ demo & không & không & một phần \\
+\textbf{Luận văn này} & 13 điểm khóa thân trên & Pi 5 + Hailo-8, ngoại tuyến & tỷ lệ của lớp + khoảng 95\% & không (chỗ ngồi ẩn danh) & có: video, nhãn người gán, buổi dàn dựng & có: FPS, độ trễ, nhiệt độ, công suất \\
+\bottomrule
+\end{tabularx}
+\end{table}

@@ -1,32 +1,42 @@
 # Thesis, LaTeX version (HUST template ĐT.QT12.BM01)
 
 The thesis in LaTeX, in the layout of HUST's master's thesis template (ĐT.QT12.BM01, Lần ban hành 02,
-30/6/2025). The `.tex` files are the master copy of the text: edit `chapters/` directly. (The text was
+30/6/2025), in two languages:
+
+- `en/`: the English thesis (the original)
+- `vn/`: the Vietnamese thesis (translated from `en/`, with the template's Vietnamese labels)
+
+Each folder is a complete, self-contained LaTeX project with its own chapters and figures. The `.tex`
+files are the master copy of the text: edit `en/chapters/` and `vn/chapters/` directly. A change to one
+language is not copied to the other automatically. (The text was
 first drafted in a Claude doc and converted once; the converter and that draft are kept in
 `tools/archive/` for reference only and are no longer used.)
 
 ## Build
 
 ```bash
-./build.sh                      # compile main.pdf
-latexmk -pdf main.tex           # the same
+en/build.sh                     # compile en/main.pdf
+vn/build.sh                     # compile vn/main.pdf
+tools/package.sh dist           # both PDFs and both Overleaf zips into dist/
 ```
 
 It compiles with **pdfLaTeX**, Overleaf's default, on the same base as HUST's own LaTeX template:
 `inputenc` utf8, the T5 font encoding (vntex) for Vietnamese letters and `mathptmx` for Times.
 XeLaTeX and LuaLaTeX work too (they switch to TeX Gyre Termes).
 
-On Overleaf: *New project → Upload project*, upload `thesis_overleaf.zip` (or a zip of this folder),
+On Overleaf: *New project → Upload project*, upload `thesis_en_overleaf.zip` or `thesis_vn_overleaf.zip` (or a zip of `en/` or `vn/`),
 and leave the compiler on pdfLaTeX. The main document is `main.tex`.
 
 ## Releases
 
 `.github/workflows/release.yml` runs on a version tag (`git tag -a v1.0-thesis -m ... && git push origin v1.0-thesis`).
 It runs the tests and builds the runtime as a Python sdist and wheel. It also compiles this thesis with
-`tools/package.sh`, then attaches `thesis.pdf` and `thesis_overleaf.zip` to the GitHub release. On every push and
-pull request, `ci.yml` runs the same tests and thesis build and keeps the PDF as a build artifact.
+`tools/package.sh`, then attaches `thesis_en.pdf`, `thesis_vn.pdf` and their two Overleaf zips to the GitHub release. On every push and
+pull request, `ci.yml` runs the same tests and thesis build and keeps the PDFs as a build artifact.
 
 ## Files
+
+Inside `en/` and `vn/`:
 
 | File | What |
 |---|---|
@@ -35,14 +45,19 @@ pull request, `ci.yml` runs the same tests and thesis build and keeps the PDF as
 | `info.tex`, `acknowledgements.tex` | personal details and acknowledgements |
 | `frontmatter.tex`, `main.tex`, `hust-thesis.sty` | cover, front pages, layout |
 | `figures/` | figures; `figures/manual/` holds the ones made by hand |
-| `tools/package.sh` | builds `thesis.pdf` and `thesis_overleaf.zip` (used by the release workflow) |
-| `tools/archive/` | the original doc export and converter, no longer used |
+
+In `thesis/`: `tools/package.sh` builds both PDFs and Overleaf zips (used by CI and the release
+workflow); `tools/archive/` holds the original doc export and converter, no longer used.
 
 ## Language
 
-Labels are in English by default (CHAPTER, Figure, Table, CONTENTS, the cover and forms). Set
-`\vietnamesetrue` in `info.tex` to switch every label to the template's Vietnamese (CHƯƠNG, Hình, Bảng,
-MỤC LỤC, equations as PT n.m). The body text comes from the doc, in whatever language it is written.
+`en/info.tex` sets `\vietnamesefalse` (CHAPTER, Figure, Table, CONTENTS); `vn/info.tex` sets
+`\vietnamesetrue`, which switches every label, the cover and the forms to the template's Vietnamese
+(CHƯƠNG, Hình, Bảng, MỤC LỤC, equations as PT n.m).
+
+The Vietnamese version keeps decimal points (0.45, 4.3 W) as in the English text, the figures and the
+code, and keeps the references in English as published. The diagrams and charts in `vn/figures/` are
+still the English ones; replace them under the same file names if Vietnamese labels are wanted.
 
 ## Template rules applied
 
@@ -57,7 +72,7 @@ MỤC LỤC, equations as PT n.m). The body text comes from the doc, in whatever
 
 ## To do by hand
 
-**Pictures** (drop the file in `figures/manual/` under the name given; until then the PDF shows a red placeholder box):
+**Pictures** (drop the file in `en/figures/manual/` and `vn/figures/manual/` under the name given; until then the PDF shows a red placeholder box):
 
 | File | What | How (full instructions in the doc) |
 |---|---|---|
@@ -72,10 +87,9 @@ MỤC LỤC, equations as PT n.m). The body text comes from the doc, in whatever
 supervisor wants vector figures, e.g. in draw.io exported to PDF with the same file names.
 
 **Text and forms:**
-- `info.tex`: personal details, major, supervisor, school, year
+- `info.tex` (in each folder): personal details, major, supervisor, school, year
 - `acknowledgements.tex`
-- the summary page must fit on one side with the acknowledgements. A Vietnamese summary may be required; it
-  goes in the doc's Abstract tab
+- the summary page must fit on one side with the acknowledgements (both versions fit now)
 - after the defence: set `\showrevisionformtrue` in `info.tex` and fill the revision form
 - signatures on the cover (supervisor) and on the summary page (you)
 - the spine text for binding: Khóa – Ngành – Họ và tên – Mã số học viên (template section 1.9)

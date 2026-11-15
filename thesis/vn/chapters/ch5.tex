@@ -1,0 +1,59 @@
+% Chương 5 (sửa trực tiếp; bản tiếng Việt)
+\chapter{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}
+
+\section{Trả lời các câu hỏi nghiên cứu}
+
+\textbf{RQ1, tính khả thi trên thiết bị biên: có.} Trên Raspberry Pi 5 với Hailo-8, cấu hình triển khai (mô hình n có chia ô) chạy thời gian thực trong 15 phút:
+
+\begin{itemize}
+\tightlist
+\item
+  30 FPS với độ trễ 45 ms
+\item
+  4.3 W đo được trên bo mạch, cộng khoảng 2.5 W cho bộ tăng tốc
+\item
+  nhiệt độ SoC cao nhất 60 °C, không bị giảm xung
+\end{itemize}
+
+Pipeline bị giới hạn bởi bộ tăng tốc, không phải CPU. Mô hình m có chia ô chỉ đạt 7.9 FPS, đủ cho phân tích nhưng không đủ cho camera trực tiếp nếu không bỏ khung hình.
+
+\textbf{RQ2, độ bao phủ: có thể cải thiện đáng kể mà không cần huấn luyện lại.} Chia ô vùng cuối lớp nâng tỷ lệ học sinh SCB được tìm thấy từ 49\% lên 76\%, và ở một phần ba xa nhất từ 17\% lên 74\%. Kỹ thuật này tăng gấp đôi số học sinh tìm được trong một phòng tự học đông đúc. Loại bỏ trùng lặp cùng bộ khung xương và neo chỗ ngồi ở phần đầu giúp sĩ số suy ra khớp với sĩ số thực (52 cho khoảng 50 học sinh, 31 cho khoảng 30).
+
+Trong một phòng nhỏ quay ở khoảng cách gần (clip\_5), số chỗ ngồi vẫn bị nhân lên, thành 13-17 cho 10 học sinh, nên ước lượng sĩ số đúng với các khoảng cách camera đã dùng khi phát triển, nhưng chưa đúng với camera đặt rất gần.
+
+\textbf{RQ3, quyết định cho từng học sinh: hiệu chỉnh tốt hơn độ chính xác trên benchmark.} Các bộ phân loại huấn luyện trên SCB xếp hạng tốt các hành động của SCB (AUC trong ảnh 0.84) nhưng chuyển giao kém:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Video buổi giảng:} chúng gọi 48-89\% của một buổi giảng chăm chú là mất tập trung.
+\item
+  \textbf{Nhãn người gán:} chúng đánh dấu sai 114-199 trên 262 thời điểm tập trung.
+\item
+  \textbf{Nguyên nhân:} SCB không có nhãn ``nghe giảng'', nên chúng học được rằng ngẩng đầu nghĩa là mất tập trung.
+\end{itemize}
+
+Các luật đã hiệu chỉnh có rất ít báo động nhầm (độ đặc hiệu 90\% trên nhãn người gán; 0-5\% trên buổi giảng). Ban đầu chúng bỏ sót phần lớn hành vi mất tập trung thực (11\% trên buổi dàn dựng), vì góc yaw của đầu dựa trên tai sụp đổ khi nhìn nghiêng. Một thước đo góc quay đầu thứ hai, tương đối so với cơ thể, nâng con số này lên 45-56\%, không thêm báo động nhầm nào ở đó và chỉ tốn một chi phí nhỏ trên các lớp học thực. Trên một lớp 10 học sinh được gán nhãn sau khi mọi ngưỡng đã cố định (clip\_5), các luật trong cấu hình triển khai giữ độ đặc hiệu 91\%. Việc dùng điện thoại vẫn không thể thấy được qua tư thế.
+
+\textbf{RQ4, chỉ số cấp lớp: có, với độ rộng trung thực.} Ghi nhớ chỗ ngồi, gán trọng số theo vùng và khoảng Wilson quanh giá trị hiển thị cho ra một tỷ lệ luôn nằm trong khoảng của nó. Khi không biết sĩ số thực, khoảng khá rộng (25-37 điểm cho 20-30 học sinh), phản ánh một mẫu nhỏ như vậy chỉ nói được ít điều. Cung cấp \texttt{-\/-class-size} sẽ thu hẹp khoảng này.
+
+\section{Hướng phát triển}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Kiểm tra độc lập ở quy mô lớp học.} Chạy buổi dàn dựng 9 người theo kịch bản (research/staged/script\_v2.csv). clip\_5 đã xác nhận độ đặc hiệu của các luật trên một lớp chưa từng dùng để tinh chỉnh, nhưng recall vẫn chỉ dựa trên một buổi hai người.
+\item
+  \textbf{Nhãn huấn luyện đặc thù cho lớp học.} Các công cụ gán nhãn và dàn dựng có thể xây dựng một bộ dữ liệu có cả học sinh ngẩng đầu chú ý, trường hợp mà SCB thiếu. Một bộ quyết định học máy huấn luyện trên bộ dữ liệu đó, dùng giá trị gốc theo từng chỗ ngồi làm đặc trưng, có thể kết hợp độ nhạy của các bộ phân loại với độ đặc hiệu của các luật.
+\item
+  \textbf{Việc dùng điện thoại.} Phát hiện điện thoại cần một bộ phát hiện đối tượng. Trên Hailo-8, nó có thể chạy trên cùng các khung hình, đổi lại tốc độ khung hình giảm. Chỉ một cờ ``thấy điện thoại'' theo từng chỗ ngồi được phép rời khỏi thiết bị.
+\item
+  \textbf{Triển khai thực địa dài hơn.} Vài tuần sử dụng sẽ cho thấy độ trôi của hiệu chỉnh, ảnh hưởng của ánh sáng và việc đổi chỗ ngồi, và liệu giáo viên có thấy chỉ số hữu ích hay không. Việc này cần một nghiên cứu có sự đồng ý, được thiết kế cùng nhà trường.
+\item
+  \textbf{Chạy trực tiếp m có chia ô.} Một hàng đợi có bỏ khung hình hoặc giảm tốc độ camera sẽ giúp cấu hình chính xác nhất chạy trực tiếp mà độ trễ không tăng dần.
+\item
+  \textbf{Hình học dựa trên điểm khóa.} Neo chỗ ngồi theo vai và đo độ xoay thân so với phần thân trên nhìn thấy được thay vì so với hộp. Điều này loại bỏ hai lỗi thấy ở khoảng cách gần trong clip\_5: số chỗ ngồi bị nhân lên và hộp toàn thân bị hiểu là thân xoay.
+\item
+  \textbf{Đánh giá từ phía giáo viên.} Phép thử thực sự của một chỉ số cấp lớp là nó có giúp ích cho việc dạy hay không, điều này cần một nghiên cứu người dùng chứ không phải thêm các độ đo độ chính xác.
+\end{enumerate}
