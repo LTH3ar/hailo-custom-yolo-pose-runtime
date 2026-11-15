@@ -1,5 +1,5 @@
 # Release on a version tag (e.g. git tag -a v1.0-thesis -m ... && git push origin v1.0-thesis):
-# the runtime as a Python sdist and wheel, the thesis PDF and the Overleaf bundle.
+# the runtime as a Python sdist and wheel, the thesis PDFs (English, Vietnamese) and their Overleaf bundles.
 # The C++ post-process and Hailo libraries are built on the Pi by install.sh, not here.
 name: Release
 on:
@@ -32,7 +32,7 @@ jobs:
           sudo apt-get install -y -q --no-install-recommends latexmk texlive-latex-recommended \
             texlive-latex-extra texlive-fonts-recommended texlive-lang-other
       - name: Build the thesis PDF and the Overleaf bundle
-        run: thesis/tools/package.sh dist
+        run: thesis/tools/package.sh dist en vn
       - uses: actions/upload-artifact@v4
         with:
           name: release

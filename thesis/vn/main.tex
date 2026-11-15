@@ -1,0 +1,21 @@
+% HUST master's thesis, Vietnamese version (template ĐT.QT12.BM01). Compiles with pdfLaTeX, Overleaf's default:
+%   latexmk -pdf main.tex          (XeLaTeX and LuaLaTeX work too)
+% The chapter text lives in chapters/ and is edited directly; labels are Vietnamese (\vietnamesetrue in info.tex).
+% Edit info.tex (names, supervisor) and acknowledgements.tex by hand.
+\documentclass[a4paper,oneside]{report}
+\usepackage{hust-thesis}
+\input{info}
+
+\begin{document}
+\pagenumbering{gobble}
+\input{frontmatter}
+
+\pagestyle{main}
+\pagenumbering{arabic}
+\input{chapters/chapters}
+
+% An appendix (Phụ lục), if any, would go here, before the references, as the template lists them
+\cleardoublepage
+\phantomsection\addcontentsline{toc}{chapter}{\bibname}
+\input{chapters/references}
+\end{document}
