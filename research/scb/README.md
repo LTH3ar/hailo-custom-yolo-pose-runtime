@@ -34,25 +34,29 @@ done
 # 3. evaluate the rules and a learned classifier
 for m in n s m; do
   echo "== $m"; .venv/bin/python research/scb/evaluate.py ~/scb/poses_hef_$m.jsonl --out ~/scb/report_$m.json
-  .venv/bin/python research/scb/learn.py ~/scb/poses_hef_$m.jsonl
 done
+# in hailo-custom-yolo-pose (the training repository), for each cache:
+#   python -m classifiers.experiments.learn ~/scb/poses_hef_$m.jsonl
 ```
 
 `extract_pt.py` does the same with a PyTorch `.pt` (Ultralytics) on any machine. The first results came from it, using the stock yolov8n-pose as a stand-in.
 
 ## Train the learned classifier
 
+> **Moved.** Classifier training (`train_classifier.py`, `learn.py`, `eval_tiling.py`, and the SCB loader they share) now lives in the training repository, [hailo-custom-yolo-pose `classifiers/`](https://github.com/LTH3ar/hailo-custom-yolo-pose/tree/main/classifiers). Run the same old and new code on the same data and they give identical results. The tag `v1.0.3` keeps the scripts here as they were used for the thesis. This repository keeps pose extraction (`extract_hef.py`, `extract_pt.py`), the rules evaluation (`evaluate.py`) and the exported models in `hcpose/engagement/models/`.
+
 The classifier takes the keypoints and pose cues computed by `hcpose.engagement.classifier.feature_vector()`, the same code the live analyzer runs. Image-context features (position in the frame, crowd size) are deliberately excluded.
 
-`train_classifier.py`:
+`classifiers.train_all` (was `train_classifier.py`):
 - Compares logistic regression, gradient-boosted trees and a small MLP with 5-fold cross-validation by lesson.
 - Fits gradient-boosted trees on all the data.
 - Exports them as JSON, which the Pi evaluates in NumPy (no scikit-learn needed at runtime).
 
 ```bash
-# on the Pi: pose caches from the deployed m HEF, at the runtime detection threshold
-.venv/bin/python research/scb/train_classifier.py ~/scb/poses_hef_m.jsonl --det-thr 0.3 \
-    --name scb-m-int8 --export-dir hcpose/engagement/models
+# pose caches from the deployed m HEF (made on the Pi), at the runtime detection threshold;
+# run in hailo-custom-yolo-pose, next to a clone of this repository
+python -m classifiers.train_all ~/scb/poses_hef_m.jsonl --det-thr 0.3 \
+    --name scb-m-int8 --export-dir ../hailo-custom-yolo-pose-runtime/hcpose/engagement/models
 ```
 
 This writes three models to `hcpose/engagement/models/`, all trained on the same students and features:
@@ -96,7 +100,7 @@ Both scripts first run `scbdata.load()`, which fixes two dataset issues the firs
 - Reports detection coverage: how many labelled students got a pose detection at `--det-thr` (default 0.5).
 - Scores the rules in their uncalibrated single-frame mode, per behavior.
 
-`learn.py`:
+`classifiers.experiments.learn` (was `learn.py`, now in the training repository):
 - Trains a gradient-boosted classifier on front-view keypoints, with 5-fold cross-validation grouped by lesson.
 - Reports which feature groups matter.
 - Runs two **shortcut checks**. Most SCB images contain only focused or only distracted labels, so a model can partly "recognize the image" instead of the pose. A context-only model (position, box size, crowd size, no pose) shows how big that shortcut is. The **within-image AUC**, computed only on images with both classes, is the number to quote: it compares students in the same room and frame, so the shortcut can't help.
@@ -189,7 +193,7 @@ python research/scb/compare_coverage.py ub_tiles_none.jsonl ub_tiles_auto.jsonl 
 
 ### Do the classifiers work on tiled poses?
 
-`eval_tiling.py` scores the bundled classifiers on the same students with and without tiling, and on the students only tiling finds. Results for upper_body_n `best.pt`, threshold 0.3; "pred" is the share the classifier calls distracted:
+`classifiers.experiments.eval_tiling` (was `eval_tiling.py`, now in the training repository) scores the bundled classifiers on the same students with and without tiling, and on the students only tiling finds. Results for upper_body_n `best.pt`, threshold 0.3; "pred" is the share the classifier calls distracted:
 
 | Students | n | True distracted | Trees AUC | Trees pred | MLP AUC | MLP pred | Logistic pred | Rules AUC |
 |---|---|---|---|---|---|---|---|---|
@@ -213,9 +217,11 @@ The bundled classifiers (`scb-m-int8-tiles`) are now trained this way, on pooled
 # on the Pi: INT8 m caches with and without tiles (the decoder now applies pose_dedup)
 .venv/bin/python research/scb/extract_hef.py ~/models/upper_body_m.hef ~/scb/poses_hef_m.jsonl <SCB dirs...>
 .venv/bin/python research/scb/extract_hef.py ~/models/upper_body_m.hef ~/scb/poses_hef_m_tiles.jsonl <SCB dirs...> --tiles auto
-.venv/bin/python research/scb/train_classifier.py ~/scb/poses_hef_m.jsonl ~/scb/poses_hef_m_tiles.jsonl \
-    --det-thr 0.3 --name scb-m-int8-tiles --export-dir hcpose/engagement/models --save-cv ~/scb/cv_m_pooled.npz
-.venv/bin/python research/scb/eval_tiling.py ~/scb/poses_hef_m.jsonl ~/scb/poses_hef_m_tiles.jsonl
+# then, in hailo-custom-yolo-pose:
+python -m classifiers.train_all ~/scb/poses_hef_m.jsonl ~/scb/poses_hef_m_tiles.jsonl \
+    --det-thr 0.3 --name scb-m-int8-tiles --export-dir ../hailo-custom-yolo-pose-runtime/hcpose/engagement/models \
+    --save-cv ~/scb/cv_m_pooled.npz
+python -m classifiers.experiments.eval_tiling ~/scb/poses_hef_m.jsonl ~/scb/poses_hef_m_tiles.jsonl
 ```
 
 The cost is one extra inference per tile: full frame plus 3 tiles is four passes per frame, which is fine at the 5–10 FPS that engagement needs. Both engines support it; the gst engine does the crops and the merge in C++ (`cpp/tiling.cpp`), with the same rules as the Python engine.

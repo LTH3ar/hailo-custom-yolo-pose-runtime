@@ -1,6 +1,7 @@
 """Learned focused/distracted classifiers: features + dependency-free runtimes.
 
-Training happens offline with scikit-learn (research/scb/train_classifier.py).
+Training happens offline with scikit-learn, in the training repository
+(hailo-custom-yolo-pose, classifiers/).
 Three model kinds are exported to JSON and evaluated here with NumPy only, so
 there is no scikit-learn on the Pi and no pickle/version coupling:
 
@@ -303,8 +304,9 @@ def resolve(setting: Optional[str]) -> Optional[_Model]:
         p = BUNDLED[setting]
         if not p.is_file():
             raise FileNotFoundError(
-                f"no bundled {setting} classifier ({p}). Export it with research/scb/train_classifier.py "
-                "--export-dir hcpose/engagement/models")
+                f"no bundled {setting} classifier ({p}). Export it from the training repository "
+                "(hailo-custom-yolo-pose): python -m classifiers.train_all POSES.jsonl "
+                "--export-dir <this repository>/hcpose/engagement/models")
         return load_model(str(p))
     return load_model(str(Path(setting).expanduser()))
 

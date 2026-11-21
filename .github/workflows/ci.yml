@@ -19,6 +19,21 @@ jobs:
         run: pip install -e ".[test,eval]" opencv-python-headless scikit-learn
       - name: Test
         run: pytest -q tests
+      - name: Build the wheel
+        run: |
+          pip install build
+          python -m build --wheel --outdir dist
+      - name: Check the wheel contains the engagement code and models
+        run: |
+          python - <<'PY'
+          import glob, sys, zipfile
+          names = zipfile.ZipFile(glob.glob("dist/*.whl")[0]).namelist()
+          need = ["hcpose/engagement/analyzer.py", "hcpose/engagement/classifier.py",
+                  "hcpose/engagement/models/scb_trees.json"]
+          missing = [n for n in need if n not in names]
+          print("missing from the wheel:", missing) if missing else print(len(names), "files in the wheel, engagement included")
+          sys.exit(1 if missing else 0)
+          PY
 
   thesis:
     runs-on: ubuntu-24.04
