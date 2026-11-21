@@ -197,7 +197,7 @@ The analyzer turns each frame's skeletons into a \textbf{focused}, \textbf{distr
   \texttt{-\/-camera-position} (left, centre, right) sets a prior for the room's attentive direction.
 \end{itemize}
 
-\textbf{Decision.} Each cue is a ramp from ``normal'' to ``clearly off'' relative to the seat's baseline. They combine with a noisy-OR, so weak cues such as head down (writing looks the same) only count together with another cue:
+\textbf{Decision.} Each cue is a ramp from ``normal'' to ``clearly off'' relative to the seat's baseline. They combine with a noisy-OR, so weak cues only count together with another cue: body turned and hand at the face can never flag a student alone, and head down (writing looks the same) only when the head drops far below the seat's usual height:
 
 \begin{equation}
 s = 1 - \prod_{c} \left(1 - w_c \, r_c\right)
