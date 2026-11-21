@@ -21,8 +21,10 @@ test = ["pytest"]
 [project.scripts]
 hcpose = "hcpose.cli:main"
 
-[tool.setuptools]
-packages = ["hcpose"]
+# every subpackage (hcpose.engagement, ...) and the bundled classifier models; listing only
+# "hcpose" left hcpose/engagement out of the wheel (fixed after v1.0.3)
+[tool.setuptools.packages.find]
+include = ["hcpose*"]
 
 [tool.setuptools.package-data]
-hcpose = ["lib/*.so"]
+hcpose = ["lib/*.so", "engagement/models/*.json"]
