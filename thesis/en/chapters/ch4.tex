@@ -345,7 +345,7 @@ Lenient & SCB → ClaBehavior & 0.69 / 0.79 / 0.81 & 0.68 / 0.79 / 0.81 & 43 / 3
 \end{tabularx}
 \end{table}
 
-Trees and MLP, which reach AUC 0.86-0.90 within SCB, fall to 0.70-0.81 on another classroom dataset of the same kind, and nearly all over-predict the distracted share. Cross-validation within ClaBehavior, grouped by camera, is being re-run with corrected camera groups and is not quoted here.
+Within one dataset the scores stay high. Trained on both datasets and scored on ClaBehavior's students in 5-fold cross-validation grouped by camera view, trees reach AUC 0.84 (within-image 0.83) and the MLP 0.86 (0.85) with the strict mapping, and 0.84 (0.83) and 0.85 (0.85) with the lenient one. ClaBehavior's file names carry no camera, so its frames were grouped by how alike their thumbnails are. No threshold gave a clean set of views, so the coarsest grouping tried (41 groups) is the one quoted; from 85 groups to 41 the scores moved by at most 0.02. Across datasets, trees and MLP, which reach 0.86-0.90 within SCB and 0.84-0.86 within ClaBehavior, fall to 0.70-0.81, and nearly all over-predict the distracted share.
 
 \textbf{On real classes.} Trained on both datasets, with the lookup class, the classifiers false-alarm somewhat less, but not enough to change the conclusion (m with tiles):
 
