@@ -12,7 +12,13 @@ and reports, per setting:
   * class distracted % on the lecture, exam and study-hall clips (truth: low in all three)
 
 usage: python research/tune/sweep_rules.py [--jobs 8] [--out research/tune/sweep.md]
-Clip_4 is used to choose the setting; keep the 9-person staged session as the held-out test.
+       [--results-dir DIR] [--staged-dir DIR] [--work DIR]
+Clip_4 is used to choose the setting; clip_5 is the held-out test.
+
+--results-dir / --staged-dir point at other runs (default: the thesis runs in research/results);
+the skeleton files may be .xz or plain. Rows with the head-offset measure "off" switch it off
+explicitly: it has been on by default since ac18363. The working folder (--work) holds one
+analysis per setting and clip, several GB in all, so it defaults to ~/.cache, not /tmp.
 """
 import argparse
 import itertools
@@ -21,7 +27,6 @@ import lzma
 import os
 import subprocess
 import sys
-import tempfile
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -31,8 +36,22 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "research" / "staged"))
 import score as staged  # noqa: E402
 
-R1 = ROOT / "research/results/pi_20261110"
-R4 = ROOT / "research/results/pi_staged_clip4"
+ap = argparse.ArgumentParser()
+ap.add_argument("--jobs", type=int, default=os.cpu_count() or 2)
+ap.add_argument("--work", default=str(Path.home() / ".cache" / "hcpose_sweep"))
+ap.add_argument("--out", default=str(ROOT / "research/tune/sweep.md"))
+ap.add_argument("--only", help="comma-separated skeleton names (default: all)")
+ap.add_argument("--grid", default="offset", choices=["offset", "yaw", "current"],
+                help="offset: the head-offset measure x two yaw ramps x two on thresholds (default); "
+                     "yaw: the first sweep (yaw ramp x on threshold); current: the defaults only")
+ap.add_argument("--results-dir", default=str(ROOT / "research/results/pi_20261110"),
+                help="folder with the lecture, exam and study-hall skeleton files")
+ap.add_argument("--staged-dir", default=str(ROOT / "research/results/pi_staged_clip4"),
+                help="folder with the clip_4 skeleton files")
+args = ap.parse_args()
+
+R1 = Path(args.results_dir).expanduser()
+R4 = Path(args.staged_dir).expanduser()
 SKELETONS = {  # name: (xz file, camera position)
     "clip4_n": (R4 / "clip_4_720p_n_none.skeleton.jsonl.xz", "center"),
     "clip4_m": (R4 / "clip_4_720p_m_none.skeleton.jsonl.xz", "center"),
@@ -45,19 +64,9 @@ SKELETONS = {  # name: (xz file, camera position)
 }
 LABEL_CLIP = {"lecture": "clip_3", "exam": "clip"}
 
-ap = argparse.ArgumentParser()
-ap.add_argument("--jobs", type=int, default=os.cpu_count() or 2)
-ap.add_argument("--work", default=str(Path(tempfile.gettempdir()) / "hcpose_sweep"))
-ap.add_argument("--out", default=str(ROOT / "research/tune/sweep.md"))
-ap.add_argument("--only", help="comma-separated skeleton names (default: all)")
-ap.add_argument("--grid", default="offset", choices=["offset", "yaw", "current"],
-                help="offset: the head-offset measure x two yaw ramps x two on thresholds (default); "
-                     "yaw: the first sweep (yaw ramp x on threshold); current: the defaults only")
-args = ap.parse_args()
-
 # a setting = (yaw ramp, head-offset ramp or None, on threshold)
-if args.grid == "current":
-    GRID = [((0.35, 0.85), None, 0.6)]
+if args.grid == "current":  # the defaults in hcpose/engagement/settings.py
+    GRID = [((0.35, 0.85), (0.2, 0.4), 0.6)]
 elif args.grid == "yaw":
     GRID = [(t, None, on) for t, on in itertools.product(
         [(0.35, 0.85), (0.25, 0.65), (0.2, 0.5), (0.15, 0.4), (0.1, 0.3)], [0.6, 0.5, 0.4])]
@@ -72,8 +81,14 @@ def unpack(name):
     src, _ = SKELETONS[name]
     dst = work / f"{name}.skeleton.jsonl"
     if not dst.is_file():
-        with lzma.open(src) as f, open(dst, "wb") as o:
-            o.write(f.read())
+        plain = src.with_suffix("") if src.suffix == ".xz" else src
+        if src.is_file():
+            with lzma.open(src) as f, open(dst, "wb") as o:
+                o.write(f.read())
+        elif plain.is_file():
+            dst.symlink_to(plain.resolve())
+        else:
+            raise SystemExit(f"skeleton file not found: {src} (or {plain})")
     return dst
 
 
@@ -84,6 +99,8 @@ def run(job):
     text = f"head_turn_start: {turn[0]}\nhead_turn_full: {turn[1]}\non_threshold: {on}\noff_threshold: {round(on - 0.2, 2)}\n"
     if offset:
         text += f"head_offset_cue: true\nhead_offset_start: {offset[0]}\nhead_offset_full: {offset[1]}\n"
+    else:  # the measure is on by default (since ac18363), so "off" must say so
+        text += "head_offset_cue: false\n"
     cfg.write_text(text)
     out = work / f"{name}__{tag}.jsonl"
     if not out.is_file():
@@ -172,5 +189,5 @@ for g in GRID:
                      + " | ".join("–" if v != v else f"{v:.1f}%" for v in cp.values()) + " |")
 text = "\n".join(lines)
 print(text)
-Path(args.out).write_text("# Rule threshold sweep\n\nCurrent defaults: yaw ramp 0.35-0.85, head-offset measure off, on threshold 0.6.\n\n" + text + "\n")
+Path(args.out).write_text("# Rule threshold sweep\n\nCurrent defaults: yaw ramp 0.35-0.85, head-offset ramp 0.2-0.4, on threshold 0.6.\n\n" + text + "\n")
 print(f"written to {args.out}")
