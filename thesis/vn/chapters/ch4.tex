@@ -345,7 +345,7 @@ Lenient & SCB → ClaBehavior & 0.69 / 0.79 / 0.81 & 0.68 / 0.79 / 0.81 & 43 / 3
 \end{tabularx}
 \end{table}
 
-Cây quyết định và MLP, vốn đạt AUC 0.86-0.90 trong SCB, giảm xuống 0.70-0.81 trên một bộ dữ liệu lớp học khác cùng loại, và gần như tất cả đều dự đoán tỷ lệ mất tập trung cao hơn thực tế. Kiểm định chéo trong ClaBehavior, nhóm theo camera, đang được chạy lại với cách nhóm camera đã sửa và chưa được trích dẫn ở đây.
+Trong cùng một bộ dữ liệu, điểm số vẫn cao. Khi huấn luyện trên cả hai bộ dữ liệu và chấm trên học sinh của ClaBehavior bằng kiểm định chéo 5 phần nhóm theo góc camera, cây quyết định đạt AUC 0.84 (trong ảnh 0.83) và MLP đạt 0.86 (0.85) với cách ánh xạ strict, và 0.84 (0.83) và 0.85 (0.85) với cách ánh xạ lenient. Tên tệp của ClaBehavior không cho biết camera, nên các khung hình được nhóm theo mức giống nhau của ảnh thu nhỏ. Không ngưỡng nào cho ra một tập góc camera rõ ràng, nên cách nhóm thô nhất đã thử (41 nhóm) là cách được trích dẫn; từ 85 nhóm xuống 41 nhóm, điểm số thay đổi nhiều nhất 0.02. Giữa hai bộ dữ liệu, cây quyết định và MLP, vốn đạt 0.86-0.90 trong SCB và 0.84-0.86 trong ClaBehavior, giảm xuống 0.70-0.81, và gần như tất cả đều dự đoán tỷ lệ mất tập trung cao hơn thực tế.
 
 \textbf{Trên lớp học thực.} Khi huấn luyện trên cả hai bộ dữ liệu, có lớp lookup, các bộ phân loại báo động nhầm ít hơn đôi chút, nhưng không đủ để thay đổi kết luận (m có chia ô):
 
