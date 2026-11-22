@@ -33,6 +33,8 @@ In a small room filmed at close range (clip\_5), seats multiplied too, to 13-16 
   \textbf{Cause:} SCB has no ``listening'' label, so they learn that a raised head means distracted.
 \item
   \textbf{A second dataset:} adding ClaBehavior, which has that head-up class, lowers the lecture share only to 44-51\% for trees and MLP, and a model trained on one dataset reaches only AUC 0.70-0.81 on the other.
+\item
+  \textbf{Pixels instead of pose:} a crop classifier (YOLOv8s-cls, FP32) ranks SCB students better (AUC 0.93 against 0.90 for the MLP), but only by telling images apart, not students within an image. On real footage it misses most of clip\_5's distraction and calls the attentive adults of clip\_4 distracted 84\% of the time.
 \end{itemize}
 
 The calibrated rules have very few false alarms (specificity 95\% on human labels in the deployment setting; 1-2\% on the lecture). They first missed most real distraction (11\% on the staged session), because the ear-based head yaw collapses in profile. A second, body-relative head-turn measure raised that to 56\% with both models, with no new false alarms there and a cost of 7-10 points on the exam hall. On a 10-student class labelled after all thresholds were fixed (clip\_5), the rules on the deployment setting kept 89\% specificity. Phone use remains invisible to pose.

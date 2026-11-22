@@ -33,6 +33,8 @@ Trong một phòng nhỏ quay ở khoảng cách gần (clip\_5), số chỗ ng�
   \textbf{Nguyên nhân:} SCB không có nhãn ``nghe giảng'', nên chúng học được rằng ngẩng đầu nghĩa là mất tập trung.
 \item
   \textbf{Bộ dữ liệu thứ hai:} bổ sung ClaBehavior, có lớp ngẩng đầu đó, chỉ hạ tỷ lệ trên buổi giảng xuống 44-51\% với cây quyết định và MLP, và một mô hình huấn luyện trên bộ dữ liệu này chỉ đạt AUC 0.70-0.81 trên bộ kia.
+\item
+  \textbf{Điểm ảnh thay cho tư thế:} một bộ phân loại ảnh cắt (YOLOv8s-cls, FP32) xếp hạng học sinh SCB tốt hơn (AUC 0.93 so với 0.90 của MLP), nhưng chỉ nhờ phân biệt các ảnh, không phải các học sinh trong một ảnh. Trên video thực, nó bỏ sót phần lớn hành vi mất tập trung của clip\_5 và gọi hai người lớn đang chú ý trong clip\_4 là mất tập trung 84\% thời gian.
 \end{itemize}
 
 Các luật đã hiệu chỉnh có rất ít báo động nhầm (độ đặc hiệu 95\% trên nhãn người gán ở cấu hình triển khai; 1-2\% trên buổi giảng). Ban đầu chúng bỏ sót phần lớn hành vi mất tập trung thực (11\% trên buổi dàn dựng), vì góc yaw của đầu dựa trên tai sụp đổ khi nhìn nghiêng. Một thước đo góc quay đầu thứ hai, tương đối so với cơ thể, nâng con số này lên 56\% với cả hai mô hình, không thêm báo động nhầm nào ở đó, với chi phí 7-10 điểm ở phòng thi. Trên một lớp 10 học sinh được gán nhãn sau khi mọi ngưỡng đã cố định (clip\_5), các luật trong cấu hình triển khai giữ độ đặc hiệu 89\%. Việc dùng điện thoại vẫn không thể thấy được qua tư thế.

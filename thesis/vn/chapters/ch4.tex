@@ -378,6 +378,81 @@ MLP & SCB + ClaBehavior, lenient & 72 (3) & 48.2\% \\
 
 Vì vậy, việc thiếu nhãn ``nghe giảng'' chỉ giải thích được một phần khoảng cách. Nhãn hành động trên ảnh đơn lẻ là một bài toán khác với sự chú ý theo thời gian, và ngay cả hai bộ dữ liệu lớp học cùng loại cũng cách xa nhau. Các luật đã hiệu chỉnh vẫn là mặc định.
 
+
+\section{Điểm ảnh thay cho tư thế: một baseline phân loại ảnh cắt}
+
+Cho đến đây, mọi mô hình học máy chỉ nhìn thấy bộ khung xương. Một mô hình nhìn thấy điểm ảnh của học sinh có thể dùng những gì tư thế bỏ mất: điện thoại, quyển sách, hướng mắt. Cách thường dùng trong các công trình về SCB là một bộ phát hiện hành vi, nhưng bản SCB của chúng tôi chỉ gán nhãn các hành động của từng tập con: trong một ảnh BowTurnHead, học sinh đang đọc hay nghe giảng không có hộp nào. Một bộ phát hiện huấn luyện trên dữ liệu đó sẽ học các em là nền ở ảnh này và là ``read'' ở ảnh khác.
+
+\textbf{Thiết lập.} Vì vậy, baseline là một bộ phân loại ảnh cắt, YOLOv8s-cls \cite{b14}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Huấn luyện:} mô hình học tám hành động chung từ các hộp có nhãn của SCB và ClaBehavior, nới rộng 10\% và đổi kích thước về 224 px, trong 50 epoch. Học sinh không có nhãn không bao giờ được dùng.
+\item
+  \textbf{Kiểm tra:} mô hình phân loại các hộp người mà mô hình tư thế tìm được, như khi chạy thực, nên khác biệt duy nhất so với các bộ phân loại tư thế là đầu vào: điểm ảnh thay cho bộ khung xương.
+\item
+  \textbf{Cùng cách kiểm tra:} cùng 5 phần, cùng nhãn và cùng cách ánh xạ. Mỗi hộp có nhãn được tính một lần cho cả hai mô hình, và chênh lệch có khoảng 95\% từ bootstrap theo tiết học và góc camera.
+\item
+  \textbf{Trường hợp tốt nhất:} mô hình chạy FP32 trên RTX 3060 (khoảng 690 ảnh cắt mỗi giây), không phải INT8 trên Pi. Huấn luyện mất khoảng 35 phút mỗi phần.
+\end{itemize}
+
+\begin{table}[htbp]\small
+\caption{Bộ phân loại ảnh cắt so với các bộ phân loại tư thế trên cùng học sinh (ánh xạ strict; AUC, AUC trong ảnh trong ngoặc)}\label{tab:crop-benchmark}
+\begin{tabularx}{\textwidth}{*{5}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Kiểm tra trên} & \textbf{Ảnh cắt (điểm ảnh)} & \textbf{Cây (tư thế)} & \textbf{MLP (tư thế)} & \textbf{MLP trừ ảnh cắt, AUC [khoảng 95\%]} \\
+\midrule
+SCB & 0.929 (0.869) & 0.878 (0.856) & 0.897 (0.876) & −0.031 [−0.051, −0.013] \\
+ClaBehavior & 0.816 (0.845) & 0.846 (0.832) & 0.854 (0.843) & +0.038 (xem phần chữ) \\
+Cả hai, gộp & 0.911 (0.861) & 0.874 (0.848) & 0.893 (0.865) & −0.018 [−0.043, +0.006] \\
+Huấn luyện trên SCB, kiểm tra trên ClaBehavior & 0.720 & 0.790 & 0.794 & -- \\
+Huấn luyện trên ClaBehavior, kiểm tra trên SCB & 0.668 & 0.70 & 0.72 & -- \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Trên SCB}, mô hình ảnh cắt xếp hạng học sinh tốt hơn, hơn cây quyết định và MLP 0.03-0.05 AUC, và mọi khoảng đều không chứa 0. Trong cùng một ảnh, nó không tốt hơn: chênh lệch AUC trong ảnh là −0.014 đến +0.007, với mọi khoảng đều chứa 0. Lợi thế của nó đến từ việc phân biệt các ảnh với nhau.
+\item
+  \textbf{Trên ClaBehavior}, không có khác biệt rõ ràng. Hai góc camera chứa 76\% số học sinh, nên khoảng của nó không đáng tin; trong từng góc camera, chênh lệch gần bằng 0.
+\item
+  \textbf{Giữa hai bộ dữ liệu}, mô hình ảnh cắt chuyển giao kém hơn tư thế.
+\end{itemize}
+
+Số liệu của các bộ phân loại tư thế ở đây khác với Bảng~\ref{tab:per-student-decisions-on-scb-lesson-grou}, vốn dùng cách ánh xạ của luận văn và tính hai lần một học sinh được tìm thấy cả khi có và không có chia ô.
+
+\textbf{Trên lớp học thực.} Mô hình ảnh cắt được chạy trên các hộp và chỗ ngồi của các lần chạy m có chia ô, một lần theo từng khung hình và một lần với cách làm mượt của chính hcpose:
+
+\begin{table}[htbp]\small
+\caption{Bộ phân loại ảnh cắt so với các luật và cây quyết định tư thế trên lớp học thực (m có chia ô, ánh xạ strict)}\label{tab:crop-real-classes}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.32\textwidth}*{4}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Thước đo} & \textbf{Ảnh cắt, từng khung hình} & \textbf{Ảnh cắt, làm mượt} & \textbf{Luật} & \textbf{Cây (tư thế)} \\
+\midrule
+Báo động nhầm trên 262 thời điểm tập trung (phát hiện được trên 13) & 31 (3) & 23 (1) & 24 (2) & 88 (4) \\
+clip\_5: báo động nhầm trên 121 (phát hiện được trên 28) & 3 (4) & 1 (3) & 22 (16) & 28 (6) \\
+Tỷ lệ của lớp, buổi giảng (giá trị thực gần 0) & 27.2\% & 23.9\% & 1.4\% & 50.5\% \\
+clip\_4: số giây mất tập trung phát hiện được & 32\% & 34\% & 56\% & 50\% \\
+clip\_4: độ chính xác / số giây chú ý bị đánh dấu & 34\% / 84\% & 36\% / 84\% & 100\% / 0\% & 100\% / 0\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Các thời điểm có nhãn:} trên bộ nhãn đầu tiên, mô hình thận trọng gần như các luật, nhưng trên clip\_5 nó bỏ sót gần như mọi thời điểm mất tập trung (3-4 trên 28).
+\item
+  \textbf{Buổi giảng:} mô hình đánh dấu 24-27\% một buổi giảng chăm chú: bằng một nửa các bộ phân loại tư thế, nhưng còn xa các luật.
+\item
+  \textbf{clip\_4:} mô hình gọi hai người lớn đang chú ý là mất tập trung 84\% thời gian, nên độ chính xác chỉ 34-36\%. Nó đánh dấu cả hai sự kiện dùng điện thoại, nhưng vì nó đánh dấu phần lớn video, đó không phải là phát hiện. Người lớn được quay bằng một camera khác cách xa dữ liệu huấn luyện từ lớp học phổ thông của nó.
+\end{itemize}
+
+Vì vậy, nhìn điểm ảnh thay cho tư thế cũng không thu hẹp được khoảng cách. Nó chỉ giúp trên chính benchmark mà nó được huấn luyện, và chủ yếu nhờ nhận ra các ảnh chứ không phải các học sinh. Trên video thực, việc hiệu chỉnh theo từng học sinh của các luật quan trọng hơn đầu vào.
+
 \section{Hiệu năng trên thiết bị biên}
 
 Trong cấu hình triển khai, n có chia ô chạy thời gian thực, hệ thống chạy 15 phút ở 30 FPS với độ trễ 47 ms, công suất đo được 4.1 W trên bo mạch Pi cộng 2.5 W cho Hailo-8 (số liệu nhà sản xuất), nhiệt độ SoC cao nhất 60 °C và không bị giảm xung. Ở cấu hình này, pipeline bị giới hạn bởi Hailo-8, không phải CPU. Mọi số liệu dưới đây được đo trên Pi 5 với bộ tản nhiệt chủ động chính hãng Raspberry Pi gắn vào cổng quạt, ngày 22/11/2026.
@@ -546,6 +621,8 @@ Khoảng trống lớn nhất là dữ liệu chuẩn: đến nay chưa có kế
   \textbf{Lớp nhỏ, khoảng rộng.} Khi không biết sĩ số, khoảng 95\% của các luật rộng 15-44 điểm trên các video. Đây là tính chất của cỡ mẫu, không phải khiếm khuyết, nhưng nó giới hạn độ mịn khi đọc chỉ số.
 \item
   \textbf{Trọng số luật đặt thủ công.} Trọng số của các luật được đặt theo thiết kế, không được khớp từ dữ liệu, và cố ý không tinh chỉnh trên các video dùng để đánh giá chúng; một thay đổi đã ghi nhận, trọng số cho camera thấp, là một tùy chọn chứ không phải mặc định.
+\item
+  \textbf{Baseline ảnh cắt} chạy FP32 trên GPU máy để bàn, trường hợp tốt nhất của nó, và không được biên dịch cho Hailo-8; tốc độ của nó trên Pi chưa được đo.
 \item
   \textbf{Một bản biên dịch cho mỗi mô hình.} Các bản biên dịch INT8 từ cùng trọng số chênh nhau khoảng ±0.01 AP; mọi kết quả lấy từ một bản biên dịch được chọn cho mỗi kích thước. m có chia ô cũng không theo kịp camera trực tiếp 25-30 FPS nếu không bỏ khung hình.
 \item

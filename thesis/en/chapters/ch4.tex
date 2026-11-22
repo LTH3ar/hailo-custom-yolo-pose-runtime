@@ -378,6 +378,81 @@ MLP & SCB + ClaBehavior, lenient & 72 (3) & 48.2\% \\
 
 So the missing ``listening'' label explains only part of the gap. Single-image action labels are a different task from attention over time, and even two classroom datasets of the same kind are far apart. The calibrated rules stay the default.
 
+
+\section{Pixels instead of pose: a crop baseline}
+
+Every learned model so far sees only the skeleton. A model that sees the student's pixels could use what pose loses: a phone, a book, the direction of the eyes. The usual approach in the SCB literature is a behaviour detector, but our copy of SCB labels only each subset's own actions: in a BowTurnHead image, students who read or listen have no box. A detector trained on that learns them as background in some images and as ``read'' in others.
+
+\textbf{Setup.} The baseline is therefore a crop classifier, YOLOv8s-cls \cite{b14}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Training:} it learns the eight shared actions from the labelled boxes of SCB and ClaBehavior, padded by 10\% and resized to 224 px, for 50 epochs. Unlabelled students are never used.
+\item
+  \textbf{Testing:} it classifies the person boxes the pose model found, as it would run live, so the only difference from the pose classifiers is the input: pixels instead of a skeleton.
+\item
+  \textbf{Same tests:} the same 5 folds, labels and mappings. Each labelled box counts once for both models, and the difference gets a 95\% interval from a bootstrap over lessons and camera views.
+\item
+  \textbf{Best case:} it runs in FP32 on the RTX 3060 (about 690 crops per second), not in INT8 on the Pi. Training took about 35 minutes per fold.
+\end{itemize}
+
+\begin{table}[htbp]\small
+\caption{Crop classifier against the pose classifiers on the same students (strict mapping; AUC, within-image AUC in brackets)}\label{tab:crop-benchmark}
+\begin{tabularx}{\textwidth}{*{5}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Tested on} & \textbf{Crop (pixels)} & \textbf{Trees (pose)} & \textbf{MLP (pose)} & \textbf{MLP minus crop, AUC [95\% interval]} \\
+\midrule
+SCB & 0.929 (0.869) & 0.878 (0.856) & 0.897 (0.876) & −0.031 [−0.051, −0.013] \\
+ClaBehavior & 0.816 (0.845) & 0.846 (0.832) & 0.854 (0.843) & +0.038 (see text) \\
+Both, pooled & 0.911 (0.861) & 0.874 (0.848) & 0.893 (0.865) & −0.018 [−0.043, +0.006] \\
+Trained on SCB, tested on ClaBehavior & 0.720 & 0.790 & 0.794 & -- \\
+Trained on ClaBehavior, tested on SCB & 0.668 & 0.70 & 0.72 & -- \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{On SCB} the crop model ranks students better, by 0.03-0.05 AUC over trees and the MLP, and every interval excludes zero. Within one image it is no better: the within-image differences are −0.014 to +0.007, all with intervals that include zero. Its lead comes from telling images apart.
+\item
+  \textbf{On ClaBehavior} there is no clear difference. Two camera views hold 76\% of its students, so its interval is not reliable; within each of the two views the gap is about zero.
+\item
+  \textbf{Across datasets} the crop model transfers worse than pose.
+\end{itemize}
+
+The pose classifiers' numbers here differ from Table~\ref{tab:per-student-decisions-on-scb-lesson-grou}, which uses the thesis mapping and counts a student found both with and without tiles twice.
+
+\textbf{On real classes.} The crop model was run on the boxes and seats of the m runs with tiles, once per frame and once with hcpose's own smoothing:
+
+\begin{table}[htbp]\small
+\caption{Crop classifier against the rules and the pose trees on real classes (m with tiles, strict mapping)}\label{tab:crop-real-classes}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.32\textwidth}*{4}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Measure} & \textbf{Crop, per frame} & \textbf{Crop, smoothed} & \textbf{Rules} & \textbf{Trees (pose)} \\
+\midrule
+False alarms on 262 focused moments (caught of 13) & 31 (3) & 23 (1) & 24 (2) & 88 (4) \\
+clip\_5: false alarms on 121 (caught of 28) & 3 (4) & 1 (3) & 22 (16) & 28 (6) \\
+Lecture class \% (truth near 0) & 27.2\% & 23.9\% & 1.4\% & 50.5\% \\
+clip\_4: distracted seconds caught & 32\% & 34\% & 56\% & 50\% \\
+clip\_4: precision / attentive seconds flagged & 34\% / 84\% & 36\% / 84\% & 100\% / 0\% & 100\% / 0\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Labelled moments:} on the first label set it is about as cautious as the rules, but on clip\_5 it misses almost every distracted moment (3-4 of 28).
+\item
+  \textbf{Lecture:} it flags 24-27\% of an attentive lecture: half as much as the pose classifiers, but far from the rules.
+\item
+  \textbf{clip\_4:} it calls the two attentive adults distracted 84\% of the time, so its precision is 34-36\%. It flags both phone events, but since it flags most of the clip anyway, that is not a detection. Adults filmed by another camera are far from its school-classroom training data.
+\end{itemize}
+
+So looking at pixels instead of pose does not close the gap either. It helps only on the benchmark it was trained on, and mainly by recognising images rather than students. On real footage, the per-student calibration of the rules matters more than the input.
+
 \section{Edge performance}
 
 In the deployment setting, n with tiles in real time, the system ran for 15 minutes at 30 FPS with 47 ms latency, 4.1 W measured on the Pi board plus 2.5 W for the Hailo-8 (vendor figure), a peak SoC temperature of 60 °C and no throttling. In this setting the pipeline is bound by the Hailo-8, not the CPU. All figures below were measured on the Pi 5 with official Raspberry Pi active cooling on its fan header, on 22 November 2026.
@@ -546,6 +621,8 @@ The largest gap is ground truth: no result so far measures per-student accuracy 
   \textbf{Small classes, wide ranges.} Without the head count the rules' 95\% range spans 15-44 points on the clips. This is a property of the sample size, not a defect, but it limits how finely the indicator can be read.
 \item
   \textbf{Hand-set rule weights.} The rule weights were set by design, not fitted, and were deliberately not tuned on the clips used to evaluate them; one documented change, the low-camera weight, is an option rather than the default.
+\item
+  \textbf{The crop baseline} ran in FP32 on a desktop GPU, its best case, and was not compiled for the Hailo-8; its speed on the Pi is not measured.
 \item
   \textbf{One compile per model.} INT8 compiles of the same weights differ by about ±0.01 AP; every result comes from one chosen compile per size. m with tiles also cannot keep up with a live 25-30 FPS camera without dropping frames.
 \item
