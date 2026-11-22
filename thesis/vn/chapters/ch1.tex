@@ -41,7 +41,7 @@ Các vấn đề còn lại mang tính kỹ thuật: mô hình tư thế gọn n
 \item
   \textbf{hcpose}, một runtime mã nguồn mở cho các mô hình YOLOv8-pose tùy biến trên Hailo-8, gồm một engine GStreamer và một engine Python cho kết quả như nhau, cài đặt và chạy bằng một lệnh.\footnote{Mã nguồn và các bản phát hành: \url{https://github.com/LTH3ar/hailo-custom-yolo-pose-runtime}}
 \item
-  \textbf{Chia ô ảnh cho các hàng xa:} chạy suy luận bổ sung trên các ô phóng to ở cuối lớp, gộp kết quả không trùng lặp bằng C++ ngay trong pipeline GStreamer. Trên ảnh SCB, kỹ thuật này nâng tỷ lệ học sinh được phát hiện từ 49\% lên 76\%, và từ 17\% lên 74\% ở một phần ba xa nhất, mà không thay đổi mô hình.
+  \textbf{Chia ô ảnh cho các hàng xa:} chạy suy luận bổ sung trên các ô phóng to ở cuối lớp, gộp kết quả không trùng lặp bằng C++ ngay trong pipeline GStreamer. Trên ảnh SCB, kỹ thuật này nâng tỷ lệ học sinh được phát hiện từ 55\% lên 72\%, và từ 25\% lên 66\% ở một phần ba xa nhất, mà không thay đổi mô hình.
 \item
   \textbf{Loại bỏ khung xương trùng lặp:} một bước hậu xử lý loại bỏ hộp thứ hai mà YOLO-pose thường sinh ra cho cùng một học sinh.
 \item
@@ -54,7 +54,7 @@ Các vấn đề còn lại mang tính kỹ thuật: mô hình tư thế gọn n
   \begin{itemize}
   \tightlist
   \item
-    bộ dữ liệu SCB
+    hai bộ dữ liệu lớp học công khai, SCB và ClaBehavior
   \item
     bốn đoạn video lớp học thực (ba đoạn công khai, một đoạn ghi hình cho luận văn này)
   \item
@@ -63,7 +63,7 @@ Các vấn đề còn lại mang tính kỹ thuật: mô hình tư thế gọn n
     một buổi học dàn dựng theo kịch bản
   \end{itemize}
 
-  Kết hợp lại, chúng cho thấy các bộ phân loại huấn luyện trên SCB không chuyển giao tốt sang các buổi giảng thực, trong khi hiệu chỉnh theo từng học sinh thì có.
+  Kết hợp lại, chúng cho thấy các bộ phân loại huấn luyện trên các bộ dữ liệu này không chuyển giao tốt sang các buổi giảng thực, kể cả khi có lớp ngẩng đầu chú ý, trong khi hiệu chỉnh theo từng học sinh thì có.
 \item
   \textbf{Đo đạc trên thiết bị biên:} thông lượng, độ trễ, CPU, nhiệt độ và công suất của bo mạch.
 \item

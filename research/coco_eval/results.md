@@ -1,5 +1,7 @@
 # COCO keypoint results: stock vs trained vs HEF
 
+> **Superseded HEF rows (thesis v1.0.3).** The HEFs below were replaced in thesis v1.1 by seeded recompiles of the same weights: INT8 HEF AP n 0.432, s 0.514, m 0.575 (n seed 2, s seed 2, m seed 1; five-seed mean ± SD n 0.430 ± 0.007, s 0.508 ± 0.011, m 0.570 ± 0.006). The stock and .pt rows are unchanged. The old HEFs are kept on the Pi in `~/models/thesis_v1.0.3/`.
+
 Run 2026-11-11. COCO val2017 (5,000 images, 11,004 person annotations), pycocotools, square 640×640 letterbox for every model. Method: [README.md](README.md).
 
 - PyTorch rows: FP32 on an RTX 3060 (Ultralytics 8.4.208, torch 2.15.0+cu132).

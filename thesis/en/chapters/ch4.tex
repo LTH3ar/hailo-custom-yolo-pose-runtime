@@ -5,7 +5,7 @@
 
 The system is evaluated at four levels: detection coverage, the per-student decision, the class estimate, and on-device performance. Several sources of evidence are used, because no single dataset has per-student attention labels for real lectures.
 
-\textbf{System under test.} hcpose on a Raspberry Pi 5 with a Hailo-8 AI HAT (26 TOPS), Raspberry Pi OS trixie, HailoRT 4.23 / TAPPAS 5.1. The pose models are the project's own YOLOv8-pose upper-body models (13 keypoints) in three sizes, n, s and m, compiled to INT8 HEFs. Model weights were kept fixed throughout: all improvements are in pre- and post-processing and in the engagement logic.
+\textbf{System under test.} hcpose on a Raspberry Pi 5 with a Hailo-8 AI HAT (26 TOPS), Raspberry Pi OS trixie, HailoRT 4.23 / TAPPAS 5.1. The pose models are the project's own YOLOv8-pose upper-body models (13 keypoints) in three sizes, n, s and m, compiled to INT8 HEFs (the seeded compiles of chapter 3). Model weights were kept fixed throughout: all improvements are in pre- and post-processing and in the engagement logic.
 
 \textbf{Evidence}
 
@@ -24,9 +24,10 @@ The system is evaluated at four levels: detection coverage, the per-student deci
 \bottomrule
 \endlastfoot
 SCB-Dataset (three subsets) \cite{b3} & 8,116 unique classroom images after merging duplicates, Chinese K-12 & detection coverage, per-student classifier accuracy (lesson-grouped 5-fold CV) & action boxes: read, write, hand-raising (focused); TurnHead, BowHead, discuss (distracted) \\
-Exam-hall clip \cite{b17} & 72 s, high corner camera, about 30 adult students writing & false alarms, class estimate & none; context implies a share near 0 \\
-Study-hall clip \cite{b18} & 6 min, camera at desk height, about 50 students & dense rooms, seat counting, low-camera failure & none; context implies a low share \\
-Lecture clip \cite{b19} & 3 min 18 s, high front camera, about 35 students, mostly attentive & transfer of the classifiers to a real lecture & none; context implies a share near 0 \\
+ClaBehavior \cite{b28} & 400 frames from 13 fixed classroom cameras, Chinese K-12 & whether a head-up attentive class fixes the classifiers; transfer between datasets & action boxes, including lookup (head up, looking at the board) \\
+Exam-hall clip \cite{b17} & 72 s, high corner camera, 23 visible adult students writing and one teacher & false alarms, class estimate & none; context implies a share near 0 \\
+Study-hall clip \cite{b18} & 6 min, camera at desk height, about 50 students (too dense to count exactly) & dense rooms, seat counting, low-camera failure & none; context implies a low share \\
+Lecture clip \cite{b19} & 3 min 18 s, high front camera, 28 visible students, mostly attentive & transfer of the classifiers to a real lecture & none; context implies a share near 0 \\
 Small-class clip (clip\_5) & 14 min, iPhone mounted high at the front, 10 secondary-school students in three rows; a rough script the students did not consistently follow & false alarms and catches on a class nothing was tuned on; seat counting at close range & 150 student-moments labelled blind \\
 Staged two-person session (clip\_4) & 4 min 45 s, phone mounted high at the front, two adults acting 7 scripted events & recall, precision, latency, false alarms during writing & exact per second, from the script \\
 Human labels & 301 student-moments from two clips, labelled blind & precision and recall on real classes & focused / distracted / can't tell \\
@@ -35,21 +36,21 @@ Human labels & 301 student-moments from two clips, labelled blind & precision an
 
 \textbf{Metrics.} Coverage = share of labelled students matched to a detection (centre coverage ≥ 0.5 or IoU ≥ 0.3). Per-student: AUC, within-image AUC (only images with both classes, which removes the ``recognise the image'' shortcut), balanced accuracy, precision and recall of \emph{distracted}. Class level: mean class distracted \%, the width of its 95\% range, and inferred class size. Device: FPS, latency, CPU, memory, temperature, throttling, power.
 
-SCB numbers come from the deployed INT8 m HEF unless marked. Clip numbers come from the INT8 HEFs on the Pi; the two charts and the human-label scores use the same n model in FP32 on a PC, which the INT8 runs reproduce within a few points.
+Every number in this chapter comes from the INT8 HEFs running on the Pi's Hailo-8. Dataset poses come from m; the clips, the human labels and the staged session are scored with n, the deployment model, and with m.
 
 \section{Detection coverage and tiling}
 
-Without tiling, the model misses most students in the far rows; running it again on three zoomed-in tiles of the top 60\% of the frame lifts coverage from 48.6\% to 75.5\% of labelled students at threshold 0.3, and from 17.0\% to 74.4\% in the far third.
+Without tiling, the model misses most students in the far rows; running it again on three zoomed-in tiles of the top 60\% of the frame lifts coverage with n from 54.6\% to 72.0\% of labelled students at threshold 0.3, and from 24.6\% to 65.5\% in the far third. With m it rises from 55.4\% to 75.1\%, and from 25.0\% to 69.4\% in the far third.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{figures/scb_coverage.png}
-\caption{Labelled SCB front-view students detected, by size in the image, without and with tiles (upper\_body\_n, threshold 0.3)}\label{fig:labelled-scb-front-view-students-detecte}
+\caption{Labelled SCB front-view students detected, by size in the image, without and with tiles (upper\_body\_n INT8, threshold 0.3)}\label{fig:labelled-scb-front-view-students-detecte}
 \end{figure}
 
 \textbf{Method.} Besides the full frame, the model runs on one row of overlapping, roughly square tiles over the top 60\% of the image (three tiles at 1280×720). Tile detections are mapped back to the frame; those cut by an inner tile edge are dropped, and duplicates across passes are merged by IoU, or by containment plus agreeing keypoints. Both engines implement the same rules; the C++ merge in the GStreamer pipeline was checked equal to the Python merge on 25 random scenes. The detector weights are unchanged.
 
-\textbf{On the deployed INT8 m model}, the number of matched SCB front-view students rose from 23,186 without tiles to 36,226 with them (+56\%); 13,269 students were found only with tiles, 229 only without.
+\textbf{On the deployed INT8 m model}, the number of matched SCB front-view students rose from 23,073 without tiles to 36,294 with them (+57\%); 13,446 students were found only with tiles, 225 only without.
 
 \textbf{On the classroom clips}, students per frame:
 
@@ -59,21 +60,21 @@ Without tiling, the model misses most students in the far rows; running it again
 \toprule
 \textbf{Clip} & \textbf{Model (INT8, Pi)} & \textbf{No tiles} & \textbf{Tiles} \\
 \midrule
-Exam hall & n & 12.6 & 18.6 \\
-Exam hall & m & 14.2 & 22.1 \\
-Lecture & n & 15.6 & 17.9 \\
-Lecture & m & 20.1 & 22.0 \\
-Study hall & n & 10.3 & 23.5 \\
-Study hall & m & 10.6 & 21.0 \\
+Exam hall & n & 13.5 & 18.8 \\
+Exam hall & m & 14.4 & 22.2 \\
+Lecture & n & 16.4 & 18.7 \\
+Lecture & m & 19.8 & 22.0 \\
+Study hall & n & 10.3 & 23.6 \\
+Study hall & m & 10.6 & 20.2 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\textbf{Cost.} Full frame plus three tiles is four inferences per frame, and the frame rate drops by exactly four: n from 131 to 32.8 FPS (still real time) and m from 31.5 to 7.9 FPS (enough for engagement, which needs 5-10 FPS, but not for a live camera without dropping frames). The tiles help most in dense rooms with far rows, doubling the students found in the study hall; in the lecture clip, where the far rows are already large enough, they add only two to three per frame.
+\textbf{Cost.} Full frame plus three tiles is four inferences per frame, and the frame rate drops by exactly four: n from 131 to 32.8 FPS (still real time) and m from 31.5 to 7.9 FPS (enough for engagement, which needs 5-10 FPS, but not for a live camera without dropping frames). The tiles help most in dense rooms with far rows: in the study hall they find 2.3 times as many students with n, and 1.9 times with m. In the lecture clip, where the far rows are already large enough, they add only about two per frame.
 
 \section{Duplicate boxes and the class estimate}
 
-Two post-processing fixes made the class-level number more reliable: removing same-skeleton duplicate boxes, and counting only current, consistently seen seats. On the device, duplicates fell from 0.9-1.6 per frame to about 0.01, and the inferred class size now tracks the real head count.
+Two post-processing fixes made the class-level number more reliable: removing same-skeleton duplicate boxes, and counting only current, consistently seen seats. On the device, duplicates fell from 0.9-1.6 per frame to 0.00-0.03 on every clip and setting, and the inferred class size came close to the real head count, though it still overcounts the exam hall.
 
 \textbf{Same-skeleton duplicates.} YOLO-pose often outputs a tight and a loose box for one student with the same skeleton. Their box IoU is low, so box NMS keeps both, and the analyzer then counts one student twice. After NMS, a box is dropped when it lies inside a stronger box (≥ 70\% of the smaller box) and at least three keypoints visible in both are, on average, closer than 0.1 × √(smaller box area). The same rule runs in the NumPy and the C++ post-process.
 
@@ -83,10 +84,10 @@ Two post-processing fixes made the class-level number more reliable: removing sa
 \toprule
 \textbf{Measure} & \textbf{Before} & \textbf{After} \\
 \midrule
-SCB detections removed (1,500 images) & -- & 6.5\% (6.3\% with tiles) \\
-Duplicate pairs per frame, exam clip, n, no tiles (Pi) & 1.63 & 0.01 \\
-Duplicate pairs per frame, exam clip, m, tiles (Pi) & 1.54 & 0.00 \\
-SCB coverage change & -- & −0.6 to −0.8 points \\
+SCB detections removed (all 10,138 images, n) & -- & 6.6\% (5.9\% with tiles) \\
+Duplicate pairs per frame, exam clip, n, no tiles & 1.63 & 0.01 \\
+Duplicate pairs per frame, exam clip, m, tiles & 1.54 & 0.00 \\
+SCB coverage change (n, threshold 0.3) & -- & −0.5 points \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -118,9 +119,9 @@ The range is a Wilson score interval \cite{b16} for a share p measured on n of N
 
 with z = 1.96; the range is {[}\ensuremath{\tilde{p}} − h, \ensuremath{\tilde{p}} + h{]} clipped to {[}0, 1{]}, and with a known N its ends move toward p by the factor f.~Without a known N, no correction is applied: a size inferred from the seats seen so far is itself a lower bound, so counting every known seat is not a census. The range covers students who weren't counted, not classifier mistakes.
 
-\textbf{Seat counting.} Before step 3, every box that persisted about 1.5 s became a permanent seat. On the 6-minute study-hall clip the inferred class grew to 78 for about 50 students; with the rule it is 52, and 31 on the exam clip with about 30 students.
+\textbf{Seat counting.} Before step 3, every box that persisted about 1.5 s became a permanent seat, and in the first version of the system the inferred class on the 6-minute study-hall clip grew to 78 for about 50 students. With the rule and n with tiles it is 59 there (39 with m), 26 on the lecture with 28 visible students, and 29 on the exam hall with 23 students and a teacher. The lecture is slightly undercounted; the exam hall is overcounted by about five. A teacher walking between the rows can leave seats along the way, which may explain part of that overcount, but this was not checked.
 
-\textbf{Checks.} On the Pi, over 2,060 frames per setting, the shown estimate was never outside its range and the range was never zero-width. Without \texttt{-\/-class-size} the ranges are wide, 25-37 points for 20-30 counted students, which is honest for samples that small.
+\textbf{Checks.} On the Pi, in all 208 analyses (every clip, model, tiling and decision), the shown estimate was never outside its range on any frame. Without \texttt{-\/-class-size} the rules' ranges are wide, 15-44 points, which is honest for samples that small.
 
 \section{Per-student decision: rules versus learned models}
 
@@ -128,7 +129,7 @@ The learned classifiers beat the rules on SCB by a wide margin, but on real clas
 
 \textbf{The two approaches.} The rules combine pose cues with a noisy-OR: head yaw beyond the seat's calibrated baseline, head dropped below it, face hidden while the shoulders are visible, torso turned, a hand at the face; a raised hand always counts as focused. Each seat learns its own attentive pose in its first 120 s of observation, and labels are smoothed (EMA with hysteresis). The learned models (gradient-boosted trees, logistic regression, an MLP 64-32) take the keypoints and the same cues as features and are trained on SCB students with the deployed INT8 m model's poses, with and without tiles. They run in NumPy on the Pi.
 
-\textbf{On SCB} (58,185 front-view students, 182 lessons, 5-fold cross-validation grouped by lesson):
+\textbf{On SCB} (57,972 front-view students, 180 lessons, 5-fold cross-validation grouped by lesson; lessons that share a re-saved picture are joined into one group):
 
 \begin{table}[htbp]\small
 \caption{Per-student decisions on SCB (lesson-grouped 5-fold cross-validation)}\label{tab:per-student-decisions-on-scb-lesson-grou}
@@ -136,10 +137,10 @@ The learned classifiers beat the rules on SCB by a wide margin, but on real clas
 \toprule
 \textbf{Decision} & \textbf{AUC} & \textbf{Within-image AUC} & \textbf{Balanced accuracy} \\
 \midrule
-Rules (single image, uncalibrated) & 0.55 & 0.54 & 56\% \\
-Logistic regression & 0.772 & 0.735 & 71.3\% \\
-Gradient-boosted trees & 0.855 & 0.840 & 77.0\% \\
-MLP 64-32 & 0.863 & 0.838 & 78.0\% \\
+Rules (single image, uncalibrated) & 0.55 & 0.52 & 56\% \\
+Logistic regression & 0.768 & 0.730 & 71.0\% \\
+Gradient-boosted trees & 0.860 & 0.834 & 77.8\% \\
+MLP 64-32 & 0.858 & 0.815 & 77.9\% \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -151,30 +152,34 @@ The within-image AUC is the figure to quote: most SCB images contain only one cl
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/clips_rules_vs_learned.png}
-\caption{Mean class distracted share on the lecture and exam-hall clips: rules against learned classifiers (upper\_body\_n with tiles, FP32)}\label{fig:mean-class-distracted-share-on-the-lectu}
+\caption{Mean class distracted share on the lecture and exam-hall clips: rules against learned classifiers (INT8 n and m with tiles, on the Pi)}\label{fig:mean-class-distracted-share-on-the-lectu}
 \end{figure}
 
-In the lecture clip, students sitting upright and looking at the board were labelled distracted, and students reading with their heads down focused (median head height above the shoulders 0.45 versus 0.32). The reason is a gap in SCB's labels: its focused classes are read, write and hand-raising, all head-down or hand-up, while its distracted classes include turning the head and discussing, both head-up. SCB has no ``listening'' or ``looking at the board'' label, the most common attentive state in a lecture, so a model trained on it learns that a raised head means distracted. Removing the head-height features did not fix it in a test, and the learned models also depend strongly on pose quality: with n and no tiles, trees gave 36\% on the exam clip on the Pi, against 9-13\% with m.
+In the lecture clip, students sitting upright and looking at the board were labelled distracted, and students reading with their heads down focused (median head height above the shoulders 0.45 versus 0.33, n with tiles at 2:00). The reason is a gap in SCB's labels: its focused classes are read, write and hand-raising, all head-down or hand-up, while its distracted classes include turning the head and discussing, both head-up. SCB has no ``listening'' or ``looking at the board'' label, the most common attentive state in a lecture, so a model trained on it learns that a raised head means distracted. The learned models also depend strongly on pose quality: with n and no tiles, trees gave 26\% on the exam clip, against 9-11\% with m.
 
-On the deployed INT8 models the picture is the same: in the lecture clip with m and tiles, the rules gave 0.0\% and the trees 48\%, logistic regression 74\% and the MLP 52\%.
+In the lecture clip with m and tiles, the rules gave 1.4\%, the trees 50.5\%, logistic regression 74.4\% and the MLP 53.8\%; with n, 2.1\%, 59.1\%, 82.3\% and 57.7\%.
 
-\textbf{Against human labels.} 301 student-moments from the lecture and exam clips were labelled blind (focused, distracted or can't tell), sampled so that each disagreement between the rules and the trees was represented. Only 13 of the 275 judgeable moments (4.7\%) were distracted, 4.2\% when re-weighted to the whole clips. Pooled over both clips:
+\textbf{Against human labels.} 301 student-moments from the lecture and exam clips were labelled blind (focused, distracted or can't tell), sampled so that each disagreement between the rules and the trees was represented. Only 13 of the 275 judgeable moments (4.7\%) were distracted, 4.2\% when re-weighted to the whole clips. A moment a run did not detect counts as not flagged (32 with n, 18 with m). Pooled over both clips, with tiles:
 
 \begin{table}[htbp]\small
 \caption{Per-student decisions against 301 blind human labels (lecture and exam-hall clips)}\label{tab:per-student-decisions-against-301-blind-}
-\begin{tabularx}{\textwidth}{*{4}{>{\raggedright\arraybackslash}X}}
+\begin{tabularx}{\textwidth}{*{5}{>{\raggedright\arraybackslash}X}}
 \toprule
-\textbf{Decision} & \textbf{False alarms on focused moments} & \textbf{Specificity (95\% CI)} & \textbf{Distracted moments caught} \\
+\textbf{Model, tiles on} & \textbf{Decision} & \textbf{False alarms on focused moments} & \textbf{Specificity (95\% CI)} & \textbf{Distracted moments caught} \\
 \midrule
-Rules & 27 / 262 & 90\% (85-93\%) & 5 / 13 \\
-Gradient-boosted trees & 114 / 262 & 56\% (50-62\%) & 3 / 13 \\
-MLP 64-32 & 120 / 262 & 54\% (48-60\%) & 2 / 13 \\
-Logistic regression & 199 / 262 & 24\% (19-30\%) & 5 / 13 \\
+n & Rules & 12 / 262 & 95\% (92-97\%) & 2 / 13 \\
+n & Trees & 104 / 262 & 60\% (54-66\%) & 2 / 13 \\
+n & MLP & 102 / 262 & 61\% (55-67\%) & 2 / 13 \\
+n & Logistic & 159 / 262 & 39\% (34-45\%) & 3 / 13 \\
+m & Rules & 24 / 262 & 91\% (87-94\%) & 2 / 13 \\
+m & Trees & 88 / 262 & 66\% (60-72\%) & 4 / 13 \\
+m & MLP & 84 / 262 & 68\% (62-73\%) & 4 / 13 \\
+m & Logistic & 153 / 262 & 42\% (36-48\%) & 3 / 13 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Re-weighted to the whole clips, the rules flag 1\% of lecture moments and 3\% of exam moments, close to the 4\% truth, while the learned models flag 56-94\% of lecture moments. Thirteen distracted moments are too few to estimate recall; the staged sessions measure it.
+Re-weighted to the whole clips, the rules with n flag 0.7\% of lecture moments and 8.3\% of exam moments, against 4\% labelled overall, while the learned models flag 50-81\% of lecture moments. With m the rules flag more of the exam (20.5\%). Thirteen distracted moments are too few to estimate recall; the staged sessions measure it.
 
 \textbf{Held-out class (clip\_5).} The deployment setting kept its low false-alarm rate on a class recorded after every threshold was fixed. 150 moments were labelled blind: 121 focused, 28 distracted and 1 can't tell, or 6.8\% distracted re-weighted to the whole clip. The moments were sampled from m-with-tiles detections, and a moment a run did not detect counts as not flagged. No frames of clip\_5 are shown, because its students are minors.
 
@@ -184,14 +189,14 @@ Re-weighted to the whole clips, the rules flag 1\% of lecture moments and 3\% of
 \toprule
 \textbf{Model, tiles on} & \textbf{Decision} & \textbf{False alarms on focused} & \textbf{Specificity (95\% CI)} & \textbf{Distracted caught} & \textbf{Flagged share of the clip (re-weighted)} \\
 \midrule
-n & Rules & 11 / 121 & 91\% (84-95\%) & 8 / 28 & 4.7\% \\
-n & Trees & 35 / 121 & 71\% (62-78\%) & 3 / 28 & 17.7\% \\
-n & Logistic & 44 / 121 & 64\% (55-72\%) & 11 / 28 & 33.9\% \\
-n & MLP & 42 / 121 & 65\% (56-73\%) & 9 / 28 & 28.4\% \\
-m & Rules & 43 / 121 & 64\% (56-72\%) & 21 / 28 & 10.1\% \\
-m & Trees & 51 / 121 & 58\% (49-66\%) & 12 / 28 & 11.4\% \\
-m & Logistic & 55 / 121 & 55\% (46-63\%) & 10 / 28 & 35.4\% \\
-m & MLP & 37 / 121 & 69\% (61-77\%) & 9 / 28 & 20.0\% \\
+n & Rules & 13 / 121 & 89\% (82-94\%) & 7 / 28 & 4.9\% \\
+n & Trees & 31 / 121 & 74\% (66-81\%) & 2 / 28 & 22.3\% \\
+n & Logistic & 39 / 121 & 68\% (59-75\%) & 9 / 28 & 36.7\% \\
+n & MLP & 36 / 121 & 70\% (62-78\%) & 3 / 28 & 25.2\% \\
+m & Rules & 22 / 121 & 82\% (74-88\%) & 16 / 28 & 9.5\% \\
+m & Trees & 28 / 121 & 77\% (69-83\%) & 6 / 28 & 11.1\% \\
+m & Logistic & 55 / 121 & 55\% (46-63\%) & 9 / 28 & 35.4\% \\
+m & MLP & 33 / 121 & 73\% (64-80\%) & 11 / 28 & 16.1\% \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -199,23 +204,23 @@ m & MLP & 37 / 121 & 69\% (61-77\%) & 9 / 28 & 20.0\% \\
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Rules on n:} 91\% specificity, against 90\% on the first label set. They flag 4.7\% of the clip against 6.8\% labelled, and catch 8 of 28 distracted moments.
+  \textbf{Rules on n:} 89\% specificity, against 95\% on the first label set. They flag 4.9\% of the clip against 6.8\% labelled, and catch 7 of 28 distracted moments.
 \item
-  \textbf{Learned models:} they again false-alarm far more, at 55-71\% specificity.
+  \textbf{Learned models:} they again false-alarm more, at 55-77\% specificity.
 \item
-  \textbf{Rules on m:} they catch the most (21 of 28) but flag 36\% of focused moments. Six of those 43 false alarms are on one front-row student.
+  \textbf{Rules on m:} they catch the most (16 of 28) at 82\% specificity. In the first version of the system, 6 of m's false alarms on this clip were on one front-row student; now 2 of the 22 are, both from the hand-at-face cue.
 
   \begin{itemize}
   \tightlist
   \item
-    The camera sees under that student's desk, so the box switches between upper body and full body. The models learned full-body boxes from COCO, whose person boxes cover the legs.
+    The camera sees under that student's desk, so the box can switch between upper body and full body. The models learned full-body boxes from COCO, whose person boxes cover the legs.
   \item
-    The \texttt{body\_turned} cue divides shoulder width by box height, so the tall box reads as a turned torso.
+    The \texttt{body\_turned} cue divides shoulder width by box height, so a tall box reads as a turned torso.
   \end{itemize}
 \item
-  \textbf{Without tiles:} n leaves 92 of the 149 moments undetected.
+  \textbf{Without tiles:} n leaves 57 of the 149 moments undetected.
 \item
-  \textbf{Seat counting:} with tiles, the analyzer found 13-17 seats for 10 students.
+  \textbf{Seat counting:} with tiles, the analyzer found 13-16 seats for 10 students.
 
   \begin{itemize}
   \tightlist
@@ -224,7 +229,7 @@ m & MLP & 37 / 121 & 69\% (61-77\%) & 9 / 28 & 20.0\% \\
   \item
     The full-body box adds a second seat on the same student.
   \item
-    So after 2:30 the class indicator averages 11-15\% for the rules with tiles, against 6.8\% labelled.
+    So after 2:30 the class indicator averages 11\% (n) and 14\% (m) for the rules with tiles, against 6.8\% labelled.
   \end{itemize}
 \end{itemize}
 
@@ -250,16 +255,16 @@ There is also a minute of writing, which should stay focused. Results on the INT
 \toprule
 \textbf{Decision} & \textbf{Distracted seconds caught} & \textbf{Precision} & \textbf{False alarms, attentive / writing} & \textbf{Events missed} \\
 \midrule
-Rules, original head-turn cue & 11\% & 100\% & 0\% / 0\% & 6 of 7 \\
-Gradient-boosted trees & 40\% (17\%) & 100\% & 0\% / 0\% & 2 of 7 \\
-MLP 64-32 & 40\% (11\%) & 100\% & 0\% / 0\% & 3 of 7 \\
-Logistic regression & 34\% (19\%) & 64\% & 44\% / 0\% & 3 of 7 \\
-Rules with the head-offset measure (new default) & 56\% (45\%) & 100\% & 0\% / 0\% & 2 of 7 \\
+Rules, original head-turn cue & 11\% & 100\% & 0\% / 0\% & -- \\
+Gradient-boosted trees & 50\% (35\%) & 100\% & 0\% / 0\% & 2 (3) of 7 \\
+MLP 64-32 & 49\% (37\%) & 100\% & 0\% / 0\% & 3 (4) of 7 \\
+Logistic regression & 43\% (9\%) & 69\% (52\%) & 44\% (18\%) / 0\% & 3 (5) of 7 \\
+Rules with the head-offset measure (new default) & 56\% & 100\% & 0\% / 0\% & 2 of 7 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-No decision caught the phone, whether on the table or under it. Head, wrists and elbows sit within about 0.2 shoulder-widths of where they sit when writing, so 13 upper-body keypoints cannot separate the two. The learned models' figures predate a seat-matching fix described below, so their turn-around seconds are slightly undercounted.
+The original cue's row comes from the threshold sweep below, which reports seconds but not events. Tiles change nothing on this clip. No decision caught the phone, whether on the table or under it. Head, wrists and elbows sit within about 0.2 shoulder-widths of where they sit when writing, so 13 upper-body keypoints cannot separate the two.
 
 \textbf{Why the rules missed head turns.} The original head-turn cue measures yaw as the nose's position between the two ears. In profile the far ear disappears (confidence about 0.01), and the code falls back to estimating the head centre from the remaining ear. That ear has moved with the head, so the estimate cancels most of the turn:
 
@@ -269,16 +274,16 @@ No decision caught the phone, whether on the table or under it. Head, wrists and
 \toprule
 \textbf{Moment} & \textbf{Person} & \textbf{Ear-based yaw} & \textbf{Nose offset from the shoulder centre} \\
 \midrule
-Attentive & blue / grey & −0.15 / +0.07 & −0.07 / +0.05 \\
-Talking to each other & grey & +0.03 & −0.35 \\
-Looking to the side & blue & −0.31 (0.16 from his baseline) & −0.54 \\
+Attentive & blue / grey & −0.16 / +0.07 & −0.08 / +0.05 \\
+Talking to each other & grey & −0.01 & −0.36 \\
+Looking to the side & blue & −0.27 (0.10 from his baseline) & −0.52 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The nose's offset from the shoulder centre, in shoulder-width units, shows every turn: about ±0.05 when attentive and ±0.35-0.54 when turned. It was added as a second head-turn measure, compared with each seat's own calibrated offset. The cue takes whichever of the two measures shows the larger turn. Like yaw, each seat's offset baseline is kept within 0.15 of the room's, so a student who looks away during calibration does not learn ``turned'' as attentive. The same session also showed that a student who turns around shrinks to a head-and-shoulders box whose centre jumps by about a third of its height, so seats are now anchored at the top of the box.
+The nose's offset from the shoulder centre, in shoulder-width units, shows every turn: about ±0.05 when attentive and ±0.36-0.52 when turned. It was added as a second head-turn measure, compared with each seat's own calibrated offset. The cue takes whichever of the two measures shows the larger turn. Like yaw, each seat's offset baseline is kept within 0.15 of the room's, so a student who looks away during calibration does not learn ``turned'' as attentive. The same session also showed that a student who turns around shrinks to a head-and-shoulders box whose centre jumps by about a third of its height, so seats are now anchored at the top of the box.
 
-\textbf{Validation of the fix.} The offset's thresholds were chosen with clip\_4, so its clip\_4 recall is optimistic. Its cost was therefore measured on everything else, in a sweep over 16 settings on the saved INT8 skeletons. At the chosen ramp (0.2-0.4, other thresholds unchanged):
+\textbf{Validation of the fix.} The offset's thresholds were chosen with clip\_4, so its clip\_4 recall is optimistic. Its cost was therefore measured on everything else, in a sweep over threshold settings on the saved skeletons. At the chosen ramp (0.2-0.4, other thresholds unchanged):
 
 \begin{table}[htbp]\small
 \caption{Effect of the head-offset measure across all evidence}\label{tab:effect-of-the-head-offset-measure-across}
@@ -286,17 +291,17 @@ The nose's offset from the shoulder centre, in shoulder-width units, shows every
 \toprule
 \textbf{} & \textbf{n, before → after} & \textbf{m, before → after} \\
 \midrule
-clip\_4 distracted seconds caught & 11\% → 45\% & 11\% → 56\% \\
-Human labels: false alarms on focused moments & 4\% → 5\% & 6\% → 7\% \\
-Lecture class \% (truth near 0) & 4.7\% → 4.7\% & 0.0\% → 0.0\% \\
-Exam-hall class \% & 3.6\% → 8.4\% & 11.7\% → 14.6\% \\
+clip\_4 distracted seconds caught & 11\% → 56\% & 11\% → 56\% \\
+Human labels: false alarms on focused moments & 3\% → 5\% & 6\% → 10\% \\
+Lecture class \% (truth near 0) & 2.1\% → 2.1\% & 1.4\% → 1.4\% \\
+Exam-hall class \% & 7.1\% → 14.5\% & 11.2\% → 21.6\% \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The only cost is 3-5 points on the exam clip. Some of that may be real, since the human labels found exam students looking around. Loosening the yaw thresholds alone reached only 25\% on clip\_4. The measure is now the default. The held-out test is clip\_5 above: a 10-student class recorded after this choice and every other threshold were fixed.
+The cost is 7-10 points on the exam clip and a few more false alarms on the human labels (5 more for n, 10 for m). Some of the exam increase may be real, since the human labels found exam students looking around. Loosening the yaw thresholds alone reached at most 25\% on clip\_4, or 32\% with a lower switching threshold, never the offset's 56\%. Of the offset ramps tried, 0.2-0.4 had the fewest label false alarms. The measure is now the default. The held-out test is clip\_5 above: a 10-student class recorded after this choice and every other threshold were fixed.
 
-The measure helps the rules only. The learned classifiers decide from the features they were trained on, which do not include it. It also cannot be learned from SCB: it needs a per-student baseline, and on SCB's single images with small faces it does not separate turned heads from reading (AUC 0.53).
+The measure helps the rules only. The learned classifiers decide from the features they were trained on, which do not include it. It also cannot be learned from SCB: it needs a per-student baseline, and on SCB's single images with small faces it barely separates turned heads from reading (AUC 0.56).
 
 \begin{figure}[htbp]
 \centering
@@ -306,11 +311,76 @@ The measure helps the rules only. The learned classifiers decide from the featur
 
 In profile the far ear's confidence falls to about 0.01, so the ear yaw reads near zero while the nose sits well to one side of the shoulders. The head-offset measure picks up these turns.
 
-The benchmark accuracy of a classifier trained on a public action dataset therefore does not transfer to measuring attention; per-student calibration does better. Making a learned model usable would need training labels that include attentive, head-up students from the target classrooms, which the pending human labels and staged session begin to provide.
+The benchmark accuracy of a classifier trained on a public action dataset therefore does not transfer to measuring attention; per-student calibration does better. Making a learned model usable would need training labels that include attentive, head-up students. The next section tests whether a public dataset with such a label is enough.
+
+\section{A second dataset: ClaBehavior}
+
+ClaBehavior \cite{b28} has the label SCB lacks: \emph{lookup}, a student with the head up looking at the board. It has 400 frames from 13 fixed cameras in Chinese K-12 classrooms, with 4,480 lookup boxes, 1,021 read, 1,011 turn\_head, 684 raise\_hand, 579 write, 242 discuss and 66 stand. Its images are treated like SCB's and like minors' data: they stay on the machines, and only poses, labels and numbers are used.
+
+\textbf{Mappings.} Neither dataset labels attention, so two mappings from action to focused or distracted were fixed before training:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Strict:} read, write, raise hand and lookup are focused; turning the head is distracted. Bowed head (it looks like writing), discussing (it may be group work) and standing (it may be answering) are left out.
+\item
+  \textbf{Lenient:} as strict, but those three count as distracted.
+\end{itemize}
+
+The mapping used above for SCB alone counts bowed head and discussing as distracted. On SCB alone the strict mapping is easier: trees reach AUC 0.890 (within-image 0.861, balanced accuracy 80.3\%) and the MLP 0.903 (0.872, 82.3\%).
+
+\textbf{Across datasets.} A model trained on one dataset and tested on the other shows how far a benchmark score carries:
+
+\begin{table}[htbp]\footnotesize
+\caption{Classifiers trained on one dataset and tested on the other (logistic / trees / MLP)}\label{tab:cross-dataset}
+\begin{tabularx}{\textwidth}{*{5}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Mapping} & \textbf{Train → test} & \textbf{AUC} & \textbf{Within-image AUC} & \textbf{Predicted distracted share (true)} \\
+\midrule
+Strict & ClaBehavior → SCB & 0.67 / 0.70 / 0.72 & 0.67 / 0.71 / 0.72 & 41 / 28 / 35\% (20\%) \\
+Strict & SCB → ClaBehavior & 0.66 / 0.79 / 0.79 & 0.65 / 0.79 / 0.79 & 47 / 34 / 18\% (13\%) \\
+Lenient & ClaBehavior → SCB & 0.69 / 0.70 / 0.72 & 0.67 / 0.70 / 0.70 & 49 / 34 / 43\% (25\%) \\
+Lenient & SCB → ClaBehavior & 0.69 / 0.79 / 0.81 & 0.68 / 0.79 / 0.81 & 43 / 30 / 31\% (14\%) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Trees and MLP, which reach AUC 0.86-0.90 within SCB, fall to 0.70-0.81 on another classroom dataset of the same kind, and nearly all over-predict the distracted share. Cross-validation within ClaBehavior, grouped by camera, is being re-run with corrected camera groups and is not quoted here.
+
+\textbf{On real classes.} Trained on both datasets, with the lookup class, the classifiers false-alarm somewhat less, but not enough to change the conclusion (m with tiles):
+
+\begin{table}[htbp]\small
+\caption{Classifiers trained on SCB alone and on SCB + ClaBehavior, on the real classes (m with tiles)}\label{tab:clabehavior-real-classes}
+\begin{tabularx}{\textwidth}{*{4}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Decision} & \textbf{Training labels} & \textbf{False alarms on 262 focused moments (caught of 13)} & \textbf{Lecture class \%} \\
+\midrule
+Rules & -- & 24 (2) & 1.4\% \\
+Trees & SCB & 88 (4) & 50.5\% \\
+Trees & SCB + ClaBehavior, strict & 78 (5) & 43.8\% \\
+Trees & SCB + ClaBehavior, lenient & 84 (4) & 45.0\% \\
+MLP & SCB & 84 (4) & 53.8\% \\
+MLP & SCB + ClaBehavior, strict & 80 (3) & 51.2\% \\
+MLP & SCB + ClaBehavior, lenient & 72 (3) & 48.2\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Lecture:} every learned model still flags 44-80\% of a lecture where the labels find about 4\% distracted; logistic regression stays the worst (74-80\%).
+\item
+  \textbf{Strict against lenient:} no consistent winner. Strict is better for the trees, lenient for the MLP; both stay far above the rules.
+\item
+  \textbf{Held-out class (clip\_5):} the strict MLP is the best classifier there, with 17 false alarms on 121 focused moments (86\% specificity) and 9 of 28 caught, against 22 and 16 for the rules on m.
+\end{itemize}
+
+So the missing ``listening'' label explains only part of the gap. Single-image action labels are a different task from attention over time, and even two classroom datasets of the same kind are far apart. The calibrated rules stay the default.
 
 \section{Edge performance}
 
-In the deployment setting, n with tiles in real time, the system ran for 15 minutes at 30 FPS with 45 ms latency, 4.3 W measured on the Pi board plus 2.5 W for the Hailo-8 (vendor figure), a peak SoC temperature of 60 °C and no throttling. The pipeline is bound by the Hailo-8, not the CPU. All figures below were measured on the Pi 5 with official Raspberry Pi active cooling on its fan header, on 10 November 2026.
+In the deployment setting, n with tiles in real time, the system ran for 15 minutes at 30 FPS with 47 ms latency, 4.1 W measured on the Pi board plus 2.5 W for the Hailo-8 (vendor figure), a peak SoC temperature of 60 °C and no throttling. In this setting the pipeline is bound by the Hailo-8, not the CPU. All figures below were measured on the Pi 5 with official Raspberry Pi active cooling on its fan header, on 22 November 2026.
 
 \textbf{Hailo-8 alone} (\texttt{hailortcli\ benchmark}, INT8 HEFs):
 
@@ -320,8 +390,8 @@ In the deployment setting, n with tiles in real time, the system ran for 15 minu
 \toprule
 \textbf{Model} & \textbf{FPS} & \textbf{Hardware latency (ms)} \\
 \midrule
-n & 131.5 & 5.7 \\
-s & 69.5 & 11.9 \\
+n & 131.2 & 5.7 \\
+s & 69.4 & 11.9 \\
 m & 31.5 & 26.7 \\
 \bottomrule
 \end{tabularx}
@@ -335,19 +405,19 @@ m & 31.5 & 26.7 \\
 \toprule
 \textbf{Model} & \textbf{Tiles} & \textbf{FPS} & \textbf{CPU, whole Pi} & \textbf{Memory of hcpose (MB)} & \textbf{Max SoC temp (°C)} & \textbf{Pi board power (W)} \\
 \midrule
-n & off & 119.1 & 79\% & 332 & 61.1 & 5.42 \\
-n & on & 32.8 & 46\% & 286 & 60.6 & 4.84 \\
-s & off & 69.3 & 47\% & 329 & 60.1 & 4.77 \\
-s & on & 17.4 & 26\% & 294 & 59.5 & 3.87 \\
-m & off & 31.5 & 23\% & 339 & 58.4 & 3.19 \\
-m & on & 7.9 & 14\% & 307 & 57.3 & 2.82 \\
+n & off & 108.0 & 73\% & 342 & 59.0 & 5.06 \\
+n & on & 32.8 & 47\% & 300 & 60.1 & 4.75 \\
+s & off & 69.3 & 47\% & 343 & 60.1 & 4.53 \\
+s & on & 17.4 & 26\% & 303 & 58.4 & 3.68 \\
+m & off & 31.5 & 23\% & 346 & 57.9 & 3.13 \\
+m & on & 7.9 & 14\% & 319 & 55.6 & 2.60 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-End-to-end FPS matches the Hailo-only figures, and four passes per frame divide them by exactly four. The CPU's main cost is the engagement analysis, about 2.8 cores at 119 FPS. Board power is lower for the slower settings because the Pi waits on the accelerator.
+For s and m, and for every setting with tiles, end-to-end FPS matches the Hailo-only figures, and four passes per frame divide them by exactly four. n without tiles is the exception: at 108 FPS the CPU is the limit, mainly the engagement analysis at about 3.0 cores. The new n HEF finds more students per frame than the first version's (20-21 against 18 on the lecture), which costs about 5 FPS (4.5\%): on an idle Pi, two runs each gave 111 FPS for the new HEF and 116 for the old one. Board power is lower for the slower settings because the Pi waits on the accelerator.
 
-\textbf{Latency.} Frames were released at the clip's 25 FPS, as a camera releases them, and timed from that point to the sink with GstShark's interlatency tracer \cite{b20}: median 20 ms for n (95th percentile 23), 45 ms for n with tiles (53), and 40 ms for m (47). m with tiles cannot keep up with a 25 FPS camera (7.9 FPS): frames queue and latency settles at 2.5 s, so a live m-with-tiles deployment needs a leaky queue or a lower camera rate.
+\textbf{Latency.} Frames were released at the clip's 25 FPS, as a camera releases them, and timed from that point to the sink with GstShark's interlatency tracer \cite{b20}: median 21 ms for n (95th percentile 24), 47 ms for n with tiles (56), and 42 ms for m (47). m with tiles cannot keep up with a 25 FPS camera (7.9 FPS): frames queue and latency settles at 2.5 s, so a live m-with-tiles deployment needs a leaky queue or a lower camera rate.
 
 \textbf{Thermal behaviour} over two 15-minute runs:
 
@@ -357,13 +427,13 @@ End-to-end FPS matches the Hailo-only figures, and four passes per frame divide 
 \toprule
 \textbf{Run} & \textbf{FPS} & \textbf{SoC temperature after 5 / 10 / 15 min (°C)} & \textbf{Max (°C)} & \textbf{Throttling} & \textbf{Pi board power (W)} \\
 \midrule
-n with tiles, real time (deployment) & 30.0 & 56.8 / 57.9 / 56.8 & 60.1 & none & 4.26 \\
-m with tiles, as fast as possible & 7.9 & 53.5 / 55.6 / 54.6 & 56.2 & none & 2.70 \\
+n with tiles, real time (deployment) & 30.0 & 55.6 / 56.8 / 59.0 & 60.1 & none & 4.09 \\
+m with tiles, as fast as possible & 7.9 & 51.8 / 51.8 / 52.9 & 53.5 & none & 2.57 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Idle, the Pi drew 2.33 W at 50 °C.
+Idle, the Pi drew 2.08 W at 48 °C.
 
 \textbf{Power.} Board power is the sum of voltage × current over the Pi 5's PMIC rails (\texttt{vcgencmd\ pmic\_read\_adc}). It excludes the AI HAT and USB devices, so the Hailo-8 is added from vendor figures:
 
@@ -382,7 +452,7 @@ AI HAT+, operating ambient & 0-50 °C & \href{https://cdn.sparkfun.com/assets/c/
 \end{tabularx}
 \end{table}
 
-The deployment setting therefore draws about 4.3 W (measured) + 2.5 W (typical, vendor) ≈ 6.8 W, well within one 27 W USB-C supply. The measured board figure agrees with the vendor's 4 W typical. 26 TOPS at 2.5 W is about 10 TOPS/W (own calculation from Hailo's figures).
+The deployment setting therefore draws about 4.1 W (measured) + 2.5 W (typical, vendor) ≈ 6.6 W, well within one 27 W USB-C supply. The measured board figure agrees with the vendor's 4 W typical. 26 TOPS at 2.5 W is about 10 TOPS/W (own calculation from Hailo's figures).
 
 \section{Privacy by design}
 
@@ -415,7 +485,7 @@ What a saved record holds, when \texttt{-\/-save-json} is used: one line per fra
 \begin{codeblock}
 {"type": "frame", "t": 229.97, "w": 1280, "h": 720,
  "class": {"visible": 2, "counted": 2, "focused": 1, "distracted": 1,
-           "class_pct_distracted": 33.3, "class_ci": [6.1, 79.2], "class_size": 3},
+           "class_pct_distracted": 50.0, "class_ci": [9.5, 90.5], "class_size": 2},
  "persons": [{"score": 0.75, "box": [663.9, 296.1, 863.6, 709.2],
               "keypoints": [[771.9, 356.1, 0.98], [776.5, 348.7, 0.91], [761.6, 349.6, 0.95], "…"],
               "engagement": {"seat": 2, "state": "focused", "score": 0.0, "reason": null, "calibrated": true}}]}
@@ -463,23 +533,23 @@ The largest gap is ground truth: no result so far measures per-student accuracy 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Proxy labels.} SCB labels actions (reading, turning, discussing), not attention, and comes mostly from Chinese K-12 classrooms. About 2,000 SCB students carried both a focused and a distracted label across duplicate images, mostly ``bowed head'' versus ``reading or writing'', so even the annotators could not separate these.
+  \textbf{Proxy labels.} SCB labels actions (reading, turning, discussing), not attention, and comes mostly from Chinese K-12 classrooms. 2,891 SCB students carried both a focused and a distracted label across duplicate images (in the first version's count, mostly ``bowed head'' versus ``reading or writing''), so even the annotators could not always separate these. ClaBehavior adds the missing head-up class but is small: 400 frames from 13 cameras.
 \item
   \textbf{Clip evidence is contextual.} The three clips have no labels; ``the true share is close to 0'' rests on what the class is doing. They show false alarms, not missed distraction. The human labels and the staged session address this.
 \item
   \textbf{Few rooms, third-party footage.} Three third-party clips from three rooms, one of them with a camera outside the intended mounting, plus one small class recorded for this work. Results may not carry over to other layouts, lighting or age groups.
 \item
-  \textbf{Camera height.} With a camera at desk height, a head bowed over writing hides the face and reads as ``turned away'': the rules gave 44\% distracted in a study hall where everyone wrote. The design assumes a camera mounted high at the front; a lower \texttt{face\_hidden} weight (0.3) halves the error for low cameras.
+  \textbf{Camera height.} With a camera at desk height, a head bowed over writing hides the face and reads as ``turned away'': the rules gave 55\% distracted in a study hall where everyone wrote (n with tiles). The design assumes a camera mounted high at the front; a lower \texttt{face\_hidden} weight (0.3) cuts that to 30\% for low cameras.
 \item
-  \textbf{Calibration time.} Each seat needs 120 s of usable observation. In a 6-minute dense clip only 20 of 52 seats finished calibrating, so short sessions run mostly on room-level baselines.
+  \textbf{Calibration time.} Each seat needs 120 s of usable observation. In a 6-minute dense clip only 16 of 59 seats finished calibrating, so short sessions run mostly on room-level baselines.
 \item
-  \textbf{Small classes, wide ranges.} With 20-30 counted students the 95\% range spans 25-37 points unless the head count is given. This is a property of the sample size, not a defect, but it limits how finely the indicator can be read.
+  \textbf{Small classes, wide ranges.} Without the head count the rules' 95\% range spans 15-44 points on the clips. This is a property of the sample size, not a defect, but it limits how finely the indicator can be read.
 \item
   \textbf{Hand-set rule weights.} The rule weights were set by design, not fitted, and were deliberately not tuned on the clips used to evaluate them; one documented change, the low-camera weight, is an option rather than the default.
 \item
-  \textbf{Mixed precision of the evidence.} The two charts and the human-label scores use the n model in FP32 on a PC; the INT8 runs on the Pi reproduce the class-level numbers within a few points. m with tiles also cannot keep up with a live 25-30 FPS camera without dropping frames.
+  \textbf{One compile per model.} INT8 compiles of the same weights differ by about ±0.01 AP; every result comes from one chosen compile per size. m with tiles also cannot keep up with a live 25-30 FPS camera without dropping frames.
 \item
   \textbf{Staged session.} Adult volunteers acting scripted behaviour in a small room are easier to see and more exaggerated than real distraction, so its recall is an upper bound.
 \item
-  \textbf{Close cameras and full-body boxes.} In a small room filmed from close range, seats multiply (13-17 for 10 students in clip\_5), and a full-body box on a student whose legs are visible reads as a turned torso. Both come from geometry tied to the box: the seat anchor at its top and the box height in \texttt{body\_turned}. Keypoint-based anchors and scales would avoid them; they were not changed after clip\_5, to keep it a held-out test.
+  \textbf{Close cameras and full-body boxes.} In a small room filmed from close range, seats multiply (13-16 for 10 students in clip\_5), and a full-body box on a student whose legs are visible reads as a turned torso. Both come from geometry tied to the box: the seat anchor at its top and the box height in \texttt{body\_turned}. Keypoint-based anchors and scales would avoid them; they were not changed after clip\_5, to keep it a held-out test.
 \end{itemize}
