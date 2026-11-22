@@ -5,7 +5,7 @@
 
 Hệ thống được đánh giá ở bốn mức: độ bao phủ phát hiện, quyết định cho từng học sinh, ước lượng cấp lớp và hiệu năng trên thiết bị. Luận văn dùng nhiều nguồn bằng chứng, vì không có bộ dữ liệu đơn lẻ nào có nhãn sự chú ý theo từng học sinh cho các buổi giảng thực.
 
-\textbf{Hệ thống được kiểm tra.} hcpose trên Raspberry Pi 5 với Hailo-8 AI HAT (26 TOPS), Raspberry Pi OS trixie, HailoRT 4.23 / TAPPAS 5.1. Các mô hình tư thế là mô hình YOLOv8-pose phần thân trên (13 điểm khóa) của chính dự án ở ba kích thước n, s và m, biên dịch thành HEF INT8. Trọng số mô hình được giữ cố định trong suốt quá trình: mọi cải tiến nằm ở tiền xử lý, hậu xử lý và logic đánh giá mức độ tập trung.
+\textbf{Hệ thống được kiểm tra.} hcpose trên Raspberry Pi 5 với Hailo-8 AI HAT (26 TOPS), Raspberry Pi OS trixie, HailoRT 4.23 / TAPPAS 5.1. Các mô hình tư thế là mô hình YOLOv8-pose phần thân trên (13 điểm khóa) của chính dự án ở ba kích thước n, s và m, biên dịch thành HEF INT8 (các bản biên dịch có seed ở chương 3). Trọng số mô hình được giữ cố định trong suốt quá trình: mọi cải tiến nằm ở tiền xử lý, hậu xử lý và logic đánh giá mức độ tập trung.
 
 \textbf{Bằng chứng}
 
@@ -24,9 +24,10 @@ Hệ thống được đánh giá ở bốn mức: độ bao phủ phát hiện,
 \bottomrule
 \endlastfoot
 SCB-Dataset (ba tập con) \cite{b3} & 8.116 ảnh lớp học duy nhất sau khi gộp ảnh trùng, phổ thông Trung Quốc & độ bao phủ phát hiện, độ chính xác bộ phân loại theo từng học sinh (kiểm định chéo 5 phần nhóm theo tiết học) & hộp hành động: đọc, viết, giơ tay (tập trung); TurnHead, BowHead, thảo luận (mất tập trung) \\
-Video phòng thi \cite{b17} & 72 s, camera đặt cao ở góc, khoảng 30 học viên người lớn đang viết & báo động nhầm, ước lượng cấp lớp & không có; bối cảnh cho thấy tỷ lệ gần 0 \\
-Video phòng tự học \cite{b18} & 6 phút, camera ngang mặt bàn, khoảng 50 học sinh & phòng đông, đếm chỗ ngồi, lỗi khi camera thấp & không có; bối cảnh cho thấy tỷ lệ thấp \\
-Video buổi giảng \cite{b19} & 3 phút 18 s, camera đặt cao phía trước, khoảng 35 học sinh, phần lớn chăm chú & khả năng chuyển giao của các bộ phân loại sang buổi giảng thực & không có; bối cảnh cho thấy tỷ lệ gần 0 \\
+ClaBehavior \cite{b28} & 400 khung hình từ 13 camera cố định trong lớp học, phổ thông Trung Quốc & liệu một lớp ``ngẩng đầu chú ý'' có khắc phục được các bộ phân loại không; khả năng chuyển giao giữa các bộ dữ liệu & hộp hành động, gồm cả lookup (ngẩng đầu, nhìn lên bảng) \\
+Video phòng thi \cite{b17} & 72 s, camera đặt cao ở góc, 23 học viên người lớn nhìn thấy được đang viết và một giám thị & báo động nhầm, ước lượng cấp lớp & không có; bối cảnh cho thấy tỷ lệ gần 0 \\
+Video phòng tự học \cite{b18} & 6 phút, camera ngang mặt bàn, khoảng 50 học sinh (quá đông để đếm chính xác) & phòng đông, đếm chỗ ngồi, lỗi khi camera thấp & không có; bối cảnh cho thấy tỷ lệ thấp \\
+Video buổi giảng \cite{b19} & 3 phút 18 s, camera đặt cao phía trước, 28 học sinh nhìn thấy được, phần lớn chăm chú & khả năng chuyển giao của các bộ phân loại sang buổi giảng thực & không có; bối cảnh cho thấy tỷ lệ gần 0 \\
 Video lớp nhỏ (clip\_5) & 14 phút, iPhone gắn cao phía trước, 10 học sinh phổ thông ở ba hàng; một kịch bản sơ bộ mà học sinh không làm theo đều đặn & báo động nhầm và phát hiện đúng trên một lớp chưa từng dùng để tinh chỉnh; đếm chỗ ngồi ở khoảng cách gần & 150 thời điểm học sinh được gán nhãn mù \\
 Buổi dàn dựng hai người (clip\_4) & 4 phút 45 s, điện thoại gắn cao phía trước, hai người lớn diễn 7 sự kiện theo kịch bản & recall, precision, độ trễ, báo động nhầm khi viết & chính xác theo từng giây, từ kịch bản \\
 Nhãn do người gán & 301 thời điểm học sinh từ hai video, gán nhãn mù & precision và recall trên lớp học thực & tập trung / mất tập trung / không rõ \\
@@ -35,21 +36,21 @@ Nhãn do người gán & 301 thời điểm học sinh từ hai video, gán nhã
 
 \textbf{Độ đo.} Độ bao phủ = tỷ lệ học sinh có nhãn được ghép với một phát hiện (độ phủ tâm ≥ 0.5 hoặc IoU ≥ 0.3). Theo từng học sinh: AUC, AUC trong ảnh (chỉ các ảnh có cả hai lớp, loại bỏ lối tắt ``nhận ra bức ảnh''), balanced accuracy, precision và recall của lớp \emph{mất tập trung}. Cấp lớp: tỷ lệ mất tập trung trung bình của lớp, độ rộng khoảng 95\% của nó, và sĩ số suy ra. Thiết bị: FPS, độ trễ, CPU, bộ nhớ, nhiệt độ, giảm xung, công suất.
 
-Số liệu trên SCB lấy từ HEF INT8 của m khi triển khai, trừ khi có ghi chú khác. Số liệu trên các video lấy từ các HEF INT8 trên Pi; hai biểu đồ và điểm số theo nhãn người gán dùng cùng mô hình n ở FP32 trên PC, và các lần chạy INT8 tái hiện kết quả này với sai khác vài điểm.
+Mọi số liệu trong chương này lấy từ các HEF INT8 chạy trên Hailo-8 của Pi. Tư thế trên các bộ dữ liệu lấy từ m; các video, nhãn người gán và buổi dàn dựng được chấm với n, mô hình khi triển khai, và với m.
 
 \section{Độ bao phủ phát hiện và chia ô ảnh}
 
-Không có chia ô ảnh, mô hình bỏ sót phần lớn học sinh ở các hàng xa; chạy lại trên ba ô phóng to phủ 60\% phía trên của khung hình nâng độ bao phủ từ 48.6\% lên 75.5\% số học sinh có nhãn ở ngưỡng 0.3, và từ 17.0\% lên 74.4\% ở một phần ba xa nhất.
+Không có chia ô ảnh, mô hình bỏ sót phần lớn học sinh ở các hàng xa; chạy lại trên ba ô phóng to phủ 60\% phía trên của khung hình nâng độ bao phủ với n từ 54.6\% lên 72.0\% số học sinh có nhãn ở ngưỡng 0.3, và từ 24.6\% lên 65.5\% ở một phần ba xa nhất. Với m, độ bao phủ tăng từ 55.4\% lên 75.1\%, và từ 25.0\% lên 69.4\% ở một phần ba xa nhất.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{figures/scb_coverage.png}
-\caption{Học sinh nhìn chính diện có nhãn trong SCB được phát hiện, theo kích thước trong ảnh, khi không có và có chia ô (upper\_body\_n, ngưỡng 0.3)}\label{fig:labelled-scb-front-view-students-detecte}
+\caption{Học sinh nhìn chính diện có nhãn trong SCB được phát hiện, theo kích thước trong ảnh, khi không có và có chia ô (upper\_body\_n INT8, ngưỡng 0.3)}\label{fig:labelled-scb-front-view-students-detecte}
 \end{figure}
 
 \textbf{Phương pháp.} Ngoài khung hình đầy đủ, mô hình chạy trên một hàng các ô gần vuông, chồng lấn nhau, phủ 60\% phía trên của ảnh (ba ô ở độ phân giải 1280×720). Phát hiện trong các ô được ánh xạ về khung hình; các phát hiện bị cắt bởi cạnh trong của ô bị loại, và các phát hiện trùng giữa các lượt được gộp theo IoU, hoặc theo quan hệ bao chứa kèm điểm khóa khớp nhau. Cả hai engine cài đặt cùng các luật này; kết quả gộp bằng C++ trong pipeline GStreamer được kiểm tra là trùng với kết quả gộp bằng Python trên 25 cảnh ngẫu nhiên. Trọng số bộ phát hiện không thay đổi.
 
-\textbf{Trên mô hình m INT8 khi triển khai}, số học sinh nhìn chính diện trong SCB được ghép tăng từ 23.186 khi không chia ô lên 36.226 khi có chia ô (+56\%); 13.269 học sinh chỉ được tìm thấy khi có chia ô, 229 chỉ được tìm thấy khi không chia ô.
+\textbf{Trên mô hình m INT8 khi triển khai}, số học sinh nhìn chính diện trong SCB được ghép tăng từ 23.073 khi không chia ô lên 36.294 khi có chia ô (+57\%); 13.446 học sinh chỉ được tìm thấy khi có chia ô, 225 chỉ được tìm thấy khi không chia ô.
 
 \textbf{Trên các video lớp học}, số học sinh mỗi khung hình:
 
@@ -59,21 +60,21 @@ Không có chia ô ảnh, mô hình bỏ sót phần lớn học sinh ở các h
 \toprule
 \textbf{Video} & \textbf{Mô hình (INT8, Pi)} & \textbf{Không chia ô} & \textbf{Chia ô} \\
 \midrule
-Phòng thi & n & 12.6 & 18.6 \\
-Phòng thi & m & 14.2 & 22.1 \\
-Buổi giảng & n & 15.6 & 17.9 \\
-Buổi giảng & m & 20.1 & 22.0 \\
-Phòng tự học & n & 10.3 & 23.5 \\
-Phòng tự học & m & 10.6 & 21.0 \\
+Phòng thi & n & 13.5 & 18.8 \\
+Phòng thi & m & 14.4 & 22.2 \\
+Buổi giảng & n & 16.4 & 18.7 \\
+Buổi giảng & m & 19.8 & 22.0 \\
+Phòng tự học & n & 10.3 & 23.6 \\
+Phòng tự học & m & 10.6 & 20.2 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\textbf{Chi phí.} Khung hình đầy đủ cộng ba ô là bốn lần suy luận mỗi khung hình, và tốc độ khung hình giảm đúng bốn lần: n từ 131 xuống 32.8 FPS (vẫn thời gian thực) và m từ 31.5 xuống 7.9 FPS (đủ cho đánh giá mức độ tập trung, vốn cần 5-10 FPS, nhưng không đủ cho camera trực tiếp nếu không bỏ khung hình). Chia ô hiệu quả nhất trong các phòng đông có hàng xa, tăng gấp đôi số học sinh tìm được trong phòng tự học; trong video buổi giảng, nơi các hàng xa đã đủ lớn, chia ô chỉ thêm hai đến ba học sinh mỗi khung hình.
+\textbf{Chi phí.} Khung hình đầy đủ cộng ba ô là bốn lần suy luận mỗi khung hình, và tốc độ khung hình giảm đúng bốn lần: n từ 131 xuống 32.8 FPS (vẫn thời gian thực) và m từ 31.5 xuống 7.9 FPS (đủ cho đánh giá mức độ tập trung, vốn cần 5-10 FPS, nhưng không đủ cho camera trực tiếp nếu không bỏ khung hình). Chia ô hiệu quả nhất trong các phòng đông có hàng xa: trong phòng tự học, số học sinh tìm được gấp 2.3 lần với n và 1.9 lần với m. Trong video buổi giảng, nơi các hàng xa đã đủ lớn, chia ô chỉ thêm khoảng hai học sinh mỗi khung hình.
 
 \section{Hộp trùng lặp và ước lượng cấp lớp}
 
-Hai cải tiến hậu xử lý làm con số cấp lớp đáng tin cậy hơn: loại bỏ các hộp trùng có cùng bộ khung xương, và chỉ đếm các chỗ ngồi đang hiện diện và được thấy ổn định. Trên thiết bị, số hộp trùng giảm từ 0.9-1.6 mỗi khung hình xuống khoảng 0.01, và sĩ số suy ra giờ bám sát số người thực tế.
+Hai cải tiến hậu xử lý làm con số cấp lớp đáng tin cậy hơn: loại bỏ các hộp trùng có cùng bộ khung xương, và chỉ đếm các chỗ ngồi đang hiện diện và được thấy ổn định. Trên thiết bị, số hộp trùng giảm từ 0.9-1.6 mỗi khung hình xuống 0.00-0.03 trên mọi video và thiết lập, và sĩ số suy ra đã gần với số người thực tế, dù vẫn đếm thừa ở phòng thi.
 
 \textbf{Trùng lặp cùng bộ khung xương.} YOLO-pose thường xuất một hộp chặt và một hộp lỏng cho cùng một học sinh với cùng bộ khung xương. IoU giữa hai hộp thấp, nên NMS theo hộp giữ cả hai, và bộ phân tích đếm một học sinh thành hai. Sau NMS, một hộp bị loại khi nằm trong một hộp có điểm cao hơn (≥ 70\% diện tích hộp nhỏ hơn) và có ít nhất ba điểm khóa thấy được ở cả hai hộp, với khoảng cách trung bình nhỏ hơn 0.1 × √(diện tích hộp nhỏ hơn). Cùng luật này chạy trong hậu xử lý NumPy và C++.
 
@@ -83,10 +84,10 @@ Hai cải tiến hậu xử lý làm con số cấp lớp đáng tin cậy hơn:
 \toprule
 \textbf{Chỉ số} & \textbf{Trước} & \textbf{Sau} \\
 \midrule
-Phát hiện bị loại trên SCB (1.500 ảnh) & -- & 6.5\% (6.3\% khi chia ô) \\
-Số cặp trùng mỗi khung hình, video phòng thi, n, không chia ô (Pi) & 1.63 & 0.01 \\
-Số cặp trùng mỗi khung hình, video phòng thi, m, chia ô (Pi) & 1.54 & 0.00 \\
-Thay đổi độ bao phủ trên SCB & -- & −0.6 đến −0.8 điểm \\
+Phát hiện bị loại trên SCB (toàn bộ 10.138 ảnh, n) & -- & 6.6\% (5.9\% khi chia ô) \\
+Số cặp trùng mỗi khung hình, video phòng thi, n, không chia ô & 1.63 & 0.01 \\
+Số cặp trùng mỗi khung hình, video phòng thi, m, chia ô & 1.54 & 0.00 \\
+Thay đổi độ bao phủ trên SCB (n, ngưỡng 0.3) & -- & −0.5 điểm \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -118,9 +119,9 @@ Khoảng này là khoảng điểm Wilson \cite{b16} cho một tỷ lệ p đo t
 
 với z = 1.96; khoảng là {[}\ensuremath{\tilde{p}} − h, \ensuremath{\tilde{p}} + h{]} được cắt trong {[}0, 1{]}, và khi biết N, hai đầu khoảng dịch về phía p theo hệ số f.~Khi không biết N, không áp dụng hiệu chỉnh: một sĩ số suy ra từ các chỗ ngồi đã thấy bản thân nó chỉ là cận dưới, nên việc đếm mọi chỗ ngồi đã biết không phải là một cuộc tổng điều tra. Khoảng này bao phủ những học sinh không được đếm, chứ không bao phủ lỗi của bộ phân loại.
 
-\textbf{Đếm chỗ ngồi.} Trước khi có bước 3, mọi hộp tồn tại khoảng 1.5 s đều trở thành một chỗ ngồi vĩnh viễn. Trên video phòng tự học dài 6 phút, sĩ số suy ra tăng lên 78 cho khoảng 50 học sinh; với luật mới con số là 52, và 31 trên video phòng thi có khoảng 30 học sinh.
+\textbf{Đếm chỗ ngồi.} Trước khi có bước 3, mọi hộp tồn tại khoảng 1.5 s đều trở thành một chỗ ngồi vĩnh viễn, và trong phiên bản đầu của hệ thống, sĩ số suy ra trên video phòng tự học dài 6 phút tăng lên 78 cho khoảng 50 học sinh. Với luật mới và n có chia ô, con số là 59 ở đó (39 với m), 26 trên buổi giảng có 28 học sinh nhìn thấy được, và 29 trên phòng thi có 23 học viên và một giám thị. Buổi giảng bị đếm thiếu một chút; phòng thi bị đếm thừa khoảng năm. Một giám thị đi lại giữa các hàng có thể để lại các chỗ ngồi dọc đường đi, điều này có thể giải thích một phần số đếm thừa, nhưng chưa được kiểm tra.
 
-\textbf{Kiểm tra.} Trên Pi, qua 2.060 khung hình cho mỗi thiết lập, giá trị ước lượng hiển thị không bao giờ nằm ngoài khoảng của nó và khoảng không bao giờ có độ rộng bằng 0. Khi không có \texttt{-\/-class-size} các khoảng khá rộng, 25-37 điểm cho 20-30 học sinh được đếm, phản ánh trung thực cỡ mẫu nhỏ như vậy.
+\textbf{Kiểm tra.} Trên Pi, trong cả 208 lần phân tích (mọi video, mô hình, chế độ chia ô và phương pháp), giá trị ước lượng hiển thị không bao giờ nằm ngoài khoảng của nó ở bất kỳ khung hình nào. Khi không có \texttt{-\/-class-size} các khoảng của luật khá rộng, 15-44 điểm, phản ánh trung thực cỡ mẫu nhỏ như vậy.
 
 \section{Quyết định cho từng học sinh: luật so với mô hình học máy}
 
@@ -128,7 +129,7 @@ Các bộ phân loại học máy vượt xa các luật trên SCB, nhưng trên
 
 \textbf{Hai cách tiếp cận.} Các luật kết hợp các dấu hiệu tư thế bằng noisy-OR: góc yaw của đầu vượt quá giá trị gốc đã hiệu chỉnh của chỗ ngồi, đầu cúi thấp hơn giá trị gốc, khuôn mặt bị khuất trong khi vẫn thấy vai, thân xoay, tay đưa lên mặt; giơ tay luôn được tính là tập trung. Mỗi chỗ ngồi học tư thế chú ý của riêng nó trong 120 s quan sát đầu tiên, và nhãn được làm trơn (EMA có trễ). Các mô hình học máy (cây tăng cường gradient, hồi quy logistic, MLP 64-32) lấy điểm khóa và các dấu hiệu nói trên làm đặc trưng, được huấn luyện trên học sinh SCB với tư thế từ mô hình m INT8 khi triển khai, có và không có chia ô. Chúng chạy bằng NumPy trên Pi.
 
-\textbf{Trên SCB} (58.185 học sinh nhìn chính diện, 182 tiết học, kiểm định chéo 5 phần nhóm theo tiết học):
+\textbf{Trên SCB} (57.972 học sinh nhìn chính diện, 180 tiết học, kiểm định chéo 5 phần nhóm theo tiết học; các tiết học có chung một bức ảnh được lưu lại nhiều lần được gộp thành một nhóm):
 
 \begin{table}[htbp]\small
 \caption{Quyết định cho từng học sinh trên SCB (kiểm định chéo 5 phần nhóm theo tiết học)}\label{tab:per-student-decisions-on-scb-lesson-grou}
@@ -136,10 +137,10 @@ Các bộ phân loại học máy vượt xa các luật trên SCB, nhưng trên
 \toprule
 \textbf{Phương pháp} & \textbf{AUC} & \textbf{AUC trong ảnh} & \textbf{Balanced accuracy} \\
 \midrule
-Luật (một ảnh, chưa hiệu chỉnh) & 0.55 & 0.54 & 56\% \\
-Hồi quy logistic & 0.772 & 0.735 & 71.3\% \\
-Cây tăng cường gradient & 0.855 & 0.840 & 77.0\% \\
-MLP 64-32 & 0.863 & 0.838 & 78.0\% \\
+Luật (một ảnh, chưa hiệu chỉnh) & 0.55 & 0.52 & 56\% \\
+Hồi quy logistic & 0.768 & 0.730 & 71.0\% \\
+Cây tăng cường gradient & 0.860 & 0.834 & 77.8\% \\
+MLP 64-32 & 0.858 & 0.815 & 77.9\% \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -151,30 +152,34 @@ AUC trong ảnh là con số nên trích dẫn: phần lớn ảnh SCB chỉ ch�
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/clips_rules_vs_learned.png}
-\caption{Tỷ lệ mất tập trung trung bình của lớp trên video buổi giảng và phòng thi: luật so với các bộ phân loại học máy (upper\_body\_n có chia ô, FP32)}\label{fig:mean-class-distracted-share-on-the-lectu}
+\caption{Tỷ lệ mất tập trung trung bình của lớp trên video buổi giảng và phòng thi: luật so với các bộ phân loại học máy (n và m INT8 có chia ô, trên Pi)}\label{fig:mean-class-distracted-share-on-the-lectu}
 \end{figure}
 
-Trong video buổi giảng, học sinh ngồi thẳng nhìn lên bảng bị gán là mất tập trung, còn học sinh cúi đầu đọc bài lại được gán là tập trung (độ cao đầu trung vị so với vai là 0.45 so với 0.32). Nguyên nhân là một khoảng trống trong nhãn của SCB: các lớp tập trung của nó là đọc, viết và giơ tay, đều là cúi đầu hoặc giơ tay, trong khi các lớp mất tập trung gồm quay đầu và thảo luận, đều là ngẩng đầu. SCB không có nhãn ``nghe giảng'' hay ``nhìn lên bảng'', trạng thái chú ý phổ biến nhất trong một buổi giảng, nên mô hình huấn luyện trên SCB học được rằng ngẩng đầu nghĩa là mất tập trung. Loại bỏ các đặc trưng độ cao đầu không khắc phục được điều này trong một thử nghiệm, và các mô hình học máy cũng phụ thuộc mạnh vào chất lượng tư thế: với n và không chia ô, cây quyết định cho 36\% trên video phòng thi trên Pi, so với 9-13\% với m.
+Trong video buổi giảng, học sinh ngồi thẳng nhìn lên bảng bị gán là mất tập trung, còn học sinh cúi đầu đọc bài lại được gán là tập trung (độ cao đầu trung vị so với vai là 0.45 so với 0.33, n có chia ô ở 2:00). Nguyên nhân là một khoảng trống trong nhãn của SCB: các lớp tập trung của nó là đọc, viết và giơ tay, đều là cúi đầu hoặc giơ tay, trong khi các lớp mất tập trung gồm quay đầu và thảo luận, đều là ngẩng đầu. SCB không có nhãn ``nghe giảng'' hay ``nhìn lên bảng'', trạng thái chú ý phổ biến nhất trong một buổi giảng, nên mô hình huấn luyện trên SCB học được rằng ngẩng đầu nghĩa là mất tập trung. Các mô hình học máy cũng phụ thuộc mạnh vào chất lượng tư thế: với n và không chia ô, cây quyết định cho 26\% trên video phòng thi, so với 9-11\% với m.
 
-Trên các mô hình INT8 khi triển khai, bức tranh vẫn vậy: trong video buổi giảng với m có chia ô, luật cho 0.0\%, còn cây quyết định 48\%, hồi quy logistic 74\% và MLP 52\%.
+Trong video buổi giảng với m có chia ô, luật cho 1.4\%, cây quyết định 50.5\%, hồi quy logistic 74.4\% và MLP 53.8\%; với n là 2.1\%, 59.1\%, 82.3\% và 57.7\%.
 
-\textbf{So với nhãn do người gán.} 301 thời điểm học sinh từ video buổi giảng và phòng thi được gán nhãn mù (tập trung, mất tập trung hoặc không rõ), được lấy mẫu sao cho mọi trường hợp bất đồng giữa luật và cây quyết định đều có mặt. Chỉ 13 trên 275 thời điểm có thể đánh giá (4.7\%) là mất tập trung, 4.2\% khi tính lại trọng số cho toàn bộ video. Gộp cả hai video:
+\textbf{So với nhãn do người gán.} 301 thời điểm học sinh từ video buổi giảng và phòng thi được gán nhãn mù (tập trung, mất tập trung hoặc không rõ), được lấy mẫu sao cho mọi trường hợp bất đồng giữa luật và cây quyết định đều có mặt. Chỉ 13 trên 275 thời điểm có thể đánh giá (4.7\%) là mất tập trung, 4.2\% khi tính lại trọng số cho toàn bộ video. Một thời điểm mà lần chạy không phát hiện được tính là không bị đánh dấu (32 với n, 18 với m). Gộp cả hai video, có chia ô:
 
 \begin{table}[htbp]\small
 \caption{Quyết định cho từng học sinh so với 301 nhãn mù do người gán (video buổi giảng và phòng thi)}\label{tab:per-student-decisions-against-301-blind-}
-\begin{tabularx}{\textwidth}{*{4}{>{\raggedright\arraybackslash}X}}
+\begin{tabularx}{\textwidth}{*{5}{>{\raggedright\arraybackslash}X}}
 \toprule
-\textbf{Phương pháp} & \textbf{Báo động nhầm trên thời điểm tập trung} & \textbf{Độ đặc hiệu (KTC 95\%)} & \textbf{Thời điểm mất tập trung phát hiện được} \\
+\textbf{Mô hình, có chia ô} & \textbf{Phương pháp} & \textbf{Báo động nhầm trên thời điểm tập trung} & \textbf{Độ đặc hiệu (KTC 95\%)} & \textbf{Thời điểm mất tập trung phát hiện được} \\
 \midrule
-Luật & 27 / 262 & 90\% (85-93\%) & 5 / 13 \\
-Cây tăng cường gradient & 114 / 262 & 56\% (50-62\%) & 3 / 13 \\
-MLP 64-32 & 120 / 262 & 54\% (48-60\%) & 2 / 13 \\
-Hồi quy logistic & 199 / 262 & 24\% (19-30\%) & 5 / 13 \\
+n & Luật & 12 / 262 & 95\% (92-97\%) & 2 / 13 \\
+n & Cây & 104 / 262 & 60\% (54-66\%) & 2 / 13 \\
+n & MLP & 102 / 262 & 61\% (55-67\%) & 2 / 13 \\
+n & Logistic & 159 / 262 & 39\% (34-45\%) & 3 / 13 \\
+m & Luật & 24 / 262 & 91\% (87-94\%) & 2 / 13 \\
+m & Cây & 88 / 262 & 66\% (60-72\%) & 4 / 13 \\
+m & MLP & 84 / 262 & 68\% (62-73\%) & 4 / 13 \\
+m & Logistic & 153 / 262 & 42\% (36-48\%) & 3 / 13 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Khi tính lại trọng số cho toàn bộ video, các luật đánh dấu 1\% thời điểm của buổi giảng và 3\% thời điểm của phòng thi, gần với giá trị thực 4\%, trong khi các mô hình học máy đánh dấu 56-94\% thời điểm của buổi giảng. Mười ba thời điểm mất tập trung là quá ít để ước lượng recall; các buổi dàn dựng đo đại lượng này.
+Khi tính lại trọng số cho toàn bộ video, các luật với n đánh dấu 0.7\% thời điểm của buổi giảng và 8.3\% thời điểm của phòng thi, so với 4\% theo nhãn trên toàn bộ, trong khi các mô hình học máy đánh dấu 50-81\% thời điểm của buổi giảng. Với m, các luật đánh dấu nhiều hơn ở phòng thi (20.5\%). Mười ba thời điểm mất tập trung là quá ít để ước lượng recall; các buổi dàn dựng đo đại lượng này.
 
 \textbf{Lớp kiểm tra độc lập (clip\_5).} Cấu hình triển khai giữ được tỷ lệ báo động nhầm thấp trên một lớp được ghi hình sau khi mọi ngưỡng đã được cố định. 150 thời điểm được gán nhãn mù: 121 tập trung, 28 mất tập trung và 1 không rõ, tức 6.8\% mất tập trung khi tính lại trọng số cho toàn bộ video. Các thời điểm được lấy mẫu từ phát hiện của m có chia ô, và một thời điểm mà một lần chạy không phát hiện được tính là không bị đánh dấu. Luận văn không hiển thị khung hình nào của clip\_5, vì học sinh trong đó là trẻ vị thành niên.
 
@@ -184,14 +189,14 @@ Khi tính lại trọng số cho toàn bộ video, các luật đánh dấu 1\% 
 \toprule
 \textbf{Mô hình, có chia ô} & \textbf{Phương pháp} & \textbf{Báo động nhầm trên thời điểm tập trung} & \textbf{Độ đặc hiệu (KTC 95\%)} & \textbf{Mất tập trung phát hiện được} & \textbf{Tỷ lệ bị đánh dấu của video (tính lại trọng số)} \\
 \midrule
-n & Luật & 11 / 121 & 91\% (84-95\%) & 8 / 28 & 4.7\% \\
-n & Cây & 35 / 121 & 71\% (62-78\%) & 3 / 28 & 17.7\% \\
-n & Logistic & 44 / 121 & 64\% (55-72\%) & 11 / 28 & 33.9\% \\
-n & MLP & 42 / 121 & 65\% (56-73\%) & 9 / 28 & 28.4\% \\
-m & Luật & 43 / 121 & 64\% (56-72\%) & 21 / 28 & 10.1\% \\
-m & Cây & 51 / 121 & 58\% (49-66\%) & 12 / 28 & 11.4\% \\
-m & Logistic & 55 / 121 & 55\% (46-63\%) & 10 / 28 & 35.4\% \\
-m & MLP & 37 / 121 & 69\% (61-77\%) & 9 / 28 & 20.0\% \\
+n & Luật & 13 / 121 & 89\% (82-94\%) & 7 / 28 & 4.9\% \\
+n & Cây & 31 / 121 & 74\% (66-81\%) & 2 / 28 & 22.3\% \\
+n & Logistic & 39 / 121 & 68\% (59-75\%) & 9 / 28 & 36.7\% \\
+n & MLP & 36 / 121 & 70\% (62-78\%) & 3 / 28 & 25.2\% \\
+m & Luật & 22 / 121 & 82\% (74-88\%) & 16 / 28 & 9.5\% \\
+m & Cây & 28 / 121 & 77\% (69-83\%) & 6 / 28 & 11.1\% \\
+m & Logistic & 55 / 121 & 55\% (46-63\%) & 9 / 28 & 35.4\% \\
+m & MLP & 33 / 121 & 73\% (64-80\%) & 11 / 28 & 16.1\% \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -199,23 +204,23 @@ m & MLP & 37 / 121 & 69\% (61-77\%) & 9 / 28 & 20.0\% \\
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Luật trên n:} độ đặc hiệu 91\%, so với 90\% trên bộ nhãn đầu tiên. Các luật đánh dấu 4.7\% video so với 6.8\% theo nhãn, và phát hiện được 8 trên 28 thời điểm mất tập trung.
+  \textbf{Luật trên n:} độ đặc hiệu 89\%, so với 95\% trên bộ nhãn đầu tiên. Các luật đánh dấu 4.9\% video so với 6.8\% theo nhãn, và phát hiện được 7 trên 28 thời điểm mất tập trung.
 \item
-  \textbf{Mô hình học máy:} một lần nữa báo động nhầm nhiều hơn hẳn, với độ đặc hiệu 55-71\%.
+  \textbf{Mô hình học máy:} một lần nữa báo động nhầm nhiều hơn, với độ đặc hiệu 55-77\%.
 \item
-  \textbf{Luật trên m:} phát hiện được nhiều nhất (21 trên 28) nhưng đánh dấu 36\% thời điểm tập trung. Sáu trong 43 báo động nhầm đó thuộc về một học sinh ở hàng đầu.
+  \textbf{Luật trên m:} phát hiện được nhiều nhất (16 trên 28) với độ đặc hiệu 82\%. Trong phiên bản đầu của hệ thống, 6 báo động nhầm của m trên video này thuộc về một học sinh ở hàng đầu; giờ chỉ còn 2 trong 22, đều do dấu hiệu tay chạm mặt.
 
   \begin{itemize}
   \tightlist
   \item
-    Camera nhìn thấy cả gầm bàn của học sinh đó, nên hộp chuyển qua lại giữa phần thân trên và toàn thân. Các mô hình học hộp toàn thân từ COCO, nơi hộp người bao cả chân.
+    Camera nhìn thấy cả gầm bàn của học sinh đó, nên hộp có thể chuyển qua lại giữa phần thân trên và toàn thân. Các mô hình học hộp toàn thân từ COCO, nơi hộp người bao cả chân.
   \item
-    Dấu hiệu \texttt{body\_turned} chia bề rộng vai cho chiều cao hộp, nên hộp cao bị hiểu thành thân xoay.
+    Dấu hiệu \texttt{body\_turned} chia bề rộng vai cho chiều cao hộp, nên một hộp cao bị hiểu thành thân xoay.
   \end{itemize}
 \item
-  \textbf{Không chia ô:} n bỏ sót 92 trên 149 thời điểm.
+  \textbf{Không chia ô:} n bỏ sót 57 trên 149 thời điểm.
 \item
-  \textbf{Đếm chỗ ngồi:} khi có chia ô, bộ phân tích tìm thấy 13-17 chỗ ngồi cho 10 học sinh.
+  \textbf{Đếm chỗ ngồi:} khi có chia ô, bộ phân tích tìm thấy 13-16 chỗ ngồi cho 10 học sinh.
 
   \begin{itemize}
   \tightlist
@@ -224,7 +229,7 @@ m & MLP & 37 / 121 & 69\% (61-77\%) & 9 / 28 & 20.0\% \\
   \item
     Hộp toàn thân thêm một chỗ ngồi thứ hai cho cùng một học sinh.
   \item
-    Vì vậy, sau 2:30, chỉ số của lớp với luật có chia ô trung bình 11-15\%, so với 6.8\% theo nhãn.
+    Vì vậy, sau 2:30, chỉ số của lớp với luật có chia ô trung bình 11\% (n) và 14\% (m), so với 6.8\% theo nhãn.
   \end{itemize}
 \end{itemize}
 
@@ -250,16 +255,16 @@ Ngoài ra có một phút viết bài, khi đó trạng thái phải giữ là t
 \toprule
 \textbf{Phương pháp} & \textbf{Số giây mất tập trung phát hiện được} & \textbf{Precision} & \textbf{Báo động nhầm, chú ý / viết} & \textbf{Sự kiện bị bỏ sót} \\
 \midrule
-Luật, dấu hiệu quay đầu ban đầu & 11\% & 100\% & 0\% / 0\% & 6 trên 7 \\
-Cây tăng cường gradient & 40\% (17\%) & 100\% & 0\% / 0\% & 2 trên 7 \\
-MLP 64-32 & 40\% (11\%) & 100\% & 0\% / 0\% & 3 trên 7 \\
-Hồi quy logistic & 34\% (19\%) & 64\% & 44\% / 0\% & 3 trên 7 \\
-Luật với thước đo độ lệch đầu (mặc định mới) & 56\% (45\%) & 100\% & 0\% / 0\% & 2 trên 7 \\
+Luật, dấu hiệu quay đầu ban đầu & 11\% & 100\% & 0\% / 0\% & -- \\
+Cây tăng cường gradient & 50\% (35\%) & 100\% & 0\% / 0\% & 2 (3) trên 7 \\
+MLP 64-32 & 49\% (37\%) & 100\% & 0\% / 0\% & 3 (4) trên 7 \\
+Hồi quy logistic & 43\% (9\%) & 69\% (52\%) & 44\% (18\%) / 0\% & 3 (5) trên 7 \\
+Luật với thước đo độ lệch đầu (mặc định mới) & 56\% & 100\% & 0\% / 0\% & 2 trên 7 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Không phương pháp nào phát hiện được điện thoại, dù trên mặt bàn hay dưới gầm bàn. Đầu, cổ tay và khuỷu tay nằm trong khoảng 0.2 bề rộng vai so với vị trí của chúng khi viết, nên 13 điểm khóa phần thân trên không thể phân biệt hai trường hợp. Số liệu của các mô hình học máy có trước một bản sửa lỗi ghép chỗ ngồi mô tả dưới đây, nên số giây quay ra phía sau của chúng bị đếm thiếu đôi chút.
+Hàng của dấu hiệu ban đầu lấy từ lần quét ngưỡng dưới đây, vốn báo cáo số giây chứ không báo cáo sự kiện. Chia ô không thay đổi gì trên video này. Không phương pháp nào phát hiện được điện thoại, dù trên mặt bàn hay dưới gầm bàn. Đầu, cổ tay và khuỷu tay nằm trong khoảng 0.2 bề rộng vai so với vị trí của chúng khi viết, nên 13 điểm khóa phần thân trên không thể phân biệt hai trường hợp.
 
 \textbf{Vì sao các luật bỏ sót việc quay đầu.} Dấu hiệu quay đầu ban đầu đo góc yaw bằng vị trí của mũi giữa hai tai. Khi nhìn nghiêng, tai phía xa biến mất (độ tin cậy khoảng 0.01), và mã nguồn chuyển sang ước lượng tâm đầu từ tai còn lại. Tai đó đã di chuyển cùng với đầu, nên phép ước lượng triệt tiêu phần lớn góc quay:
 
@@ -269,16 +274,16 @@ Không phương pháp nào phát hiện được điện thoại, dù trên mặ
 \toprule
 \textbf{Thời điểm} & \textbf{Người} & \textbf{Yaw dựa trên tai} & \textbf{Độ lệch mũi so với trung điểm vai} \\
 \midrule
-Chú ý & áo xanh / áo xám & −0.15 / +0.07 & −0.07 / +0.05 \\
-Nói chuyện với nhau & áo xám & +0.03 & −0.35 \\
-Nhìn sang bên & áo xanh & −0.31 (0.16 so với giá trị gốc) & −0.54 \\
+Chú ý & áo xanh / áo xám & −0.16 / +0.07 & −0.08 / +0.05 \\
+Nói chuyện với nhau & áo xám & −0.01 & −0.36 \\
+Nhìn sang bên & áo xanh & −0.27 (0.10 so với giá trị gốc) & −0.52 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Độ lệch của mũi so với trung điểm hai vai, tính theo đơn vị bề rộng vai, thể hiện mọi lần quay: khoảng ±0.05 khi chú ý và ±0.35-0.54 khi quay đi. Nó được thêm vào làm thước đo góc quay đầu thứ hai, so với độ lệch đã hiệu chỉnh của chính chỗ ngồi đó. Dấu hiệu lấy thước đo nào cho thấy góc quay lớn hơn trong hai thước đo. Giống như yaw, giá trị gốc về độ lệch của mỗi chỗ ngồi được giữ trong phạm vi 0.15 so với giá trị của cả phòng, để một học sinh nhìn đi chỗ khác trong lúc hiệu chỉnh không học ``quay đi'' thành trạng thái chú ý. Cùng buổi dàn dựng đó cũng cho thấy một học sinh quay ra phía sau co lại thành một hộp chỉ gồm đầu và vai, có tâm nhảy khoảng một phần ba chiều cao hộp, nên chỗ ngồi giờ được neo ở cạnh trên của hộp.
+Độ lệch của mũi so với trung điểm hai vai, tính theo đơn vị bề rộng vai, thể hiện mọi lần quay: khoảng ±0.05 khi chú ý và ±0.36-0.52 khi quay đi. Nó được thêm vào làm thước đo góc quay đầu thứ hai, so với độ lệch đã hiệu chỉnh của chính chỗ ngồi đó. Dấu hiệu lấy thước đo nào cho thấy góc quay lớn hơn trong hai thước đo. Giống như yaw, giá trị gốc về độ lệch của mỗi chỗ ngồi được giữ trong phạm vi 0.15 so với giá trị của cả phòng, để một học sinh nhìn đi chỗ khác trong lúc hiệu chỉnh không học ``quay đi'' thành trạng thái chú ý. Cùng buổi dàn dựng đó cũng cho thấy một học sinh quay ra phía sau co lại thành một hộp chỉ gồm đầu và vai, có tâm nhảy khoảng một phần ba chiều cao hộp, nên chỗ ngồi giờ được neo ở cạnh trên của hộp.
 
-\textbf{Kiểm chứng bản sửa.} Các ngưỡng của thước đo độ lệch được chọn bằng clip\_4, nên recall trên clip\_4 mang tính lạc quan. Vì vậy chi phí của nó được đo trên mọi dữ liệu còn lại, bằng một lần quét 16 thiết lập trên các bộ khung xương INT8 đã lưu. Ở hàm dốc được chọn (0.2-0.4, các ngưỡng khác giữ nguyên):
+\textbf{Kiểm chứng bản sửa.} Các ngưỡng của thước đo độ lệch được chọn bằng clip\_4, nên recall trên clip\_4 mang tính lạc quan. Vì vậy chi phí của nó được đo trên mọi dữ liệu còn lại, bằng một lần quét các thiết lập ngưỡng trên các bộ khung xương đã lưu. Ở hàm dốc được chọn (0.2-0.4, các ngưỡng khác giữ nguyên):
 
 \begin{table}[htbp]\small
 \caption{Tác dụng của thước đo độ lệch đầu trên toàn bộ bằng chứng}\label{tab:effect-of-the-head-offset-measure-across}
@@ -286,17 +291,17 @@ Nhìn sang bên & áo xanh & −0.31 (0.16 so với giá trị gốc) & −0.54 
 \toprule
 \textbf{} & \textbf{n, trước → sau} & \textbf{m, trước → sau} \\
 \midrule
-Số giây mất tập trung phát hiện được trên clip\_4 & 11\% → 45\% & 11\% → 56\% \\
-Nhãn người gán: báo động nhầm trên thời điểm tập trung & 4\% → 5\% & 6\% → 7\% \\
-Tỷ lệ của lớp, buổi giảng (giá trị thực gần 0) & 4.7\% → 4.7\% & 0.0\% → 0.0\% \\
-Tỷ lệ của lớp, phòng thi & 3.6\% → 8.4\% & 11.7\% → 14.6\% \\
+Số giây mất tập trung phát hiện được trên clip\_4 & 11\% → 56\% & 11\% → 56\% \\
+Nhãn người gán: báo động nhầm trên thời điểm tập trung & 3\% → 5\% & 6\% → 10\% \\
+Tỷ lệ của lớp, buổi giảng (giá trị thực gần 0) & 2.1\% → 2.1\% & 1.4\% → 1.4\% \\
+Tỷ lệ của lớp, phòng thi & 7.1\% → 14.5\% & 11.2\% → 21.6\% \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Chi phí duy nhất là 3-5 điểm trên video phòng thi. Một phần trong đó có thể là thật, vì nhãn người gán cho thấy học viên phòng thi có nhìn quanh. Chỉ nới lỏng các ngưỡng yaw thì chỉ đạt 25\% trên clip\_4. Thước đo này giờ là mặc định. Bài kiểm tra độc lập là clip\_5 ở trên: một lớp 10 học sinh được ghi hình sau khi lựa chọn này và mọi ngưỡng khác đã được cố định.
+Chi phí là 7-10 điểm trên video phòng thi và thêm một ít báo động nhầm trên nhãn người gán (thêm 5 với n, 10 với m). Một phần mức tăng ở phòng thi có thể là thật, vì nhãn người gán cho thấy học viên phòng thi có nhìn quanh. Chỉ nới lỏng các ngưỡng yaw thì đạt nhiều nhất 25\% trên clip\_4, hoặc 32\% với ngưỡng chuyển trạng thái thấp hơn, không bao giờ đạt 56\% như thước đo độ lệch. Trong các hàm dốc độ lệch đã thử, 0.2-0.4 có ít báo động nhầm trên nhãn nhất. Thước đo này giờ là mặc định. Bài kiểm tra độc lập là clip\_5 ở trên: một lớp 10 học sinh được ghi hình sau khi lựa chọn này và mọi ngưỡng khác đã được cố định.
 
-Thước đo này chỉ giúp các luật. Các bộ phân loại học máy quyết định dựa trên các đặc trưng chúng đã được huấn luyện, vốn không gồm thước đo này. Nó cũng không thể học từ SCB: nó cần giá trị gốc theo từng học sinh, và trên các ảnh đơn lẻ với khuôn mặt nhỏ của SCB, nó không phân biệt được đầu quay đi với đọc bài (AUC 0.53).
+Thước đo này chỉ giúp các luật. Các bộ phân loại học máy quyết định dựa trên các đặc trưng chúng đã được huấn luyện, vốn không gồm thước đo này. Nó cũng không thể học từ SCB: nó cần giá trị gốc theo từng học sinh, và trên các ảnh đơn lẻ với khuôn mặt nhỏ của SCB, nó gần như không phân biệt được đầu quay đi với đọc bài (AUC 0.56).
 
 \begin{figure}[htbp]
 \centering
@@ -306,11 +311,76 @@ Thước đo này chỉ giúp các luật. Các bộ phân loại học máy quy
 
 Khi nhìn nghiêng, độ tin cậy của tai phía xa giảm còn khoảng 0.01, nên yaw dựa trên tai đọc gần bằng 0 trong khi mũi nằm lệch hẳn về một phía so với vai. Thước đo độ lệch đầu bắt được những lần quay này.
 
-Vì vậy, độ chính xác trên benchmark của một bộ phân loại huấn luyện trên một bộ dữ liệu hành động công khai không chuyển giao sang việc đo sự chú ý; hiệu chỉnh theo từng học sinh cho kết quả tốt hơn. Để một mô hình học máy dùng được, cần nhãn huấn luyện có cả những học sinh ngẩng đầu chú ý từ chính các lớp học mục tiêu, điều mà các nhãn người gán đang thực hiện và buổi dàn dựng bắt đầu cung cấp.
+Vì vậy, độ chính xác trên benchmark của một bộ phân loại huấn luyện trên một bộ dữ liệu hành động công khai không chuyển giao sang việc đo sự chú ý; hiệu chỉnh theo từng học sinh cho kết quả tốt hơn. Để một mô hình học máy dùng được, cần nhãn huấn luyện có cả những học sinh ngẩng đầu chú ý. Mục tiếp theo kiểm tra xem một bộ dữ liệu công khai có nhãn như vậy đã đủ hay chưa.
+
+\section{Bộ dữ liệu thứ hai: ClaBehavior}
+
+ClaBehavior \cite{b28} có đúng nhãn mà SCB thiếu: \emph{lookup}, học sinh ngẩng đầu nhìn lên bảng. Bộ dữ liệu có 400 khung hình từ 13 camera cố định trong các lớp học phổ thông Trung Quốc, với 4.480 hộp lookup, 1.021 read, 1.011 turn\_head, 684 raise\_hand, 579 write, 242 discuss và 66 stand. Ảnh của nó được xử lý như ảnh SCB và như dữ liệu của trẻ vị thành niên: chúng ở lại trên các máy, và chỉ tư thế, nhãn và số liệu được sử dụng.
+
+\textbf{Cách ánh xạ nhãn.} Cả hai bộ dữ liệu đều không gán nhãn sự chú ý, nên hai cách ánh xạ từ hành động sang tập trung hoặc mất tập trung được cố định trước khi huấn luyện:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Strict (chặt):} đọc, viết, giơ tay và lookup là tập trung; quay đầu là mất tập trung. Cúi đầu (trông giống viết bài), thảo luận (có thể là làm việc nhóm) và đứng (có thể là đang trả lời) bị loại ra.
+\item
+  \textbf{Lenient (lỏng):} như strict, nhưng ba hành động đó được tính là mất tập trung.
+\end{itemize}
+
+Cách ánh xạ dùng ở trên cho riêng SCB tính cúi đầu và thảo luận là mất tập trung. Trên riêng SCB, cách ánh xạ strict dễ hơn: cây quyết định đạt AUC 0.890 (AUC trong ảnh 0.861, balanced accuracy 80.3\%) và MLP đạt 0.903 (0.872, 82.3\%).
+
+\textbf{Giữa hai bộ dữ liệu.} Một mô hình huấn luyện trên bộ dữ liệu này và kiểm tra trên bộ kia cho thấy điểm số benchmark có thể mang sang đến đâu:
+
+\begin{table}[htbp]\footnotesize
+\caption{Bộ phân loại huấn luyện trên một bộ dữ liệu và kiểm tra trên bộ kia (logistic / cây / MLP)}\label{tab:cross-dataset}
+\begin{tabularx}{\textwidth}{*{5}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Ánh xạ} & \textbf{Huấn luyện → kiểm tra} & \textbf{AUC} & \textbf{AUC trong ảnh} & \textbf{Tỷ lệ mất tập trung dự đoán (thực tế)} \\
+\midrule
+Strict & ClaBehavior → SCB & 0.67 / 0.70 / 0.72 & 0.67 / 0.71 / 0.72 & 41 / 28 / 35\% (20\%) \\
+Strict & SCB → ClaBehavior & 0.66 / 0.79 / 0.79 & 0.65 / 0.79 / 0.79 & 47 / 34 / 18\% (13\%) \\
+Lenient & ClaBehavior → SCB & 0.69 / 0.70 / 0.72 & 0.67 / 0.70 / 0.70 & 49 / 34 / 43\% (25\%) \\
+Lenient & SCB → ClaBehavior & 0.69 / 0.79 / 0.81 & 0.68 / 0.79 / 0.81 & 43 / 30 / 31\% (14\%) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Cây quyết định và MLP, vốn đạt AUC 0.86-0.90 trong SCB, giảm xuống 0.70-0.81 trên một bộ dữ liệu lớp học khác cùng loại, và gần như tất cả đều dự đoán tỷ lệ mất tập trung cao hơn thực tế. Kiểm định chéo trong ClaBehavior, nhóm theo camera, đang được chạy lại với cách nhóm camera đã sửa và chưa được trích dẫn ở đây.
+
+\textbf{Trên lớp học thực.} Khi huấn luyện trên cả hai bộ dữ liệu, có lớp lookup, các bộ phân loại báo động nhầm ít hơn đôi chút, nhưng không đủ để thay đổi kết luận (m có chia ô):
+
+\begin{table}[htbp]\small
+\caption{Bộ phân loại huấn luyện trên riêng SCB và trên SCB + ClaBehavior, trên lớp học thực (m có chia ô)}\label{tab:clabehavior-real-classes}
+\begin{tabularx}{\textwidth}{*{4}{>{\raggedright\arraybackslash}X}}
+\toprule
+\textbf{Phương pháp} & \textbf{Nhãn huấn luyện} & \textbf{Báo động nhầm trên 262 thời điểm tập trung (phát hiện được trên 13)} & \textbf{Tỷ lệ của lớp, buổi giảng} \\
+\midrule
+Luật & -- & 24 (2) & 1.4\% \\
+Cây & SCB & 88 (4) & 50.5\% \\
+Cây & SCB + ClaBehavior, strict & 78 (5) & 43.8\% \\
+Cây & SCB + ClaBehavior, lenient & 84 (4) & 45.0\% \\
+MLP & SCB & 84 (4) & 53.8\% \\
+MLP & SCB + ClaBehavior, strict & 80 (3) & 51.2\% \\
+MLP & SCB + ClaBehavior, lenient & 72 (3) & 48.2\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Buổi giảng:} mọi mô hình học máy vẫn đánh dấu 44-80\% một buổi giảng mà nhãn chỉ thấy khoảng 4\% mất tập trung; hồi quy logistic vẫn tệ nhất (74-80\%).
+\item
+  \textbf{Strict so với lenient:} không có bên nào thắng nhất quán. Strict tốt hơn cho cây quyết định, lenient tốt hơn cho MLP; cả hai vẫn kém xa các luật.
+\item
+  \textbf{Lớp kiểm tra độc lập (clip\_5):} MLP strict là bộ phân loại tốt nhất ở đó, với 17 báo động nhầm trên 121 thời điểm tập trung (độ đặc hiệu 86\%) và phát hiện được 9 trên 28, so với 22 và 16 của các luật trên m.
+\end{itemize}
+
+Vì vậy, việc thiếu nhãn ``nghe giảng'' chỉ giải thích được một phần khoảng cách. Nhãn hành động trên ảnh đơn lẻ là một bài toán khác với sự chú ý theo thời gian, và ngay cả hai bộ dữ liệu lớp học cùng loại cũng cách xa nhau. Các luật đã hiệu chỉnh vẫn là mặc định.
 
 \section{Hiệu năng trên thiết bị biên}
 
-Trong cấu hình triển khai, n có chia ô chạy thời gian thực, hệ thống chạy 15 phút ở 30 FPS với độ trễ 45 ms, công suất đo được 4.3 W trên bo mạch Pi cộng 2.5 W cho Hailo-8 (số liệu nhà sản xuất), nhiệt độ SoC cao nhất 60 °C và không bị giảm xung. Pipeline bị giới hạn bởi Hailo-8, không phải CPU. Mọi số liệu dưới đây được đo trên Pi 5 với bộ tản nhiệt chủ động chính hãng Raspberry Pi gắn vào cổng quạt, ngày 10/11/2026.
+Trong cấu hình triển khai, n có chia ô chạy thời gian thực, hệ thống chạy 15 phút ở 30 FPS với độ trễ 47 ms, công suất đo được 4.1 W trên bo mạch Pi cộng 2.5 W cho Hailo-8 (số liệu nhà sản xuất), nhiệt độ SoC cao nhất 60 °C và không bị giảm xung. Ở cấu hình này, pipeline bị giới hạn bởi Hailo-8, không phải CPU. Mọi số liệu dưới đây được đo trên Pi 5 với bộ tản nhiệt chủ động chính hãng Raspberry Pi gắn vào cổng quạt, ngày 22/11/2026.
 
 \textbf{Riêng Hailo-8} (\texttt{hailortcli\ benchmark}, HEF INT8):
 
@@ -320,8 +390,8 @@ Trong cấu hình triển khai, n có chia ô chạy thời gian thực, hệ th
 \toprule
 \textbf{Mô hình} & \textbf{FPS} & \textbf{Độ trễ phần cứng (ms)} \\
 \midrule
-n & 131.5 & 5.7 \\
-s & 69.5 & 11.9 \\
+n & 131.2 & 5.7 \\
+s & 69.4 & 11.9 \\
 m & 31.5 & 26.7 \\
 \bottomrule
 \end{tabularx}
@@ -335,19 +405,19 @@ m & 31.5 & 26.7 \\
 \toprule
 \textbf{Mô hình} & \textbf{Chia ô} & \textbf{FPS} & \textbf{CPU, toàn bộ Pi} & \textbf{Bộ nhớ của hcpose (MB)} & \textbf{Nhiệt độ SoC tối đa (°C)} & \textbf{Công suất bo mạch Pi (W)} \\
 \midrule
-n & tắt & 119.1 & 79\% & 332 & 61.1 & 5.42 \\
-n & bật & 32.8 & 46\% & 286 & 60.6 & 4.84 \\
-s & tắt & 69.3 & 47\% & 329 & 60.1 & 4.77 \\
-s & bật & 17.4 & 26\% & 294 & 59.5 & 3.87 \\
-m & tắt & 31.5 & 23\% & 339 & 58.4 & 3.19 \\
-m & bật & 7.9 & 14\% & 307 & 57.3 & 2.82 \\
+n & tắt & 108.0 & 73\% & 342 & 59.0 & 5.06 \\
+n & bật & 32.8 & 47\% & 300 & 60.1 & 4.75 \\
+s & tắt & 69.3 & 47\% & 343 & 60.1 & 4.53 \\
+s & bật & 17.4 & 26\% & 303 & 58.4 & 3.68 \\
+m & tắt & 31.5 & 23\% & 346 & 57.9 & 3.13 \\
+m & bật & 7.9 & 14\% & 319 & 55.6 & 2.60 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-FPS đầu cuối khớp với số liệu khi chỉ chạy Hailo, và bốn lượt mỗi khung hình chia chúng đúng cho bốn. Chi phí chính của CPU là phần phân tích mức độ tập trung, khoảng 2.8 lõi ở 119 FPS. Công suất bo mạch thấp hơn ở các thiết lập chậm hơn vì Pi phải chờ bộ tăng tốc.
+Với s và m, và với mọi thiết lập có chia ô, FPS đầu cuối khớp với số liệu khi chỉ chạy Hailo, và bốn lượt mỗi khung hình chia chúng đúng cho bốn. n không chia ô là ngoại lệ: ở 108 FPS, CPU là giới hạn, chủ yếu do phần phân tích mức độ tập trung, khoảng 3.0 lõi. HEF n mới tìm được nhiều học sinh hơn mỗi khung hình so với phiên bản đầu (20-21 so với 18 trên buổi giảng), điều này tốn khoảng 5 FPS (4.5\%): trên một Pi không tải, hai lần chạy mỗi loại cho 111 FPS với HEF mới và 116 FPS với HEF cũ. Công suất bo mạch thấp hơn ở các thiết lập chậm hơn vì Pi phải chờ bộ tăng tốc.
 
-\textbf{Độ trễ.} Khung hình được đưa vào ở tốc độ 25 FPS của video, giống như camera đưa ra, và được đo thời gian từ thời điểm đó đến sink bằng bộ đo interlatency của GstShark \cite{b20}: trung vị 20 ms cho n (phân vị 95 là 23), 45 ms cho n có chia ô (53), và 40 ms cho m (47). m có chia ô không theo kịp camera 25 FPS (7.9 FPS): khung hình bị xếp hàng và độ trễ ổn định ở 2.5 s, nên triển khai trực tiếp m có chia ô cần một hàng đợi có bỏ khung hình (leaky queue) hoặc giảm tốc độ camera.
+\textbf{Độ trễ.} Khung hình được đưa vào ở tốc độ 25 FPS của video, giống như camera đưa ra, và được đo thời gian từ thời điểm đó đến sink bằng bộ đo interlatency của GstShark \cite{b20}: trung vị 21 ms cho n (phân vị 95 là 24), 47 ms cho n có chia ô (56), và 42 ms cho m (47). m có chia ô không theo kịp camera 25 FPS (7.9 FPS): khung hình bị xếp hàng và độ trễ ổn định ở 2.5 s, nên triển khai trực tiếp m có chia ô cần một hàng đợi có bỏ khung hình (leaky queue) hoặc giảm tốc độ camera.
 
 \textbf{Đặc tính nhiệt} qua hai lần chạy 15 phút:
 
@@ -357,13 +427,13 @@ FPS đầu cuối khớp với số liệu khi chỉ chạy Hailo, và bốn lư
 \toprule
 \textbf{Lần chạy} & \textbf{FPS} & \textbf{Nhiệt độ SoC sau 5 / 10 / 15 phút (°C)} & \textbf{Tối đa (°C)} & \textbf{Giảm xung} & \textbf{Công suất bo mạch Pi (W)} \\
 \midrule
-n có chia ô, thời gian thực (triển khai) & 30.0 & 56.8 / 57.9 / 56.8 & 60.1 & không & 4.26 \\
-m có chia ô, nhanh nhất có thể & 7.9 & 53.5 / 55.6 / 54.6 & 56.2 & không & 2.70 \\
+n có chia ô, thời gian thực (triển khai) & 30.0 & 55.6 / 56.8 / 59.0 & 60.1 & không & 4.09 \\
+m có chia ô, nhanh nhất có thể & 7.9 & 51.8 / 51.8 / 52.9 & 53.5 & không & 2.57 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Khi rảnh, Pi tiêu thụ 2.33 W ở 50 °C.
+Khi rảnh, Pi tiêu thụ 2.08 W ở 48 °C.
 
 \textbf{Công suất.} Công suất bo mạch là tổng điện áp × dòng điện trên các đường nguồn PMIC của Pi 5 (\texttt{vcgencmd\ pmic\_read\_adc}). Con số này không gồm AI HAT và các thiết bị USB, nên Hailo-8 được cộng thêm từ số liệu nhà sản xuất:
 
@@ -382,7 +452,7 @@ AI HAT+, nhiệt độ môi trường hoạt động & 0-50 °C & \href{https://
 \end{tabularx}
 \end{table}
 
-Vì vậy cấu hình triển khai tiêu thụ khoảng 4.3 W (đo được) + 2.5 W (điển hình, theo nhà sản xuất) ≈ 6.8 W, nằm trong khả năng của một nguồn USB-C 27 W. Số liệu đo trên bo mạch khớp với mức điển hình 4 W của nhà sản xuất. 26 TOPS ở 2.5 W tương đương khoảng 10 TOPS/W (tác giả tự tính từ số liệu của Hailo).
+Vì vậy cấu hình triển khai tiêu thụ khoảng 4.1 W (đo được) + 2.5 W (điển hình, theo nhà sản xuất) ≈ 6.6 W, nằm trong khả năng của một nguồn USB-C 27 W. Số liệu đo trên bo mạch khớp với mức điển hình 4 W của nhà sản xuất. 26 TOPS ở 2.5 W tương đương khoảng 10 TOPS/W (tác giả tự tính từ số liệu của Hailo).
 
 \section{Quyền riêng tư từ thiết kế}
 
@@ -415,7 +485,7 @@ Nội dung một bản ghi được lưu khi dùng \texttt{-\/-save-json}: mỗi
 \begin{codeblock}
 {"type": "frame", "t": 229.97, "w": 1280, "h": 720,
  "class": {"visible": 2, "counted": 2, "focused": 1, "distracted": 1,
-           "class_pct_distracted": 33.3, "class_ci": [6.1, 79.2], "class_size": 3},
+           "class_pct_distracted": 50.0, "class_ci": [9.5, 90.5], "class_size": 2},
  "persons": [{"score": 0.75, "box": [663.9, 296.1, 863.6, 709.2],
               "keypoints": [[771.9, 356.1, 0.98], [776.5, 348.7, 0.91], [761.6, 349.6, 0.95], "…"],
               "engagement": {"seat": 2, "state": "focused", "score": 0.0, "reason": null, "calibrated": true}}]}
@@ -463,23 +533,23 @@ Khoảng trống lớn nhất là dữ liệu chuẩn: đến nay chưa có kế
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Nhãn thay thế.} SCB gán nhãn hành động (đọc, quay đầu, thảo luận), không gán nhãn sự chú ý, và chủ yếu lấy từ lớp học phổ thông Trung Quốc. Khoảng 2.000 học sinh SCB mang cả nhãn tập trung lẫn mất tập trung trên các ảnh trùng, phần lớn là ``cúi đầu'' so với ``đọc hoặc viết'', nên ngay cả người gán nhãn cũng không phân biệt được các trường hợp này.
+  \textbf{Nhãn thay thế.} SCB gán nhãn hành động (đọc, quay đầu, thảo luận), không gán nhãn sự chú ý, và chủ yếu lấy từ lớp học phổ thông Trung Quốc. 2.891 học sinh SCB mang cả nhãn tập trung lẫn mất tập trung trên các ảnh trùng (theo lần đếm của phiên bản đầu, phần lớn là ``cúi đầu'' so với ``đọc hoặc viết''), nên ngay cả người gán nhãn cũng không phải lúc nào cũng phân biệt được các trường hợp này. ClaBehavior bổ sung lớp ngẩng đầu còn thiếu nhưng nhỏ: 400 khung hình từ 13 camera.
 \item
   \textbf{Bằng chứng từ video dựa vào bối cảnh.} Ba video không có nhãn; nhận định ``tỷ lệ thực gần 0'' dựa trên việc lớp học đang làm gì. Chúng cho thấy báo động nhầm, chứ không cho thấy mất tập trung bị bỏ sót. Nhãn người gán và buổi dàn dựng giải quyết vấn đề này.
 \item
   \textbf{Ít phòng học, video của bên thứ ba.} Ba video của bên thứ ba từ ba phòng học, một trong số đó có camera đặt ngoài vị trí lắp đặt dự kiến, cùng một lớp nhỏ được ghi hình cho luận văn này. Kết quả có thể không đúng với các cách bố trí, điều kiện ánh sáng hay lứa tuổi khác.
 \item
-  \textbf{Độ cao camera.} Với camera ngang mặt bàn, một cái đầu cúi xuống viết sẽ che khuôn mặt và bị hiểu là ``quay đi'': các luật cho 44\% mất tập trung trong một phòng tự học nơi mọi người đều đang viết. Thiết kế giả định camera gắn cao phía trước; giảm trọng số \texttt{face\_hidden} (0.3) làm lỗi giảm một nửa với camera thấp.
+  \textbf{Độ cao camera.} Với camera ngang mặt bàn, một cái đầu cúi xuống viết sẽ che khuôn mặt và bị hiểu là ``quay đi'': các luật cho 55\% mất tập trung trong một phòng tự học nơi mọi người đều đang viết (n có chia ô). Thiết kế giả định camera gắn cao phía trước; giảm trọng số \texttt{face\_hidden} (0.3) hạ con số này xuống 30\% với camera thấp.
 \item
-  \textbf{Thời gian hiệu chỉnh.} Mỗi chỗ ngồi cần 120 s quan sát dùng được. Trong một video dày đặc dài 6 phút, chỉ 20 trên 52 chỗ ngồi hoàn tất hiệu chỉnh, nên các phiên ngắn chủ yếu chạy với giá trị gốc ở cấp phòng.
+  \textbf{Thời gian hiệu chỉnh.} Mỗi chỗ ngồi cần 120 s quan sát dùng được. Trong một video dày đặc dài 6 phút, chỉ 16 trên 59 chỗ ngồi hoàn tất hiệu chỉnh, nên các phiên ngắn chủ yếu chạy với giá trị gốc ở cấp phòng.
 \item
-  \textbf{Lớp nhỏ, khoảng rộng.} Với 20-30 học sinh được đếm, khoảng 95\% rộng 25-37 điểm trừ khi biết sĩ số. Đây là tính chất của cỡ mẫu, không phải khiếm khuyết, nhưng nó giới hạn độ mịn khi đọc chỉ số.
+  \textbf{Lớp nhỏ, khoảng rộng.} Khi không biết sĩ số, khoảng 95\% của các luật rộng 15-44 điểm trên các video. Đây là tính chất của cỡ mẫu, không phải khiếm khuyết, nhưng nó giới hạn độ mịn khi đọc chỉ số.
 \item
   \textbf{Trọng số luật đặt thủ công.} Trọng số của các luật được đặt theo thiết kế, không được khớp từ dữ liệu, và cố ý không tinh chỉnh trên các video dùng để đánh giá chúng; một thay đổi đã ghi nhận, trọng số cho camera thấp, là một tùy chọn chứ không phải mặc định.
 \item
-  \textbf{Độ chính xác số học không đồng nhất giữa các bằng chứng.} Hai biểu đồ và điểm số theo nhãn người gán dùng mô hình n ở FP32 trên PC; các lần chạy INT8 trên Pi tái hiện các con số cấp lớp với sai khác vài điểm. m có chia ô cũng không theo kịp camera trực tiếp 25-30 FPS nếu không bỏ khung hình.
+  \textbf{Một bản biên dịch cho mỗi mô hình.} Các bản biên dịch INT8 từ cùng trọng số chênh nhau khoảng ±0.01 AP; mọi kết quả lấy từ một bản biên dịch được chọn cho mỗi kích thước. m có chia ô cũng không theo kịp camera trực tiếp 25-30 FPS nếu không bỏ khung hình.
 \item
   \textbf{Buổi dàn dựng.} Các tình nguyện viên người lớn diễn hành vi theo kịch bản trong một phòng nhỏ dễ thấy hơn và cường điệu hơn so với mất tập trung thực, nên recall của buổi này là một cận trên.
 \item
-  \textbf{Camera ở gần và hộp toàn thân.} Trong một phòng nhỏ quay ở khoảng cách gần, số chỗ ngồi bị nhân lên (13-17 cho 10 học sinh trong clip\_5), và hộp toàn thân của một học sinh thấy được chân bị hiểu là thân xoay. Cả hai đều xuất phát từ hình học gắn với hộp: điểm neo chỗ ngồi ở cạnh trên của hộp và chiều cao hộp trong \texttt{body\_turned}. Neo và tỷ lệ dựa trên điểm khóa sẽ tránh được các vấn đề này; chúng không được thay đổi sau clip\_5, để giữ clip\_5 là một bài kiểm tra độc lập.
+  \textbf{Camera ở gần và hộp toàn thân.} Trong một phòng nhỏ quay ở khoảng cách gần, số chỗ ngồi bị nhân lên (13-16 cho 10 học sinh trong clip\_5), và hộp toàn thân của một học sinh thấy được chân bị hiểu là thân xoay. Cả hai đều xuất phát từ hình học gắn với hộp: điểm neo chỗ ngồi ở cạnh trên của hộp và chiều cao hộp trong \texttt{body\_turned}. Neo và tỷ lệ dựa trên điểm khóa sẽ tránh được các vấn đề này; chúng không được thay đổi sau clip\_5, để giữ clip\_5 là một bài kiểm tra độc lập.
 \end{itemize}

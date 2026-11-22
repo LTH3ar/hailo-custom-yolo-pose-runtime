@@ -46,7 +46,7 @@ m & 96 & 89.9 & 0.619 \\
 \end{tabularx}
 \end{table}
 
-\textbf{Độ chính xác điểm khóa.} Trên COCO val2017, các mô hình đã huấn luyện đạt keypoint AP 0.470, 0.568 và 0.625 trên 13 điểm của chúng, thấp hơn 4-5 điểm so với các mô hình 17 điểm gốc trên cùng các điểm đó. Trên Hailo-8, lượng tử hóa INT8 làm n mất 5.3 điểm và m mất 6.8 điểm. HEF của s mất 30.8 điểm, nên bị loại khỏi mọi kết quả về độ chính xác.
+\textbf{Độ chính xác điểm khóa.} Trên COCO val2017, các mô hình đã huấn luyện đạt keypoint AP 0.470, 0.568 và 0.625 trên 13 điểm của chúng, thấp hơn 4-5 điểm so với các mô hình 17 điểm gốc trên cùng các điểm đó. Trên Hailo-8, lượng tử hóa INT8 làm n mất 3.8 điểm, s mất 5.4 điểm và m mất 5.0 điểm.
 
 \begin{table}[htbp]\small
 \caption{Keypoint AP trên COCO val2017, 13 điểm khóa thân trên, dung sai COCO}\label{tab:keypoint-ap-on-coco-val2017-13-upper-bod}
@@ -54,9 +54,9 @@ m & 96 & 89.9 & 0.619 \\
 \toprule
 \textbf{Mô hình} & \textbf{Mô hình 17 điểm gốc, trên 13 điểm} & \textbf{Mô hình 13 điểm đã huấn luyện (.pt)} & \textbf{HEF INT8 trên Hailo-8} & \textbf{Mất mát do INT8 (điểm AP)} \\
 \midrule
-n & 0.523 & 0.470 & 0.417 & −5.3 \\
-s & 0.613 & 0.568 & 0.260 & −30.8 \\
-m & 0.665 & 0.625 & 0.557 & −6.8 \\
+n & 0.523 & 0.470 & 0.432 & −3.8 \\
+s & 0.613 & 0.568 & 0.514 & −5.4 \\
+m & 0.665 & 0.625 & 0.575 & −5.0 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -66,11 +66,13 @@ Keypoint AP (OKS 0.50:0.95) trên 5.000 ảnh val2017, chấm bằng pycocotools
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Kích thước.} Trên Hailo-8, m hơn n 0.14 AP (0.557 so với 0.417), với độ trễ gấp 4.7 lần.
+  \textbf{Kích thước.} Trên Hailo-8, m hơn n 0.14 AP (0.575 so với 0.432), với độ trễ gấp 4.7 lần.
 \item
   \textbf{Huấn luyện trên 13 điểm.} Phần lớn mức giảm 4-5 điểm nằm ở việc định vị chính xác các điểm trên khuôn mặt. Với cùng một dung sai rộng cho mọi điểm, khoảng cách thu hẹp còn 1.1-1.5 điểm.
 \item
-  \textbf{HEF của s.} Mô hình vẫn tìm được người (AP50 0.683) nhưng định vị điểm khóa kém (AP75 0.127). Trên các phát hiện được ghép cặp, sai số trung vị của điểm khóa là 4-9\% kích thước hộp, so với 2-3\% của HEF n và m, và mọi điểm đều bị lệch theo cùng một hướng. Mô hình n được biên dịch bằng cùng script mà không bị ảnh hưởng, nên lỗi nằm ở lần biên dịch này chứ không ở thiết lập: nguyên nhân là một lần lượng tử hóa thất bại (SNR đầu ra 4-11 dB). Tối ưu hóa lại với đúng các ảnh hiệu chỉnh đó cho AP 0.487, và năm lần biên dịch lại với các seed hiệu chỉnh khác nhau cho 0.508 ± 0.011. Mô hình s chỉ xuất hiện trong các kết quả về tốc độ.
+  \textbf{HEF đầu tiên của s.} HEF của s trong phiên bản đầu của luận văn chỉ đạt AP 0.260: mô hình vẫn tìm được người (AP50 0.683) nhưng định vị điểm khóa kém (AP75 0.127), và mọi điểm đều bị lệch theo cùng một hướng. Mô hình n được biên dịch bằng cùng script mà không bị ảnh hưởng, nên lỗi nằm ở lần biên dịch đó chứ không ở thiết lập: nguyên nhân là một lần lượng tử hóa thất bại (SNR đầu ra 4-11 dB). Sau khi biên dịch lại, s đạt 0.514 và được dùng như hai mô hình còn lại.
+\item
+  \textbf{Độ dao động giữa các lần biên dịch.} Lượng tử hóa không lặp lại chính xác, nên mỗi kích thước được biên dịch năm lần với các lần rút ảnh hiệu chỉnh khác nhau (seed 0-4). AP trên COCO val2017 qua năm lần: n 0.430 ± 0.007, s 0.508 ± 0.011, m 0.570 ± 0.006. HEF được triển khai của mỗi kích thước là bản đạt điểm cao nhất trên 1.000 ảnh train2017 được giữ riêng, không phải trên val2017: seed 2 cho n và s, seed 1 cho m. Vì vậy AP trên val2017 của nó không được chọn trên tập kiểm tra.
 \item
   \textbf{Điểm số trong log huấn luyện.} Keypoint mAP50-95 trong log (0.329, 0.376, 0.401) thấp hơn nhiều so với cùng các mô hình được pycocotools chấm với cùng một dung sai đồng nhất (0.579, 0.660, 0.706). Nguyên nhân là những người không có điểm khóa nào được gán nhãn trong 13 điểm. Họ chiếm 4.503 trên 10.777 người trong nhãn kiểm định (41.8\%). pycocotools bỏ qua họ, nhưng bộ kiểm định của Ultralytics tính họ là các mục tiêu không bao giờ ghép được. Khi loại những người này, chính bộ kiểm định của Ultralytics cho 0.555, 0.632 và 0.669, gần với số liệu của pycocotools. Vì vậy log đánh giá thấp độ chính xác điểm khóa, và các điểm số keypoint trong log không được dùng làm kết quả.
 \end{itemize}
@@ -91,14 +93,14 @@ Keypoint AP (OKS 0.50:0.95) trên 5.000 ảnh val2017, chấm bằng pycocotools
 \toprule
 \textbf{Mô hình} & \textbf{FPS trên Hailo-8} & \textbf{Độ trễ phần cứng (ms)} \\
 \midrule
-n & 131.5 & 5.7 \\
-s & 69.5 & 11.9 \\
+n & 131.2 & 5.7 \\
+s & 69.4 & 11.9 \\
 m & 31.5 & 26.7 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\textbf{Lượng tử hóa.} Trình biên dịch (Hailo Dataflow Compiler 3.33.1, Model Zoo 2.18) hiệu chỉnh khoảng giá trị INT8 trên 1.024 ảnh train2017 ngẫu nhiên đã đổi kích thước về 640×640. Mô hình n và s dùng chung một model script, còn m có script riêng. Cả hai script giữ ba trong chín lớp đầu ra ở 16 bit; theo thứ tự, đó là các đầu ra điểm khóa. Cả hai chạy bước tinh chỉnh sau lượng tử hóa của Hailo với tốc độ học 0.00015, và script n/s tắt thêm bước cân bằng trước lượng tử hóa.
+\textbf{Lượng tử hóa.} Trình biên dịch (Hailo Dataflow Compiler 3.33.1, Model Zoo 2.18) làm việc trên 1.024 ảnh train2017 đã đổi kích thước về 640×640, được rút ngẫu nhiên với một seed cố định, nên một lần biên dịch có thể lặp lại với đúng các ảnh đó. Khoảng giá trị INT8 được tính từ 64 ảnh đầu tiên (mặc định của trình biên dịch), còn bước tinh chỉnh dùng cả 1.024 ảnh. Mô hình n và s dùng chung một model script, còn m có script riêng. Cả hai script giữ ba trong chín lớp đầu ra ở 16 bit; theo thứ tự, đó là các đầu ra điểm khóa. Cả hai chạy bước tinh chỉnh sau lượng tử hóa của Hailo với tốc độ học 0.00015, và script n/s tắt thêm bước cân bằng trước lượng tử hóa.
 
 \section{Runtime: hcpose}
 
@@ -191,7 +193,7 @@ Bộ phân tích biến các bộ khung xương của mỗi khung hình thành t
   \texttt{-\/-camera-position} (trái, giữa, phải) đặt giá trị tiên nghiệm cho hướng chú ý của cả phòng.
 \end{itemize}
 
-\textbf{Quyết định.} Mỗi dấu hiệu là một hàm dốc từ ``bình thường'' đến ``rõ ràng lệch'' so với giá trị gốc của chỗ ngồi. Các dấu hiệu được kết hợp bằng noisy-OR, nên các dấu hiệu yếu như cúi đầu (viết bài trông cũng như vậy) chỉ có tác dụng khi đi cùng một dấu hiệu khác:
+\textbf{Quyết định.} Mỗi dấu hiệu là một hàm dốc từ ``bình thường'' đến ``rõ ràng lệch'' so với giá trị gốc của chỗ ngồi. Các dấu hiệu được kết hợp bằng noisy-OR, nên các dấu hiệu yếu chỉ có tác dụng khi đi cùng một dấu hiệu khác: thân người xoay và tay chạm mặt không bao giờ tự mình đánh dấu một học sinh, còn cúi đầu (viết bài trông cũng như vậy) chỉ đánh dấu khi đầu hạ thấp hơn nhiều so với độ cao thường ngày của chỗ ngồi:
 
 \begin{equation}
 s = 1 - \prod_{c} \left(1 - w_c \, r_c\right)
@@ -249,7 +251,7 @@ Nhờ vậy một cái liếc mắt ngắn không làm đổi trạng thái củ
 
 Một tệp YAML đi kèm mỗi mô hình đặt các ngưỡng phát hiện và tên điểm khóa.
 
-\textbf{Kiểm thử.} 44 bài test tự động bao gồm:
+\textbf{Kiểm thử.} 45 bài test tự động bao gồm:
 
 \begin{itemize}
 \tightlist
@@ -281,4 +283,4 @@ Một tệp YAML đi kèm mỗi mô hình đặt các ngưỡng phát hiện và
   các lần quét ngưỡng
 \end{itemize}
 
-Mọi phân tích đều có thể chạy lại từ các bộ khung xương đã lưu mà không cần video từ camera. Phiên bản được đánh giá được gắn tag \texttt{v1.0.3}.
+Mọi phân tích đều có thể chạy lại từ các bộ khung xương đã lưu mà không cần video từ camera. Phiên bản được đánh giá được gắn tag \texttt{v1.1.0}; phiên bản đầu của luận văn, với các HEF trước đó, là \texttt{v1.0.3}.

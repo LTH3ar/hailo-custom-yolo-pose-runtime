@@ -47,7 +47,9 @@ Inside `en/` and `vn/`:
 | `figures/` | figures; `figures/manual/` holds the ones made by hand |
 
 In `thesis/`: `tools/package.sh` builds both PDFs and Overleaf zips (used by CI and the release
-workflow); `tools/archive/` holds the original doc export and converter, no longer used.
+workflow); `tools/draw_charts.py` redraws the two charts (`scb_coverage.png`,
+`clips_rules_vs_learned.png`) from the numbers in `tools/chart_data/`; `tools/archive/` holds the
+original doc export and converter, no longer used.
 
 ## Language
 

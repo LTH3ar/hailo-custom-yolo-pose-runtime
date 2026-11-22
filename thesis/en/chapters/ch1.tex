@@ -41,7 +41,7 @@ The remaining problems are technical: lightweight pose models miss small student
 \item
   \textbf{hcpose}, an open-source runtime for custom YOLOv8-pose models on the Hailo-8, with a GStreamer engine and a Python engine that give the same results, installable and runnable with one command.\footnote{Source code and releases: \url{https://github.com/LTH3ar/hailo-custom-yolo-pose-runtime}}
 \item
-  \textbf{Tiling for far rows:} extra inferences on zoomed tiles of the back of the room, merged without duplicates in C++ inside the GStreamer pipeline. On SCB images it raised the share of students found from 49\% to 76\%, and from 17\% to 74\% in the far third, without changing the model.
+  \textbf{Tiling for far rows:} extra inferences on zoomed tiles of the back of the room, merged without duplicates in C++ inside the GStreamer pipeline. On SCB images it raised the share of students found from 55\% to 72\%, and from 25\% to 66\% in the far third, without changing the model.
 \item
   \textbf{Duplicate-skeleton removal:} a post-processing step that removes the second box YOLO-pose often gives one student.
 \item
@@ -54,7 +54,7 @@ The remaining problems are technical: lightweight pose models miss small student
   \begin{itemize}
   \tightlist
   \item
-    the SCB dataset
+    two public classroom datasets, SCB and ClaBehavior
   \item
     four real classroom clips (three public, one recorded for this work)
   \item
@@ -63,7 +63,7 @@ The remaining problems are technical: lightweight pose models miss small student
     a scripted staged session
   \end{itemize}
 
-  Together they show that classifiers trained on SCB do not transfer to real lectures well, while per-student calibration does.
+  Together they show that classifiers trained on these datasets do not transfer to real lectures well, even with a head-up attentive class, while per-student calibration does.
 \item
   \textbf{Edge measurements} on the device: throughput, latency, CPU, temperature and board power.
 \item

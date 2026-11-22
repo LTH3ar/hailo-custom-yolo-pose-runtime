@@ -52,7 +52,7 @@ m & 96 & 89.9 & 0.619 \\
 \end{tabularx}
 \end{table}
 
-\textbf{Keypoint accuracy.} On COCO val2017 the trained models reach 0.470, 0.568 and 0.625 keypoint AP on their 13 points, 4-5 points below the stock 17-keypoint models on the same points. On the Hailo-8, INT8 costs n 5.3 points and m 6.8. The s HEF loses 30.8 points, so it is left out of every accuracy result.
+\textbf{Keypoint accuracy.} On COCO val2017 the trained models reach 0.470, 0.568 and 0.625 keypoint AP on their 13 points, 4-5 points below the stock 17-keypoint models on the same points. On the Hailo-8, INT8 costs 3.8 points for n, 5.4 for s and 5.0 for m.
 
 \begin{table}[htbp]\small
 \caption{Keypoint AP on COCO val2017, 13 upper-body keypoints, COCO tolerances}\label{tab:keypoint-ap-on-coco-val2017-13-upper-bod}
@@ -60,9 +60,9 @@ m & 96 & 89.9 & 0.619 \\
 \toprule
 \textbf{Model} & \textbf{Stock 17-point model, on the 13 points} & \textbf{Trained 13-point model (.pt)} & \textbf{INT8 HEF on the Hailo-8} & \textbf{INT8 cost (AP points)} \\
 \midrule
-n & 0.523 & 0.470 & 0.417 & −5.3 \\
-s & 0.613 & 0.568 & 0.260 & −30.8 \\
-m & 0.665 & 0.625 & 0.557 & −6.8 \\
+n & 0.523 & 0.470 & 0.432 & −3.8 \\
+s & 0.613 & 0.568 & 0.514 & −5.4 \\
+m & 0.665 & 0.625 & 0.575 & −5.0 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -72,11 +72,13 @@ Keypoint AP (OKS 0.50:0.95) on the 5,000 val2017 images, scored with pycocotools
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Size.} m gains 0.14 AP over n on the Hailo-8 (0.557 against 0.417), for 4.7× the latency.
+  \textbf{Size.} m gains 0.14 AP over n on the Hailo-8 (0.575 against 0.432), for 4.7× the latency.
 \item
   \textbf{Training on 13 points.} Most of the 4-5 point loss is in placing the face points precisely. With one loose tolerance for every point, the gap shrinks to 1.1-1.5 points.
 \item
-  \textbf{The s HEF.} It still finds people (AP50 0.683) but places keypoints poorly (AP75 0.127). On matched detections its median keypoint error is 4-9\% of the box size, against 2-3\% for the n and m HEFs, and every point is shifted the same way. The n model was compiled with the same script and is unaffected, so the fault is in this compile, not in the settings: it came from a failed quantisation run (output SNR 4-11 dB). Re-optimising it with the same calibration images gives AP 0.487, and five seeded recompiles give 0.508 ± 0.011. The s model appears only in the speed results.
+  \textbf{The first s HEF.} The s HEF of the first version of this thesis scored AP 0.260: it still found people (AP50 0.683) but placed keypoints poorly (AP75 0.127), with every point shifted the same way. The n model was compiled with the same script and was unaffected, so the fault was in that compile, not in the settings: it came from a failed quantisation run (output SNR 4-11 dB). Recompiled, s scores 0.514 and is used like the other two.
+\item
+  \textbf{Compile-to-compile spread.} The quantisation is not exactly repeatable, so each size was compiled five times with different calibration draws (seeds 0-4). COCO val2017 AP over the five: n 0.430 ± 0.007, s 0.508 ± 0.011, m 0.570 ± 0.006. The deployed HEF of each size is the one that scored best on 1,000 held-out train2017 images, not on val2017: seed 2 for n and s, seed 1 for m. Its val2017 AP is therefore not chosen on the test set.
 \item
   \textbf{Training-log scores.} The log's keypoint mAP50-95 (0.329, 0.376, 0.401) is far below the same models scored by pycocotools with the same uniform tolerance (0.579, 0.660, 0.706). The cause is people with no labelled keypoint among the 13. They make up 4,503 of the 10,777 people in the validation labels (41.8\%). pycocotools ignores them, but Ultralytics' validator counts them as targets it can never match. With those people removed, Ultralytics' own validator gives 0.555, 0.632 and 0.669, close to the pycocotools figures. The log therefore understates keypoint accuracy, and its keypoint scores are not used as results.
 \end{itemize}
@@ -97,14 +99,14 @@ For the Hailo-8 each model is quantised to INT8 and compiled with the Hailo Data
 \toprule
 \textbf{Model} & \textbf{Hailo-8 FPS} & \textbf{Hardware latency (ms)} \\
 \midrule
-n & 131.5 & 5.7 \\
-s & 69.5 & 11.9 \\
+n & 131.2 & 5.7 \\
+s & 69.4 & 11.9 \\
 m & 31.5 & 26.7 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\textbf{Quantisation.} The compiler (Hailo Dataflow Compiler 3.33.1, Model Zoo 2.18) calibrated the INT8 ranges on 1,024 random train2017 images resized to 640×640. The n and s models share one model script and m has its own. Both scripts keep three of the nine output layers at 16 bits; by their order these are the keypoint outputs. Both run Hailo's post-quantisation fine-tuning at learning rate 0.00015, and the n/s script also turns off pre-quantisation equalisation.
+\textbf{Quantisation.} The compiler (Hailo Dataflow Compiler 3.33.1, Model Zoo 2.18) works on 1,024 train2017 images resized to 640×640 and drawn at random with a fixed seed, so a compile can be repeated with the same images. The INT8 ranges come from the first 64 of them (the compiler's default) and the fine-tuning uses all 1,024. The n and s models share one model script and m has its own. Both scripts keep three of the nine output layers at 16 bits; by their order these are the keypoint outputs. Both run Hailo's post-quantisation fine-tuning at learning rate 0.00015, and the n/s script also turns off pre-quantisation equalisation.
 
 \section{Runtime: hcpose}
 
@@ -197,7 +199,7 @@ The analyzer turns each frame's skeletons into a \textbf{focused}, \textbf{distr
   \texttt{-\/-camera-position} (left, centre, right) sets a prior for the room's attentive direction.
 \end{itemize}
 
-\textbf{Decision.} Each cue is a ramp from ``normal'' to ``clearly off'' relative to the seat's baseline. They combine with a noisy-OR, so weak cues such as head down (writing looks the same) only count together with another cue:
+\textbf{Decision.} Each cue is a ramp from ``normal'' to ``clearly off'' relative to the seat's baseline. They combine with a noisy-OR, so weak cues only count together with another cue: body turned and hand at the face can never flag a student alone, and head down (writing looks the same) only when the head drops far below the seat's usual height:
 
 \begin{equation}
 s = 1 - \prod_{c} \left(1 - w_c \, r_c\right)
@@ -255,7 +257,7 @@ This keeps brief glances from flipping a student.
 
 A per-model sidecar YAML sets detection thresholds and keypoint names.
 
-\textbf{Tests.} 44 automated tests cover:
+\textbf{Tests.} 45 automated tests cover:
 
 \begin{itemize}
 \tightlist
@@ -287,4 +289,4 @@ A per-model sidecar YAML sets detection thresholds and keypoint names.
   threshold sweeps
 \end{itemize}
 
-Every analysis can be rerun from the saved skeletons without the camera footage. The evaluated version is tagged \texttt{v1.0.3}.
+Every analysis can be rerun from the saved skeletons without the camera footage. The evaluated version is tagged \texttt{v1.1.0}; the first version of this thesis, with the earlier HEFs, is \texttt{v1.0.3}.
