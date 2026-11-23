@@ -97,5 +97,5 @@ supervisor wants vector figures, e.g. in draw.io exported to PDF with the same f
 - the spine text for binding: Khóa – Ngành – Họ và tên – Mã số học viên (template section 1.9)
 - the legal article numbers in chapter 4: check them against the official Vietnamese text
 
-**Privacy:** no frame or crop of clip_5 or of any minor goes in the thesis; figures come from
+**Privacy:** no frame or crop of any minor, or of clip_5 (adults who agreed to be recorded, not to publication), goes in the thesis; figures come from
 clip_4 (adults who agreed) and the exam-hall clip (adults).

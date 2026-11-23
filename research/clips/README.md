@@ -8,4 +8,4 @@
 - the width of the range
 - FPS
 
-The clips are third-party recordings of minors and stay out of the repo; only the skeleton files and the reports are committed.
+The clips stay out of the repo: the lecture and study-hall clips are third-party recordings of minors, the exam-hall clip is a third-party recording of adults, and clip_5's students agreed to be recorded but not to have their images published. Only the skeleton files and the reports are committed.

@@ -2,11 +2,11 @@
 
 A held-out check: the head-turn thresholds and the learned classifiers were tuned on other clips, and nothing was tuned on clip_5. Repo at `bf7b7a7`, INT8 HEFs `upper_body_n.hef` and `upper_body_m.hef`, run with `research/clips/run_clips.sh OUT clip_5_720p.mp4:center`.
 
-The clip shows minors. The video, frames, skeleton files, analysis outputs and the labelling page stay off the repo; only this report and the labels (`research/labels/student_labels_clip5.json`: clip, time, box, seat, stratum, label; no images) are committed.
+The students are adults: ten Grade-12 students, all 18 or older on the recording date, who agreed to be recorded for this research, not to have their images published. The video, frames, skeleton files, analysis outputs and the labelling page stay off the repo; only this report and the labels (`research/labels/student_labels_clip5.json`: clip, time, box, seat, stratum, label; no images) are committed.
 
 ## Clip
 
-- **Content:** 14 min, 10 secondary-school students in rows of 3/4/3 (3 at the back, 4 in the middle, 3 at the front). Loosely scripted, not directed.
+- **Content:** 14 min, 10 Grade-12 students (all adults) in rows of 3/4/3 (3 at the back, 4 in the middle, 3 at the front). Loosely scripted, not directed.
 - **Camera:** iPhone 16 Pro, high up at the front, centred.
 - **Source (`ffprobe`):**
   - HEVC Main 10, 1920×1080 landscape, no rotation or display matrix
