@@ -1,4 +1,4 @@
-# Release on a version tag (e.g. git tag -a v1.2.0 -m ... && git push origin v1.2.0): the runtime as a Python
+# Release on a version tag (e.g. git tag -a v1.4.0 -m ... && git push origin v1.4.0): the runtime as a Python
 # sdist and wheel. (The thesis moved to LTH3ar/hcpose-thesis, which releases its own PDFs; v1.0.3 and v1.1.0 here
 # still carry the thesis as it was then.)
 # The C++ post-process and Hailo libraries are built on the Pi by install.sh, not here.
