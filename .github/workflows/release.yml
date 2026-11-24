@@ -1,5 +1,6 @@
-# Release on a version tag (e.g. git tag -a v1.0-thesis -m ... && git push origin v1.0-thesis):
-# the runtime as a Python sdist and wheel, the thesis PDFs (English, Vietnamese) and their Overleaf bundles.
+# Release on a version tag (e.g. git tag -a v1.2.0 -m ... && git push origin v1.2.0): the runtime as a Python
+# sdist and wheel. (The thesis moved to LTH3ar/hcpose-thesis, which releases its own PDFs; v1.0.3 and v1.1.0 here
+# still carry the thesis as it was then.)
 # The C++ post-process and Hailo libraries are built on the Pi by install.sh, not here.
 name: Release
 on:
@@ -37,13 +38,6 @@ jobs:
           print("missing from the wheel:", missing) if missing else print(len(names), "files in the wheel, engagement included")
           sys.exit(1 if missing else 0)
           PY
-      - name: Install TeX Live (pdfLaTeX, vntex)
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q --no-install-recommends latexmk texlive-latex-recommended \
-            texlive-latex-extra texlive-fonts-recommended texlive-lang-other
-      - name: Build the thesis PDF and the Overleaf bundle
-        run: thesis/tools/package.sh dist en vn
       - uses: actions/upload-artifact@v4
         with:
           name: release
