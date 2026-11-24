@@ -8,7 +8,7 @@ Part of the *Privacy-First Classroom Engagement Analysis System via Edge Computi
 |---|---|
 | [hailo-custom-yolo-pose](https://github.com/LTH3ar/hailo-custom-yolo-pose) | train (Ultralytics) and compile (Hailo DFC) the model |
 | **hailo-custom-yolo-pose-runtime** (this) | run the HEF on the Pi: camera/video → skeletons |
-| [hailo-custom-yolo-pose-report](https://github.com/LTH3ar/hailo-custom-yolo-pose-report) | thesis report |
+| [hcpose-thesis](https://github.com/LTH3ar/hcpose-thesis) | the thesis (LaTeX, English and Vietnamese); private for now. Until November 2026 it lived in `thesis/` here, and releases v1.0.3 and v1.1.0 still carry its PDFs |
 
 Nothing about the model is hard-coded. The keypoint count, class count, strides, tensor order, uint8/uint16 outputs, and whether the HEF already applies sigmoid to the scores are all read from the HEF at startup. A 13-keypoint upper-body model, the stock 17-keypoint model, or a model with other keypoints all run with the same command.
 

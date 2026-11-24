@@ -1,4 +1,4 @@
-# Tests and thesis build (English and Vietnamese) on every push and pull request. The PDFs are kept as a build artifact.
+# Tests and the wheel on every push and pull request. (The thesis moved to LTH3ar/hcpose-thesis, which builds its own PDFs.)
 name: CI
 on:
   push:
@@ -35,18 +35,3 @@ jobs:
           sys.exit(1 if missing else 0)
           PY
 
-  thesis:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install TeX Live (pdfLaTeX, vntex)
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q --no-install-recommends latexmk texlive-latex-recommended \
-            texlive-latex-extra texlive-fonts-recommended texlive-lang-other
-      - name: Build the PDF and the Overleaf bundle
-        run: thesis/tools/package.sh dist en vn
-      - uses: actions/upload-artifact@v4
-        with:
-          name: thesis
-          path: dist/
