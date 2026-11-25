@@ -21,6 +21,7 @@ These are the results behind every number in thesis v1.1 and later (thesis relea
   | 05 | 22 Nov 2026 | `h05_crop/` |
   | 06 | 22 Nov 2026 | `h06_paired/` |
   | 07 | 25 Nov 2026 | `h07_s/`, the s rows of `figures/` |
+  | 09 | 25 Nov 2026 | `h09_latency/` |
 
   The originals stay in `pi5:~/hcpose_paper/`.
 
@@ -40,6 +41,7 @@ These are the results behind every number in thesis v1.1 and later (thesis relea
 | `h05_crop/` | Crop baseline (YOLOv8s-cls): `report.md`, `crop_cls.json`, `score.txt`, `cls_{thesis,strict,lenient}.{json,txt}`, `split.json.xz`, `split.txt`, `preds.jsonl.xz`, `files.txt` (image paths only), training / prediction logs, `tools/`; `clips/`: per-student crop decisions on the m and n tiled runs (`*_crop_{raw,smooth}.jsonl.xz`), logs and `scores/` |
 | `h06_paired/` | Paired crop vs pose comparison: `paired.json/txt`, `cv_*.json`, `cls_*.txt`, `cla_check.py/txt` (within-view check on ClaBehavior), `run.sh`, `run.log` |
 | `h07_s/` | The s model: `report.md`, `queue.sh`; `clips/` (s skeletons + logs, `clips_report*.md`); `staged/` (clip_4); `fps15/` (skeletons and logs of s + tiles in real time on 15 FPS copies); `edge15/` (latency trace, monitor CSVs, soak, `edge15_report.txt`); `scores/`; `sweep/`; coverage / dedup / `eval_tiling_s.txt`; `logs/`; `tools/` |
+| `h09_latency/` | Pipeline latency at 25 FPS on the lecture (`clip_3.mp4`, `HCPOSE_PACE_FILE=1`, GstShark interlatency, 70 s, as `research/edge/bench.sh`): s without and with tiles, and n without tiles as a check against `h02_edge/`. `latency_*.log`, `latency_*.trace.xz`, `report.txt` (`report.py` output), `latency_trend.txt` (median per quarter of each run, from `lat_trend.py`) |
 | `scb_poses/` | m pose caches (`extract_hef.py` output; boxes, keypoints and labels only, no pixels), the poses the learned classifiers were trained on: `scb_m.jsonl.xz`, `scb_m_tiles.jsonl.xz` (SCB) and `cla_m.jsonl.xz`, `cla_m_tiles.jsonl.xz` (ClaBehavior) |
 
 Left out:
@@ -76,7 +78,7 @@ Chapter 4 of `hcpose-thesis` (`en/chapters/ch4.tex`).
 | Tab. crop classifier on real classes | `h05_crop/clips/scores/` (`v1_pooled.md`, `clip5.md`, `clip4_summary.md`, `class_pct.txt`) |
 | Tab. Hailo-8 throughput and latency | `h02_edge/hailo_benchmark_{n,s,m}.txt` |
 | Tab. end-to-end performance | `h02_edge/edge_report.md`, `throughput_*.csv/log`; the idle-Pi repeat (111 vs 116 FPS): `h02_edge/edge_repeat/` |
-| Latency (text: 21 / 47 / 42 ms; m tiles 2.5 s) | `h02_edge/latency_*.log`, `latency_*.trace.xz`, `edge_report.md` |
+| Latency (text: 21 / 47 / 42 ms; m tiles 2.5 s; s 25 ms, s tiles 1.14 s) | `h02_edge/latency_*.log`, `latency_*.trace.xz`, `edge_report.md` (n, m); `h09_latency/report.txt`, `latency_trend.txt` (s, and the n check) |
 | s with tiles on a 15 FPS camera (text) | `h07_s/fps15/*.log`, `h07_s/edge15/edge15_report.txt`, `h07_s/scores/labels_*_15fps.md`, `h07_s/scores/classpct_15fps.txt` |
 | Tab. thermal behaviour over 15-minute runs | `h02_edge/soak_n_auto_realtime.*`, `soak_m_auto_max.*`, `edge_report.md`; `h07_s/edge15/soak_s_auto_15fps.*`, `edge15_report.txt`; idle `h02_edge/idle.csv` |
 | Tab. vendor power figures | Not a measurement: vendor specification, no file |
