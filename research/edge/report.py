@@ -106,7 +106,7 @@ def latency_ms(p):
 
 
 lat_rows = []
-for m in ("n", "m"):
+for m in ("n", "s", "m"):
     for t in ("none", "auto"):
         p = D / f"latency_{m}_{t}.trace"
         if not p.is_file():

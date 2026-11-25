@@ -47,7 +47,7 @@ for m in $MODELS; do for t in none auto; do
 done; done
 fi
 
-for m in n m; do for t in none auto; do
+for m in $MODELS; do for t in none auto; do
   T=(); [ "$t" = auto ] && T=(--tiles auto)
   echo "== latency (clip paced at its frame rate like a camera, 60 s): $m, tiles $t"
   # GStreamer's core "latency" tracer deadlocks this pipeline (GStreamer 1.26.2 + Hailo elements),
