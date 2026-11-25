@@ -1,0 +1,56 @@
+301 labelled, 275 focused/distracted, 26 can't tell; distracted share as labelled 5%, re-weighted 4.2%
+
+| File | Items | Not matched | Precision | Recall | Specificity | Balanced acc. | Flagged share | Precision (re-weighted) | Recall (re-weighted) | Flagged share (re-weighted) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| clip_3_s_auto_lenient_logistic.jsonl | 182 | 10 | 2% | 75% | 32% | 54% | 68% | 3% | 78% | 71% |
+| clip_3_s_auto_lenient_mlp.jsonl | 182 | 10 | 4% | 75% | 60% | 67% | 41% | 4% | 78% | 43% |
+| clip_3_s_auto_lenient_trees.jsonl | 182 | 10 | 4% | 75% | 57% | 66% | 43% | 4% | 78% | 47% |
+| clip_3_s_auto_logistic.jsonl | 182 | 10 | 2% | 75% | 31% | 53% | 69% | 3% | 78% | 71% |
+| clip_3_s_auto_mlp.jsonl | 182 | 10 | 3% | 75% | 48% | 61% | 53% | 3% | 78% | 56% |
+| clip_3_s_auto_none.jsonl | 182 | 10 | 0% | 0% | 99% | 50% | 1% | 0% | 0% | 1% |
+| clip_3_s_auto_strict_logistic.jsonl | 182 | 10 | 2% | 75% | 28% | 52% | 72% | 2% | 78% | 75% |
+| clip_3_s_auto_strict_mlp.jsonl | 182 | 10 | 2% | 50% | 47% | 49% | 53% | 2% | 56% | 55% |
+| clip_3_s_auto_strict_trees.jsonl | 182 | 10 | 4% | 75% | 58% | 66% | 43% | 4% | 78% | 48% |
+| clip_3_s_auto_thesis_logistic.jsonl | 182 | 10 | 2% | 75% | 31% | 53% | 69% | 3% | 78% | 71% |
+| clip_3_s_auto_thesis_mlp.jsonl | 182 | 10 | 3% | 75% | 48% | 61% | 53% | 3% | 78% | 56% |
+| clip_3_s_auto_thesis_trees.jsonl | 182 | 10 | 3% | 75% | 50% | 62% | 51% | 3% | 78% | 54% |
+| clip_3_s_auto_trees.jsonl | 182 | 10 | 3% | 75% | 50% | 62% | 51% | 3% | 78% | 54% |
+| clip_3_s_none_lenient_logistic.jsonl | 182 | 30 | 3% | 75% | 38% | 57% | 62% | 3% | 78% | 65% |
+| clip_3_s_none_lenient_mlp.jsonl | 182 | 30 | 4% | 75% | 63% | 69% | 37% | 5% | 78% | 39% |
+| clip_3_s_none_lenient_trees.jsonl | 182 | 30 | 4% | 75% | 59% | 67% | 42% | 4% | 78% | 45% |
+| clip_3_s_none_logistic.jsonl | 182 | 30 | 3% | 75% | 38% | 56% | 63% | 3% | 78% | 65% |
+| clip_3_s_none_mlp.jsonl | 182 | 30 | 4% | 75% | 54% | 64% | 47% | 4% | 78% | 49% |
+| clip_3_s_none_none.jsonl | 182 | 30 | 0% | 0% | 99% | 50% | 1% | 0% | 0% | 1% |
+| clip_3_s_none_strict_logistic.jsonl | 182 | 30 | 3% | 75% | 35% | 55% | 65% | 3% | 78% | 68% |
+| clip_3_s_none_strict_mlp.jsonl | 182 | 30 | 2% | 50% | 52% | 51% | 48% | 3% | 56% | 50% |
+| clip_3_s_none_strict_trees.jsonl | 182 | 30 | 4% | 75% | 59% | 67% | 42% | 4% | 78% | 46% |
+| clip_3_s_none_thesis_logistic.jsonl | 182 | 30 | 3% | 75% | 38% | 56% | 63% | 3% | 78% | 65% |
+| clip_3_s_none_thesis_mlp.jsonl | 182 | 30 | 4% | 75% | 54% | 64% | 47% | 4% | 78% | 49% |
+| clip_3_s_none_thesis_trees.jsonl | 182 | 30 | 3% | 75% | 52% | 63% | 49% | 3% | 78% | 52% |
+| clip_3_s_none_trees.jsonl | 182 | 30 | 3% | 75% | 52% | 63% | 49% | 3% | 78% | 52% |
+| clip_s_auto_lenient_logistic.jsonl | 93 | 5 | 0% | 0% | 87% | 43% | 12% | 0% | 0% | 13% |
+| clip_s_auto_lenient_mlp.jsonl | 93 | 5 | 33% | 22% | 95% | 59% | 6% | 7% | 5% | 4% |
+| clip_s_auto_lenient_trees.jsonl | 93 | 5 | 0% | 0% | 95% | 48% | 4% | 0% | 0% | 1% |
+| clip_s_auto_logistic.jsonl | 93 | 5 | 0% | 0% | 88% | 44% | 11% | 0% | 0% | 13% |
+| clip_s_auto_mlp.jsonl | 93 | 5 | 20% | 11% | 95% | 53% | 5% | 4% | 2% | 4% |
+| clip_s_auto_none.jsonl | 93 | 5 | 5% | 11% | 79% | 45% | 20% | 1% | 2% | 19% |
+| clip_s_auto_strict_logistic.jsonl | 93 | 5 | 0% | 0% | 88% | 44% | 11% | 0% | 0% | 11% |
+| clip_s_auto_strict_mlp.jsonl | 93 | 5 | – | 0% | 100% | 50% | 0% | – | 0% | 0% |
+| clip_s_auto_strict_trees.jsonl | 93 | 5 | – | 0% | 100% | 50% | 0% | – | 0% | 0% |
+| clip_s_auto_thesis_logistic.jsonl | 93 | 5 | 0% | 0% | 88% | 44% | 11% | 0% | 0% | 13% |
+| clip_s_auto_thesis_mlp.jsonl | 93 | 5 | 20% | 11% | 95% | 53% | 5% | 4% | 2% | 4% |
+| clip_s_auto_thesis_trees.jsonl | 93 | 5 | 0% | 0% | 94% | 47% | 5% | 0% | 0% | 1% |
+| clip_s_auto_trees.jsonl | 93 | 5 | 0% | 0% | 94% | 47% | 5% | 0% | 0% | 1% |
+| clip_s_none_lenient_logistic.jsonl | 93 | 27 | 0% | 0% | 87% | 43% | 12% | 0% | 0% | 7% |
+| clip_s_none_lenient_mlp.jsonl | 93 | 27 | 15% | 22% | 87% | 55% | 14% | 2% | 5% | 15% |
+| clip_s_none_lenient_trees.jsonl | 93 | 27 | 0% | 0% | 88% | 44% | 11% | 0% | 0% | 10% |
+| clip_s_none_logistic.jsonl | 93 | 27 | 0% | 0% | 88% | 44% | 11% | 0% | 0% | 8% |
+| clip_s_none_mlp.jsonl | 93 | 27 | 20% | 11% | 95% | 53% | 5% | 2% | 2% | 7% |
+| clip_s_none_none.jsonl | 93 | 27 | 13% | 22% | 85% | 53% | 16% | 3% | 6% | 14% |
+| clip_s_none_strict_logistic.jsonl | 93 | 27 | 0% | 0% | 89% | 45% | 10% | 0% | 0% | 5% |
+| clip_s_none_strict_mlp.jsonl | 93 | 27 | 0% | 0% | 95% | 48% | 4% | 0% | 0% | 7% |
+| clip_s_none_strict_trees.jsonl | 93 | 27 | 0% | 0% | 95% | 48% | 4% | 0% | 0% | 4% |
+| clip_s_none_thesis_logistic.jsonl | 93 | 27 | 0% | 0% | 88% | 44% | 11% | 0% | 0% | 8% |
+| clip_s_none_thesis_mlp.jsonl | 93 | 27 | 20% | 11% | 95% | 53% | 5% | 2% | 2% | 7% |
+| clip_s_none_thesis_trees.jsonl | 93 | 27 | 0% | 0% | 88% | 44% | 11% | 0% | 0% | 8% |
+| clip_s_none_trees.jsonl | 93 | 27 | 0% | 0% | 88% | 44% | 11% | 0% | 0% | 8% |

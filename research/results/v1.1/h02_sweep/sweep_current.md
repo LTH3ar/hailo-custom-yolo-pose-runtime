@@ -1,0 +1,8 @@
+# Rule threshold sweep
+
+Current defaults: yaw ramp 0.35-0.85, head-offset measure off, on threshold 0.6.
+
+| Yaw ramp | Head-offset ramp | On threshold | Model | clip_4 recall | clip_4 precision | clip_4 false alarms, attentive / writing | clip_4 latency (s) | Labels: false alarms on focused | Labels: distracted caught | Lecture % | Exam % | Study hall % |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.35-0.85 | off | 0.6 | n | 11% | 100% | 0% / 0% | 3.0 | 7/230 (3%) | 0/13 | 2.1% | 7.1% | 45.7% |
+| 0.35-0.85 | off | 0.6 | m | 11% | 100% | 0% / 0% | 2.0 | 14/244 (6%) | 0/13 | 1.4% | 11.2% | 33.5% |

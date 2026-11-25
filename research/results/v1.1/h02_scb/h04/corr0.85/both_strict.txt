@@ -1,0 +1,28 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+[scb] 6175 same-picture pairs that are not byte-identical; 189 lesson groups -> 188 after joining them
+[clabehavior] 400 images, 86 camera groups
+64917 students (4 pose cache(s)), 254 lesson groups, distracted 18.9%; mapping strict
+  clabehavior: 10480 students, 85 groups, distracted 13.2%
+  scb: 54437 students, 169 groups, distracted 19.9%
+
+model                       AUC  within-img AUC  bal. acc  (5-fold, grouped by lesson)
+logistic regression       0.770           0.733    70.9%
+    on clabehavior        0.707           0.686    65.5%
+    on scb                0.777           0.755    71.6%
+gradient-boosted trees    0.875           0.847    78.9%
+    on clabehavior        0.846           0.834    76.1%
+    on scb                0.879           0.853    79.2%
+   per behavior, share predicted distracted: read 15%, write 6%, raise_hand 30%, lookup 15%, turn_head 74%
+MLP (64-32)               0.889           0.859    80.4%
+    on clabehavior        0.854           0.843    77.3%
+    on scb                0.894           0.867    80.8%
+
+train -> test                model                       AUC  within-img AUC  bal. acc  pred / true distracted
+clabehavior -> scb           logistic regression       0.667           0.665    63.5%         41% / 20%
+clabehavior -> scb           gradient-boosted trees    0.696           0.708    63.9%         28% / 20%
+clabehavior -> scb           MLP (64-32)               0.723           0.716    66.9%         35% / 20%
+scb -> clabehavior           logistic regression       0.655           0.647    60.6%         47% / 13%
+scb -> clabehavior           gradient-boosted trees    0.790           0.793    71.8%         34% / 13%
+scb -> clabehavior           MLP (64-32)               0.794           0.785    71.0%         18% / 13%
+
+wrote /home/raven/hcpose_paper/h04/corr0.85/both_strict.json

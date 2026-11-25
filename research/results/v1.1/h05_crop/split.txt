@@ -1,0 +1,7 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+[scb] 6175 same-picture pairs that are not byte-identical; 189 lesson groups -> 188 after joining them
+[clabehavior] 400 images, 42 camera groups
+[warn] -340 classifier students not found among the labelled boxes
+67845 labelled students, 43940 evaluated (matched to a pose box), 230 groups in 5 folds -> /home/raven/hcpose_paper/h05/split.json
+  clabehavior: students per fold [4593, 352, 512, 2495, 131]; actions {'lookup': 4480, 'read': 1021, 'turn_head': 1011, 'raise_hand': 684, 'write': 579, 'discuss': 242, 'stand': 66}
+  scb: students per fold [8224, 14133, 12304, 11543, 13558]; actions {'read': 21894, 'raise_hand': 12765, 'turn_head': 9994, 'write': 8011, 'discuss': 5065, 'bow_head': 2033}

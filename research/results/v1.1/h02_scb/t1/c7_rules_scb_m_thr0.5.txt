@@ -1,0 +1,53 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+images by camera view: {'back': 2149, 'few': 619, 'front': 4377, 'mixed': 971}
+
+label -> matched to a pose detection (front view):
+  BowHead          147/1419   (10%)
+  TurnHead        2898/7462   (39%)
+  discuss          640/3358   (19%)
+  hand-raising    2575/6119   (42%)
+  read            7963/19031  (42%)
+  write           3027/7180   (42%)
+
+=== front view: 17250 labelled students ===
+  behavior           n  pred distracted  top cues
+  read            7721           12.0%   face_hidden:421, head_turned:281, body_turned:118
+  write           2947           16.0%   face_hidden:221, body_turned:79, head_turned:74
+  hand-raising    2434           14.6%   head_turned:153, face_hidden:141, body_turned:50
+  TurnHead        2802           17.5%   face_hidden:227, head_turned:205, body_turned:46
+  BowHead          141           34.8%   face_hidden:31, body_turned:9, head_down:4
+  discuss          630           46.3%   face_hidden:225, body_turned:42, head_turned:22
+  focused vs distracted @ on_threshold=0.6: recall(distracted) 23.2%, specificity(focused) 86.6%, precision 32.2%, F1 0.27, balanced acc 54.9%, AUC 0.549
+  confusion [rows true focused/distracted, cols pred focused/distracted]: [[11351, 1751], [2743, 830]]
+
+=== mixed view: 2236 labelled students ===
+  behavior           n  pred distracted  top cues
+  read             574           50.7%   face_hidden:259, head_turned:18, body_turned:11
+  write            215           40.5%   face_hidden:72, body_turned:7, head_turned:4
+  hand-raising     687           65.9%   face_hidden:425, head_turned:18, body_turned:7
+  TurnHead         325           51.1%   face_hidden:151, head_turned:12, body_turned:3
+  BowHead           22           81.8%   face_hidden:15, body_turned:2, head_down:1
+  discuss          239           78.7%   face_hidden:178, body_turned:7, head_turned:3
+  focused vs distracted @ on_threshold=0.6: recall(distracted) 63.5%, specificity(focused) 43.7%, precision 30.9%, F1 0.42, balanced acc 53.6%, AUC 0.566
+  confusion [rows true focused/distracted, cols pred focused/distracted]: [[645, 831], [214, 372]]
+
+=== back view: 3860 labelled students ===
+  behavior           n  pred distracted  top cues
+  read             530           86.6%   face_hidden:455, body_turned:3, head_turned:1
+  write            108           87.0%   face_hidden:91, body_turned:3
+  hand-raising    2041           85.3%   face_hidden:1728, body_turned:9, hand_at_face:2
+  TurnHead         617           86.7%   face_hidden:529, head_turned:6
+  BowHead          132          100.0%   face_hidden:132
+  discuss           30           83.3%   face_hidden:24, body_turned:1
+  focused vs distracted @ on_threshold=0.6: recall(distracted) 88.8%, specificity(focused) 14.4%, precision 23.2%, F1 0.37, balanced acc 51.6%, AUC 0.625
+  confusion [rows true focused/distracted, cols pred focused/distracted]: [[386, 2293], [87, 692]]
+
+1295 matched students had no usable keypoints (unknown)
+
+front view, feature medians by behavior:
+  read          yaw_dev  0.14  head_drop  0.03  face_hidden   5%  hand_raised   0%
+  write         yaw_dev  0.13  head_drop  0.04  face_hidden   7%  hand_raised   0%
+  hand-raising  yaw_dev  0.16  head_drop -0.01  face_hidden   6%  hand_raised  13%
+  TurnHead      yaw_dev  0.18  head_drop -0.00  face_hidden   8%  hand_raised   0%
+  BowHead       yaw_dev  0.14  head_drop  0.06  face_hidden  22%  hand_raised   0%
+  discuss       yaw_dev  0.20  head_drop  0.00  face_hidden  36%  hand_raised   0%

@@ -1,0 +1,12 @@
+[2026-11-22T08:11:47+07:00] sweep current
+[2026-11-22T08:13:53+07:00] sweep current rc=0
+[2026-11-22T08:13:53+07:00] sweep offset
+[2026-11-22T08:40:36+07:00] sweep offset rc=0
+[2026-11-22T08:40:36+07:00] sweep yaw
+[2026-11-22T09:01:51+07:00] sweep yaw rc=0
+[2026-11-22T09:01:51+07:00] SWEEP_DONE
+[2026-11-22T09:03:36+07:00] edge_repeat new_1: 111.3 FPS avg
+[2026-11-22T09:04:39+07:00] edge_repeat old_1: 116.3 FPS avg
+[2026-11-22T09:05:44+07:00] edge_repeat new_2: 110.9 FPS avg
+[2026-11-22T09:06:47+07:00] edge_repeat old_2: 116.4 FPS avg
+[2026-11-22T09:07:07+07:00] ALL_DONE

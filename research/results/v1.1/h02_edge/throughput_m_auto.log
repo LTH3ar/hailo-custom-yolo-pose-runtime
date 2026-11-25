@@ -1,0 +1,346 @@
+[hcpose] engagement: rule-based cues
+[hcpose] post-process loaded (filter_letterbox), score>=0.3 iou=0.7 kpt>=0.5
+[hcpose] model: 13 keypoints, 1 class(es), reg_max 16, input 640x640
+[hcpose]   stride 8: boxes=upper_body_m_dfc3331_seed1/conv59 scores=upper_body_m_dfc3331_seed1/conv60 kpts=upper_body_m_dfc3331_seed1/conv61
+[hcpose]   stride 16: boxes=upper_body_m_dfc3331_seed1/conv75 scores=upper_body_m_dfc3331_seed1/conv76 kpts=upper_body_m_dfc3331_seed1/conv77
+[hcpose]   stride 32: boxes=upper_body_m_dfc3331_seed1/conv90 scores=upper_body_m_dfc3331_seed1/conv91 kpts=upper_body_m_dfc3331_seed1/conv92
+[hcpose] class scores: already sigmoid in HEF
+[hcpose] keypoint visibility: logits -> sigmoid applied here
+[hcpose] /home/raven/models/upper_body_m.hef: 13 keypoints, 1 class(es), input 640x640
+[hcpose] engagement: rules, display=both camera=center no calibration file (pass --calibration room.json to keep what it learns)
+[hcpose] tiling: full frame + 3 tile(s) over rows 0%-60% (493x432 px each); 4 inferences per frame
+FPS:    7.0  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  Engagement: waiting for students
+FPS:    7.9  2% distracted (0-22%) | 17 of ~17 students | calibrating
+FPS:    7.9  4% distracted (1-21%) | 23 of ~23 students | calibrating
+FPS:    7.9  4% distracted (1-20%) | 24 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-20%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-20%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-20%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-20%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-20%) | 25 of ~26 students | calibrating
+FPS:    7.9  5% distracted (1-20%) | 26 of ~27 students | calibrating
+FPS:    7.9  5% distracted (1-21%) | 26 of ~27 students | calibrating
+FPS:    7.9  6% distracted (2-22%) | 26 of ~27 students | calibrating
+FPS:    7.9  7% distracted (2-24%) | 26 of ~27 students | calibrating
+FPS:    7.9  8% distracted (2-25%) | 27 of ~28 students | calibrating
+FPS:    7.9  10% distracted (3-26%) | 28 of ~28 students | calibrating
+FPS:    7.9  11% distracted (4-27%) | 28 of ~28 students | calibrating
+FPS:    7.9  11% distracted (4-28%) | 28 of ~28 students | calibrating
+FPS:    7.9  12% distracted (4-28%) | 28 of ~28 students | calibrating
+FPS:    7.9  12% distracted (4-29%) | 28 of ~29 students | calibrating
+FPS:    7.9  12% distracted (4-28%) | 28 of ~29 students | calibrating
+FPS:    7.9  11% distracted (4-26%) | 32 of ~33 students | calibrating
+FPS:    7.9  10% distracted (4-25%) | 32 of ~33 students | calibrating
+FPS:    7.9  9% distracted (3-24%) | 32 of ~33 students | calibrating
+FPS:    7.9  9% distracted (3-23%) | 32 of ~33 students | calibrating
+FPS:    7.9  8% distracted (2-23%) | 31 of ~32 students | calibrating
+FPS:    7.9  7% distracted (2-22%) | 31 of ~32 students | calibrating
+FPS:    7.9  6% distracted (2-20%) | 31 of ~32 students | calibrating
+FPS:    7.9  5% distracted (1-19%) | 31 of ~32 students | calibrating
+FPS:    7.9  5% distracted (1-18%) | 31 of ~32 students | calibrating
+FPS:    7.9  4% distracted (1-18%) | 31 of ~32 students | calibrating
+FPS:    7.9  4% distracted (1-17%) | 31 of ~32 students | calibrating
+FPS:    7.9  3% distracted (1-16%) | 31 of ~32 students | calibrating
+FPS:    7.9  3% distracted (0-18%) | 27 of ~32 students | calibrating
+FPS:    7.9  3% distracted (1-18%) | 27 of ~32 students
+FPS:    7.9  4% distracted (1-18%) | 26 of ~32 students
+FPS:    7.9  4% distracted (1-19%) | 26 of ~32 students
+FPS:    7.9  4% distracted (1-19%) | 26 of ~32 students
+FPS:    7.9  4% distracted (1-19%) | 25 of ~32 students
+FPS:    7.9  3% distracted (0-18%) | 25 of ~32 students
+FPS:    7.9  3% distracted (0-18%) | 25 of ~32 students
+FPS:    7.9  2% distracted (0-17%) | 25 of ~31 students
+FPS:    7.9  2% distracted (0-17%) | 25 of ~31 students | calibrating
+FPS:    7.9  2% distracted (0-17%) | 25 of ~30 students | calibrating
+FPS:    7.9  2% distracted (0-17%) | 24 of ~30 students | calibrating
+FPS:    7.9  2% distracted (0-18%) | 24 of ~30 students | calibrating
+FPS:    7.9  3% distracted (0-18%) | 24 of ~30 students | calibrating
+FPS:    7.9  3% distracted (0-19%) | 24 of ~30 students | calibrating
+FPS:    7.9  3% distracted (0-18%) | 25 of ~30 students | calibrating
+FPS:    7.9  3% distracted (0-18%) | 25 of ~30 students | calibrating
+FPS:    7.9  3% distracted (0-18%) | 25 of ~30 students | calibrating
+FPS:    7.9  2% distracted (0-17%) | 25 of ~30 students | calibrating
+FPS:    7.9  2% distracted (0-16%) | 25 of ~30 students | calibrating
+FPS:    7.9  1% distracted (0-15%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.8  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    8.0  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~30 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~29 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~29 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~27 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.8  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    8.0  0% distracted (0-13%) | 25 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating[hcpose] seat 1 calibrated: {'yaw': 0.0797753818333149, 'head_height': 0.29286883771419525, 'torso_ratio': 0.6016115869583332, 'head_offset': 0.059842752292752266}
+[hcpose] seat 15 calibrated: {'yaw': -0.2271285057067871, 'head_height': 0.4131755828857422, 'torso_ratio': 0.45461606339541766, 'head_offset': -0.22565779089927673}
+[hcpose] seat 13 calibrated: {'yaw': -0.052819447591900826, 'head_height': 0.31927289068698883, 'torso_ratio': 0.4351321969014459, 'head_offset': 0.040652502328157425}
+[hcpose] seat 2 calibrated: {'yaw': -0.087944645434618, 'head_height': 0.5552801489830017, 'torso_ratio': 0.4949918768267564, 'head_offset': 0.023600781336426735}
+[hcpose] seat 10 calibrated: {'yaw': -0.04352256841957569, 'head_height': 0.27276821434497833, 'torso_ratio': 0.551055259819819, 'head_offset': 0.0037493238924071193}
+[hcpose] seat 16 calibrated: {'yaw': -0.039296954870224, 'head_height': 0.4075721204280853, 'torso_ratio': 0.45341489784000816, 'head_offset': -0.20150020718574524}
+[hcpose] seat 19 calibrated: {'yaw': -0.1984514370560646, 'head_height': 0.34755370020866394, 'torso_ratio': 0.38534141440276276, 'head_offset': -0.39279526472091675}
+[hcpose] seat 4 calibrated: {'yaw': -0.20469681173563004, 'head_height': 0.32253193855285645, 'torso_ratio': 0.49091666223962827, 'head_offset': -0.21881617605686188}
+[hcpose] seat 3 calibrated: {'yaw': -0.26658788323402405, 'head_height': 0.25052234530448914, 'torso_ratio': 0.5306492928637666, 'head_offset': -0.03516580909490585}
+[hcpose] seat 20 calibrated: {'yaw': -0.07062135636806488, 'head_height': 0.5123012661933899, 'torso_ratio': 0.4476931861735023, 'head_offset': -0.050254739820957184}
+[hcpose] seat 23 calibrated: {'yaw': -0.05366125702857971, 'head_height': 0.4570101648569107, 'torso_ratio': 0.37949446288284805, 'head_offset': 0.1610075682401657}
+[hcpose] seat 18 calibrated: {'yaw': -0.09967300295829773, 'head_height': 0.17877383530139923, 'torso_ratio': 0.3800447082000758, 'head_offset': 0.11196788772940636}
+[hcpose] seat 8 calibrated: {'yaw': -0.17001190036535263, 'head_height': 0.1851862221956253, 'torso_ratio': 0.46069142120579776, 'head_offset': -0.11504500731825829}
+[hcpose] seat 6 calibrated: {'yaw': -0.19605211913585663, 'head_height': 0.44535574316978455, 'torso_ratio': 0.47864806895275724, 'head_offset': -0.15673302859067917}
+[hcpose] seat 21 calibrated: {'yaw': -0.2559158653020859, 'head_height': 0.3878481388092041, 'torso_ratio': 0.21765790109349736, 'head_offset': 0.02466352190822363}
+[hcpose] seat 17 calibrated: {'yaw': -0.14993742108345032, 'head_height': 0.40562763810157776, 'torso_ratio': 0.39923546832211937, 'head_offset': -0.2491035908460617}
+[hcpose] seat 14 calibrated: {'yaw': -0.017890118062496185, 'head_height': 0.4316455274820328, 'torso_ratio': 0.4273553739525177, 'head_offset': -0.13057180494070053}
+[hcpose] seat 25 calibrated: {'yaw': -0.24886178970336914, 'head_height': 0.4611099064350128, 'torso_ratio': 0.31931748788000497, 'head_offset': 0.022976383566856384}
+[hcpose] seat 43 calibrated: {'yaw': -0.09062785282731056, 'head_height': 0.2944575697183609, 'torso_ratio': 0.5320063213200972, 'head_offset': -0.10247461497783661}
+[hcpose] seat 44 calibrated: {'yaw': -0.22950871288776398, 'head_height': 0.40937724709510803, 'torso_ratio': 0.4353511172701576, 'head_offset': -0.06851765513420105}
+[hcpose] seat 45 calibrated: {'yaw': -0.16231490671634674, 'head_height': 0.13725034892559052, 'torso_ratio': 0.47309012113374127, 'head_offset': 0.08732228353619576}
+[hcpose] seat 22 calibrated: {'yaw': -0.1489221677184105, 'head_height': 0.39945703744888306, 'torso_ratio': 0.4045585769769603, 'head_offset': -0.2535967528820038}
+[hcpose] seat 46 calibrated: {'yaw': -0.1044439896941185, 'head_height': 0.41311152279376984, 'torso_ratio': 0.5090895565773139, 'head_offset': -0.0060357830952852964}
+
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.7  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    8.0  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~25 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.7  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    8.1  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.7  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    8.0  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.7  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    8.1  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.7  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    8.0  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.7  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    8.1  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.7  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    8.1  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 26 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.8  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating[hcpose] end of stream
+
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 25 of ~26 students | calibrating
+FPS:    7.9  1% distracted (0-15%) | 25 of ~26 students | calibrating
+FPS:    7.9  2% distracted (0-16%) | 25 of ~26 students | calibrating
+FPS:    7.9  2% distracted (0-17%) | 25 of ~26 students | calibrating
+FPS:    7.9  2% distracted (0-17%) | 25 of ~26 students | calibrating
+FPS:    7.9  3% distracted (0-18%) | 25 of ~26 students | calibrating
+FPS:    7.9  3% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  4% distracted (1-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  3% distracted (0-19%) | 25 of ~26 students | calibrating
+FPS:    7.9  3% distracted (0-18%) | 25 of ~26 students | calibrating
+FPS:    7.9  2% distracted (0-17%) | 25 of ~26 students | calibrating
+FPS:    7.9  2% distracted (0-16%) | 25 of ~26 students | calibrating
+FPS:    7.9  2% distracted (0-16%) | 25 of ~26 students | calibrating
+FPS:    7.9  1% distracted (0-15%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-14%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-13%) | 25 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:    7.9  0% distracted (0-14%) | 24 of ~26 students | calibrating
+[hcpose] 4952 frames in 628.1s (7.9 FPS avg)
+[hcpose] engagement: 0.7% of counted student-time distracted (4099.4 student-seconds, 41 seats)

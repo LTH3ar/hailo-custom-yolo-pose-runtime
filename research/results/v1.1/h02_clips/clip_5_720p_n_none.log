@@ -1,0 +1,106 @@
+[hcpose] post-process loaded (filter_letterbox), score>=0.3 iou=0.7 kpt>=0.5
+[hcpose] model: 13 keypoints, 1 class(es), reg_max 16, input 640x640
+[hcpose]   stride 8: boxes=upper_body_n_dfc3331_seed2/conv43 scores=upper_body_n_dfc3331_seed2/conv44 kpts=upper_body_n_dfc3331_seed2/conv45
+[hcpose]   stride 16: boxes=upper_body_n_dfc3331_seed2/conv57 scores=upper_body_n_dfc3331_seed2/conv58 kpts=upper_body_n_dfc3331_seed2/conv59
+[hcpose]   stride 32: boxes=upper_body_n_dfc3331_seed2/conv70 scores=upper_body_n_dfc3331_seed2/conv71 kpts=upper_body_n_dfc3331_seed2/conv72
+[hcpose] class scores: already sigmoid in HEF
+[hcpose] keypoint visibility: logits -> sigmoid applied here
+[hcpose] end of stream
+[hcpose] /home/raven/models/upper_body_n.hef: 13 keypoints, 1 class(es), input 640x640
+FPS:  113.3  persons: 10
+FPS:  132.5  persons: 10
+FPS:  131.5  persons: 11
+FPS:  131.4  persons: 11
+FPS:  131.6  persons: 10
+FPS:  131.6  persons: 10
+FPS:  131.5  persons: 10
+FPS:  127.0  persons: 10
+FPS:  135.4  persons: 11
+FPS:  132.3  persons: 10
+FPS:  131.5  persons: 10
+FPS:  131.4  persons: 10
+FPS:  131.5  persons: 10
+FPS:  131.5  persons: 10
+FPS:  131.6  persons: 10
+FPS:  131.4  persons: 11
+FPS:  131.5  persons: 10
+FPS:  131.5  persons: 10
+FPS:  131.6  persons: 10
+FPS:  131.5  persons: 10
+FPS:  131.4  persons: 11
+FPS:  131.5  persons: 12
+FPS:  131.5  persons: 12
+FPS:  131.7  persons: 12
+FPS:  131.3  persons: 11
+FPS:  131.7  persons: 10
+FPS:  131.4  persons: 13
+FPS:  131.4  persons: 10
+FPS:  130.6  persons: 11
+FPS:  132.4  persons: 10
+FPS:  131.6  persons: 10
+FPS:  131.6  persons: 10
+FPS:  131.5  persons: 10
+FPS:  131.5  persons: 11
+FPS:  131.5  persons: 11
+FPS:  131.6  persons: 10
+FPS:  131.3  persons: 10
+FPS:  127.3  persons: 10
+FPS:  130.4  persons: 10
+FPS:  135.5  persons: 10
+FPS:  130.8  persons: 9
+FPS:  130.7  persons: 10
+FPS:  131.0  persons: 10
+FPS:  133.6  persons: 10
+FPS:  129.3  persons: 10
+FPS:  134.4  persons: 9
+FPS:  128.5  persons: 11
+FPS:  134.4  persons: 11
+FPS:  129.0  persons: 12
+FPS:  133.9  persons: 11
+FPS:  131.5  persons: 9
+FPS:  129.1  persons: 10
+FPS:  134.0  persons: 10
+FPS:  130.9  persons: 11
+FPS:  132.5  persons: 11
+FPS:  129.9  persons: 11
+FPS:  130.1  persons: 11
+FPS:  133.3  persons: 11
+FPS:  131.4  persons: 11
+FPS:  132.2  persons: 10
+FPS:  127.9  persons: 10
+FPS:  135.5  persons: 9
+FPS:  131.4  persons: 10
+FPS:  129.0  persons: 10
+FPS:  132.8  persons: 9
+FPS:  132.5  persons: 10
+FPS:  126.2  persons: 12
+FPS:  136.8  persons: 11
+FPS:  127.7  persons: 10
+FPS:  133.0  persons: 10
+FPS:  131.7  persons: 11
+FPS:  131.9  persons: 11
+FPS:  130.8  persons: 10
+FPS:  132.5  persons: 9
+FPS:  131.3  persons: 11
+FPS:  132.4  persons: 9
+FPS:  131.6  persons: 9
+FPS:  130.5  persons: 10
+FPS:  132.7  persons: 8
+FPS:  130.8  persons: 9
+FPS:  131.4  persons: 9
+FPS:  131.7  persons: 9
+FPS:  129.2  persons: 9
+FPS:  134.1  persons: 9
+FPS:  131.4  persons: 9
+FPS:  129.3  persons: 10
+FPS:  133.2  persons: 9
+FPS:  131.7  persons: 10
+FPS:  129.3  persons: 10
+FPS:  130.7  persons: 11
+FPS:  134.4  persons: 10
+FPS:  131.2  persons: 10
+FPS:  131.3  persons: 10
+FPS:  132.5  persons: 10
+FPS:  131.2  persons: 10
+[hcpose] 25225 frames in 192.1s (131.3 FPS avg)
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_5_720p_n_none.skeleton.jsonl

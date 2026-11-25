@@ -1,0 +1,16 @@
+43940 of 43940 evaluated students have a fold prediction
+
+mapping   tested on          n    AUC  within-img AUC  bal. acc
+thesis    scb            36687  0.897           0.849    76.6%
+strict    pooled         41289  0.912           0.860    79.2%
+strict    scb            34116  0.929           0.869    80.5%
+strict    clabehavior     7173  0.815           0.844    71.9%
+lenient   pooled         43940  0.883           0.846    75.6%
+lenient   scb            36687  0.897           0.849    76.5%
+lenient   clabehavior     7253  0.815           0.838    71.4%
+
+mapping   train -> test                   AUC  within-img AUC  bal. acc  pred / true distracted
+strict    clabehavior -> scb            0.668           0.639    61.0%             25% / 21%
+strict    scb -> clabehavior            0.720           0.770    65.1%             31% / 13%
+lenient   clabehavior -> scb            0.647           0.610    60.2%             34% / 26%
+lenient   scb -> clabehavior            0.713           0.762    63.9%             31% / 14%

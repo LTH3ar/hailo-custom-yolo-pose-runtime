@@ -1,0 +1,14 @@
+10138 images, 68882 labelled students, detection threshold 0.3
+detections per image: none 13.3, tiles 19.5
+
+                                 none    tiles   gain
+all                             54.6%    72.0%  +17.3 pts   (n=68882)
+small (far)                     24.6%    65.5%  +40.9 pts   (n=22961)
+medium                          64.7%    74.7%  +10.0 pts   (n=22960)
+large (near)                    74.6%    75.6%   +1.0 pts   (n=22961)
+BowHead                         33.8%    55.7%  +21.9 pts   (n=4962)
+TurnHead                        60.7%    85.0%  +24.3 pts   (n=11156)
+discuss                         37.6%    53.1%  +15.4 pts   (n=5392)
+hand-raising                    60.3%    68.6%   +8.4 pts   (n=13453)
+read                            59.4%    78.8%  +19.4 pts   (n=24078)
+write                           48.2%    63.5%  +15.3 pts   (n=9841)

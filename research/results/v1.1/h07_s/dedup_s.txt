@@ -1,0 +1,2 @@
+scb_s.jsonl vs scb_s_nodedup.jsonl: images 10138/10138; >=0.25 137009 vs 142192 -> removed 3.6%; >=0.3 122706 vs 125676 -> removed 2.4%
+scb_s_tiles.jsonl vs scb_s_tiles_nodedup.jsonl: images 10138/10138; >=0.25 208539 vs 216696 -> removed 3.8%; >=0.3 196142 vs 201005 -> removed 2.4%

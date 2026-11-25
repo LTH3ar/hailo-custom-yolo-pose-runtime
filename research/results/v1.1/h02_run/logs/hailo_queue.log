@@ -1,0 +1,26 @@
+[2026-11-22T01:36:42+07:00] start edge
+[2026-11-22T02:43:00+07:00] end edge rc=0 3978s
+[2026-11-22T02:43:00+07:00] start scb_m
+[2026-11-22T02:50:06+07:00] end scb_m rc=0 426s
+[2026-11-22T02:50:06+07:00] start scb_m_tiles
+[2026-11-22T03:15:55+07:00] end scb_m_tiles rc=0 1549s
+[2026-11-22T03:15:55+07:00] start scb_n
+[2026-11-22T03:20:15+07:00] end scb_n rc=0 260s
+[2026-11-22T03:20:15+07:00] start scb_n_tiles
+[2026-11-22T03:31:22+07:00] end scb_n_tiles rc=0 667s
+[2026-11-22T03:31:22+07:00] start cla_m
+[2026-11-22T03:31:55+07:00] end cla_m rc=0 33s
+[2026-11-22T03:31:55+07:00] start cla_m_tiles
+[2026-11-22T03:33:15+07:00] end cla_m_tiles rc=0 80s
+[2026-11-22T03:33:15+07:00] start clips
+[2026-11-22T06:45:12+07:00] end clips rc=0 11517s
+[2026-11-22T06:45:12+07:00] start staged
+[2026-11-22T07:15:27+07:00] end staged rc=0 1815s
+[2026-11-22T07:15:27+07:00] QUEUE_DONE
+[2026-11-22T07:15:27+07:00] start scb_n_nodedup
+[2026-11-22T07:19:49+07:00] end scb_n_nodedup rc=0 262s
+[2026-11-22T07:19:49+07:00] start scb_n_tiles_nodedup
+[2026-11-22T07:29:54+07:00] end scb_n_tiles_nodedup rc=0 605s
+[2026-11-22T07:29:54+07:00] QUEUE2_DONE
+[2026-11-22T07:30:14+07:00] start edge_repeat_new_1
+[2026-11-22T08:11:34+07:00] queue stopped by hand: edge_repeat_new_1 hung (monitor not signalled) and ran during the sweep; repeats rerun via tools/after_sweep.sh

@@ -1,0 +1,6 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+19248 front-view students with a head offset (/home/raven/hcpose_paper/poses/scb_m.jsonl)
+  TurnHead vs read                 AUC 0.555  (n 3390 vs 9081)
+  TurnHead vs read+write           AUC 0.559  (n 3390 vs 12397)
+  TurnHead vs all focused          AUC 0.568  (n 3390 vs 15141)
+  all distracted vs all focused    AUC 0.590  (n 4107 vs 15141)

@@ -1,0 +1,149 @@
+{
+ "sources": [
+  [
+   "scb",
+   "/home/raven/hcpose_paper/poses/scb_m.jsonl"
+  ],
+  [
+   "scb",
+   "/home/raven/hcpose_paper/poses/scb_m_tiles.jsonl"
+  ],
+  [
+   "clabehavior",
+   "/home/raven/hcpose_paper/poses/cla_m.jsonl"
+  ],
+  [
+   "clabehavior",
+   "/home/raven/hcpose_paper/poses/cla_m_tiles.jsonl"
+  ]
+ ],
+ "mapping": "lenient",
+ "det_thr": 0.3,
+ "near_dups": true,
+ "students": 68575,
+ "groups": 221,
+ "pooled_cv": {
+  "logistic regression": {
+   "auc": 0.7587688125961507,
+   "within_image_auc": 0.7226225891331278,
+   "balanced_acc": 0.7021998248469654,
+   "pred_distracted": 0.38467371491068175,
+   "true_distracted": 0.23187750637987606,
+   "students": 68575,
+   "on_clabehavior": {
+    "auc": 0.7253861560154051,
+    "within_image_auc": 0.7028042310607309,
+    "balanced_acc": 0.6741463466590096,
+    "pred_distracted": 0.29510515891728756,
+    "true_distracted": 0.14212958596623598,
+    "students": 10603
+   },
+   "on_scb": {
+    "auc": 0.7598764864552585,
+    "within_image_auc": 0.7301173890287367,
+    "balanced_acc": 0.7027805770877156,
+    "pred_distracted": 0.4010556820534051,
+    "true_distracted": 0.24829227903125647,
+    "students": 57972
+   }
+  },
+  "gradient-boosted trees": {
+   "auc": 0.8514429649433392,
+   "within_image_auc": 0.8332805873789481,
+   "balanced_acc": 0.7732609547708886,
+   "pred_distracted": 0.31959168793292014,
+   "true_distracted": 0.23187750637987606,
+   "students": 68575,
+   "on_clabehavior": {
+    "auc": 0.8405196009942462,
+    "within_image_auc": 0.8298019573598708,
+    "balanced_acc": 0.7535088379704447,
+    "pred_distracted": 0.22861454305385268,
+    "true_distracted": 0.14212958596623598,
+    "students": 10603
+   },
+   "on_scb": {
+    "auc": 0.8517415725274948,
+    "within_image_auc": 0.8345961169404083,
+    "balanced_acc": 0.7734400478299862,
+    "pred_distracted": 0.3362312840681708,
+    "true_distracted": 0.24829227903125647,
+    "students": 57972
+   }
+  },
+  "MLP (64-32)": {
+   "auc": 0.8651535741508111,
+   "within_image_auc": 0.8436609912019748,
+   "balanced_acc": 0.7855239828198378,
+   "pred_distracted": 0.3061611374407583,
+   "true_distracted": 0.23187750637987606,
+   "students": 68575,
+   "on_clabehavior": {
+    "auc": 0.852160308475429,
+    "within_image_auc": 0.8474643292582463,
+    "balanced_acc": 0.7648206785222174,
+    "pred_distracted": 0.20522493633877203,
+    "true_distracted": 0.14212958596623598,
+    "students": 10603
+   },
+   "on_scb": {
+    "auc": 0.8653614724259953,
+    "within_image_auc": 0.8422226653041897,
+    "balanced_acc": 0.7854131885730915,
+    "pred_distracted": 0.3246222314220658,
+    "true_distracted": 0.24829227903125647,
+    "students": 57972
+   }
+  }
+ },
+ "cross": {
+  "clabehavior->scb:logistic": {
+   "auc": 0.6875718555711287,
+   "within_image_auc": 0.6648929541659397,
+   "balanced_acc": 0.6418298669621376,
+   "pred_distracted": 0.49213413371972675,
+   "true_distracted": 0.24829227903125647,
+   "students": 57972
+  },
+  "clabehavior->scb:trees": {
+   "auc": 0.6946115580983665,
+   "within_image_auc": 0.6947262168830846,
+   "balanced_acc": 0.6379215414977683,
+   "pred_distracted": 0.3373180155937349,
+   "true_distracted": 0.24829227903125647,
+   "students": 57972
+  },
+  "clabehavior->scb:mlp": {
+   "auc": 0.7214599136425558,
+   "within_image_auc": 0.7013682925005608,
+   "balanced_acc": 0.6699847409151368,
+   "pred_distracted": 0.426740495411578,
+   "true_distracted": 0.24829227903125647,
+   "students": 57972
+  },
+  "scb->clabehavior:logistic": {
+   "auc": 0.6939867323933634,
+   "within_image_auc": 0.6765742907041882,
+   "balanced_acc": 0.6353701416257991,
+   "pred_distracted": 0.42799207771385456,
+   "true_distracted": 0.14212958596623598,
+   "students": 10603
+  },
+  "scb->clabehavior:trees": {
+   "auc": 0.7885481940332392,
+   "within_image_auc": 0.785052888259136,
+   "balanced_acc": 0.7266527095191656,
+   "pred_distracted": 0.301235499386966,
+   "true_distracted": 0.14212958596623598,
+   "students": 10603
+  },
+  "scb->clabehavior:mlp": {
+   "auc": 0.8102858384706025,
+   "within_image_auc": 0.8099317889741985,
+   "balanced_acc": 0.7362411720969104,
+   "pred_distracted": 0.3113269829293596,
+   "true_distracted": 0.14212958596623598,
+   "students": 10603
+  }
+ }
+}

@@ -1,0 +1,20 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+[scb] 6175 same-picture pairs that are not byte-identical; 189 lesson groups -> 188 after joining them
+[clabehavior] 400 images, 42 camera groups
+68575 students (4 pose cache(s)), 221 lesson groups, distracted 23.2%; mapping lenient
+  clabehavior: 10603 students, 41 groups, distracted 14.2%
+  scb: 57972 students, 180 groups, distracted 24.8%
+
+model                       AUC  within-img AUC  bal. acc  (5-fold, grouped by lesson)
+logistic regression       0.759           0.723    70.2%
+    on clabehavior        0.725           0.703    67.4%
+    on scb                0.760           0.730    70.3%
+gradient-boosted trees    0.851           0.833    77.3%
+    on clabehavior        0.841           0.830    75.4%
+    on scb                0.852           0.835    77.3%
+   per behavior, share predicted distracted: read 19%, write 12%, raise_hand 30%, lookup 15%, turn_head 77%, bow_head 34%, discuss 78%, stand 44%
+MLP (64-32)               0.865           0.844    78.6%
+    on clabehavior        0.852           0.847    76.5%
+    on scb                0.865           0.842    78.5%
+
+saved out-of-fold predictions to /home/raven/hcpose_paper/h06/cv_lenient.npz and metrics to /home/raven/hcpose_paper/h06/cv_lenient.json

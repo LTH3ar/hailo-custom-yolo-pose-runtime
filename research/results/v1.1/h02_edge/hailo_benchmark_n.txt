@@ -1,0 +1,58 @@
+Starting Measurements...
+Measuring FPS in HW-only mode
+Network upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 6% | 131 | FPS: 130.88 | ETA: 00:00:14
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 13% | 263 | FPS: 131.36 | ETA: 00:00:13
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 20% | 395 | FPS: 131.53 | ETA: 00:00:12
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 26% | 526 | FPS: 131.36 | ETA: 00:00:11
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 33% | 658 | FPS: 131.47 | ETA: 00:00:10
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 40% | 790 | FPS: 131.53 | ETA: 00:00:09
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 46% | 921 | FPS: 131.43 | ETA: 00:00:08
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 53% | 1053 | FPS: 131.49 | ETA: 00:00:07
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 60% | 1184 | FPS: 131.42 | ETA: 00:00:06
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 66% | 1316 | FPS: 131.47 | ETA: 00:00:05
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 73% | 1448 | FPS: 131.50 | ETA: 00:00:04
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 80% | 1579 | FPS: 131.45 | ETA: 00:00:03
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 86% | 1711 | FPS: 131.48 | ETA: 00:00:02
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 93% | 1843 | FPS: 131.51 | ETA: 00:00:01
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 100% | 1972 | FPS: 131.33 | ETA: 00:00:00
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 100% | 1972 | FPS: 131.18 | ETA: 00:00:00
+Measuring FPS (and Power on supported platforms) in streaming mode
+Network upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 6% | 131 | FPS: 130.87 | ETA: 00:00:14
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 13% | 263 | FPS: 131.36 | ETA: 00:00:13
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 20% | 394 | FPS: 131.20 | ETA: 00:00:12
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 26% | 526 | FPS: 131.37 | ETA: 00:00:11
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 33% | 658 | FPS: 131.47 | ETA: 00:00:10
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 40% | 789 | FPS: 131.36 | ETA: 00:00:09
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 46% | 921 | FPS: 131.44 | ETA: 00:00:08
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 53% | 1053 | FPS: 131.49 | ETA: 00:00:07
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 60% | 1184 | FPS: 131.42 | ETA: 00:00:06
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 66% | 1316 | FPS: 131.47 | ETA: 00:00:05
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 73% | 1447 | FPS: 131.41 | ETA: 00:00:04
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 80% | 1579 | FPS: 131.45 | ETA: 00:00:03
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 86% | 1711 | FPS: 131.48 | ETA: 00:00:02
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 93% | 1842 | FPS: 131.44 | ETA: 00:00:01
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 100% | 1972 | FPS: 131.34 | ETA: 00:00:00
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 100% | 1972 | FPS: 131.17 | ETA: 00:00:00
+Measuring HW Latency
+Network upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 6% | 119 | HW Latency: 5.72 ms | ETA: 00:00:14
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 13% | 237 | HW Latency: 5.72 ms | ETA: 00:00:13
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 20% | 356 | HW Latency: 5.72 ms | ETA: 00:00:12
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 26% | 475 | HW Latency: 5.72 ms | ETA: 00:00:11
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 33% | 594 | HW Latency: 5.72 ms | ETA: 00:00:10
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 40% | 712 | HW Latency: 5.72 ms | ETA: 00:00:09
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 46% | 831 | HW Latency: 5.72 ms | ETA: 00:00:08
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 53% | 949 | HW Latency: 5.72 ms | ETA: 00:00:07
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 60% | 1068 | HW Latency: 5.72 ms | ETA: 00:00:06
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 66% | 1187 | HW Latency: 5.72 ms | ETA: 00:00:05
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 73% | 1306 | HW Latency: 5.72 ms | ETA: 00:00:04
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 80% | 1424 | HW Latency: 5.72 ms | ETA: 00:00:03
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 86% | 1543 | HW Latency: 5.72 ms | ETA: 00:00:02
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 93% | 1662 | HW Latency: 5.72 ms | ETA: 00:00:01
+[F[2KNetwork upper_body_n_dfc3331_seed2/upper_body_n_dfc3331_seed2: 100% | 1779 | HW Latency: 5.72 ms | ETA: 00:00:00
+
+=======
+Summary
+=======
+FPS     (hw_only)                 = 131.181
+        (streaming)               = 131.175
+Latency (hw)                      = 5.71903 ms

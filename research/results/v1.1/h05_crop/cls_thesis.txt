@@ -1,0 +1,11 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+[scb] 6175 same-picture pairs that are not byte-identical; 189 lesson groups -> 188 after joining them
+57972 students (2 pose cache(s)), 180 lesson groups, distracted 24.8%
+
+model                       AUC  within-img AUC  bal. acc  (5-fold, grouped by lesson)
+logistic regression       0.765           0.738    70.5%
+gradient-boosted trees    0.853           0.838    77.2%
+   per behavior, share predicted distracted: read 18%, write 11%, raise_hand 28%, turn_head 76%, bow_head 33%, discuss 77%
+MLP (64-32)               0.857           0.837    77.6%
+
+wrote /home/raven/hcpose_paper/h05/cls_thesis.json

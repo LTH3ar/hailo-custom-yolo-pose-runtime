@@ -1,0 +1,8 @@
+fold0: 35 min
+fold1: 34 min
+fold2: 36 min
+fold3: 35 min
+fold4: 35 min
+all: 44 min
+scb_only: 38 min
+cla_only: 4 min

@@ -1,0 +1,8 @@
+clip_2_s_auto_none.jsonl                     seats calibrated 19, seats seen 98, class size 48
+clip_2_s_none_none.jsonl                     seats calibrated 8, seats seen 37, class size 18
+clip_3_s_auto_none.jsonl                     seats calibrated 21, seats seen 54, class size 28
+clip_3_s_none_none.jsonl                     seats calibrated 18, seats seen 50, class size 27
+clip_5_720p_s_auto_none.jsonl                seats calibrated 15, seats seen 28, class size 13
+clip_5_720p_s_none_none.jsonl                seats calibrated 13, seats seen 33, class size 15
+clip_s_auto_none.jsonl                       seats calibrated 0, seats seen 37, class size 31
+clip_s_none_none.jsonl                       seats calibrated 0, seats seen 33, class size 23

@@ -1,0 +1,36 @@
+{
+ "poses": [
+  "/home/raven/hcpose_paper/poses/scb_m.jsonl",
+  "/home/raven/hcpose_paper/poses/scb_m_tiles.jsonl"
+ ],
+ "det_thr": 0.3,
+ "mapping": "thesis",
+ "students": 57972,
+ "lesson_groups": 180,
+ "metrics": {
+  "logistic regression": {
+   "auc": 0.7683248904143254,
+   "within_image_auc": 0.7301547740697356,
+   "balanced_acc": 0.7099976170712738,
+   "pred_distracted": 0.39527703029048505,
+   "true_distracted": 0.24829227903125647,
+   "students": 57972
+  },
+  "gradient-boosted trees": {
+   "auc": 0.8598328584151536,
+   "within_image_auc": 0.8339481095630935,
+   "balanced_acc": 0.7782275374006078,
+   "pred_distracted": 0.31958531704961013,
+   "true_distracted": 0.24829227903125647,
+   "students": 57972
+  },
+  "MLP (64-32)": {
+   "auc": 0.8579730366844697,
+   "within_image_auc": 0.8153926675472921,
+   "balanced_acc": 0.778882498446438,
+   "pred_distracted": 0.31123645898019736,
+   "true_distracted": 0.24829227903125647,
+   "students": 57972
+  }
+ }
+}

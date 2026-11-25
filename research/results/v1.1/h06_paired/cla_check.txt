@@ -1,0 +1,16 @@
+trees: n 7148, groups 41; two largest groups hold 3678 + 1770 students (76%)
+  all              n  7148  crop 0.816  pose 0.846  diff +0.030
+  without group 1  n  3470  crop 0.880  pose 0.881  diff +0.000
+  without group 2  n  5378  crop 0.838  pose 0.848  diff +0.010
+  without both     n  1700  crop 0.926  pose 0.915  diff -0.011
+  group 1 only     n  3678  crop 0.811  pose 0.807  diff -0.004
+  group 2 only     n  1770  crop 0.847  pose 0.841  diff -0.006
+  paired.json: {'n': 7148, 'groups': 41, 'ci_pose_minus_crop': {'auc': [-0.022078521548683106, 0.03740279230636523], 'within': [-0.0386855807083573, 7.005843975916098e-05]}}
+MLP: n 7148, groups 41; two largest groups hold 3678 + 1770 students (76%)
+  all              n  7148  crop 0.816  pose 0.854  diff +0.038
+  without group 1  n  3470  crop 0.880  pose 0.880  diff -0.000
+  without group 2  n  5378  crop 0.838  pose 0.855  diff +0.017
+  without both     n  1700  crop 0.926  pose 0.906  diff -0.019
+  group 1 only     n  3678  crop 0.811  pose 0.826  diff +0.015
+  group 2 only     n  1770  crop 0.847  pose 0.852  diff +0.005
+  paired.json: {'n': 7148, 'groups': 41, 'ci_pose_minus_crop': {'auc': [-0.03583369103747838, 0.04905399342426828], 'within': [-0.04814908915054601, 0.007930094665585218]}}
