@@ -1,0 +1,18 @@
+# Edge measurements
+
+## End to end (clip, as fast as possible)
+
+| Model | Tiles | FPS | CPU, whole Pi | CPU, hcpose (% of a core) | Memory (MB) | Max SoC temp (°C) | Pi board rails (W) | Throttling |
+|---|---|---|---|---|---|---|---|---|
+
+## Pipeline latency (clip paced at its frame rate like a camera; GstShark interlatency, live_pace to sink)
+
+| Model | Tiles | Frames | Median (ms) | 95th percentile (ms) | FPS |
+|---|---|---|---|---|---|
+| n | off | 1743 | 21 | 25 | 23.7 |
+| s | off | 1743 | 25 | 34 | 23.4 |
+| s | on | 1231 | 1140 | 1144 | 17.4 |
+
+When a setting runs below the clip's frame rate (m with tiles), frames queue up and the latency includes that wait.
+
+Pi board rails = sum of V x I over the Pi 5 PMIC rails (`vcgencmd pmic_read_adc`): the board's own supplies, without the AI HAT and USB devices. Hailo-8 power comes from the vendor's specification.

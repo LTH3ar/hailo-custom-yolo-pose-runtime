@@ -1,0 +1,4 @@
+latency_n_none.trace: n=1743 live_pace records 1745, sink 1743; first frame 27 ms; median by quarter 18 / 21 / 22 / 21; max 39
+latency_s_auto.trace: n=1231 live_pace records 1233, sink 1231; first frame 77 ms; median by quarter 1139 / 1139 / 1140 / 1141; max 1163
+latency_s_none.trace: n=1743 live_pace records 1745, sink 1743; first frame 37 ms; median by quarter 24 / 22 / 26 / 26; max 334
+latency_m_auto.trace: n=569 live_pace records 571, sink 569; first frame 146 ms; median by quarter 2503 / 2512 / 2507 / 2511; max 2524
