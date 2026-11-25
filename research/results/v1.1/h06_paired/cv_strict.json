@@ -1,0 +1,86 @@
+{
+ "poses": [
+  "/home/raven/hcpose_paper/poses/scb_m.jsonl",
+  "/home/raven/hcpose_paper/poses/scb_m_tiles.jsonl",
+  "/home/raven/hcpose_paper/poses/cla_m.jsonl",
+  "/home/raven/hcpose_paper/poses/cla_m_tiles.jsonl"
+ ],
+ "det_thr": 0.3,
+ "mapping": "strict",
+ "students": 64917,
+ "lesson_groups": 210,
+ "metrics": {
+  "logistic regression": {
+   "auc": 0.7727106589840773,
+   "within_image_auc": 0.7299756518558316,
+   "balanced_acc": 0.7109712376284406,
+   "pred_distracted": 0.36546667282838086,
+   "true_distracted": 0.1885946670363695,
+   "students": 64917,
+   "on_clabehavior": {
+    "auc": 0.6945583811216007,
+    "within_image_auc": 0.6750649443080318,
+    "balanced_acc": 0.6495381950269699,
+    "pred_distracted": 0.3394083969465649,
+    "true_distracted": 0.13206106870229006,
+    "students": 10480
+   },
+   "on_scb": {
+    "auc": 0.7813881185495,
+    "within_image_auc": 0.7559616032334119,
+    "balanced_acc": 0.7193708084432469,
+    "pred_distracted": 0.37048331098333853,
+    "true_distracted": 0.19947829601190367,
+    "students": 54437
+   }
+  },
+  "gradient-boosted trees": {
+   "auc": 0.8755477801872823,
+   "within_image_auc": 0.8456121900755592,
+   "balanced_acc": 0.7910802727845757,
+   "pred_distracted": 0.27418087712001477,
+   "true_distracted": 0.1885946670363695,
+   "students": 64917,
+   "on_clabehavior": {
+    "auc": 0.8396612275738303,
+    "within_image_auc": 0.8303974947510765,
+    "balanced_acc": 0.7585319850941277,
+    "pred_distracted": 0.2383587786259542,
+    "true_distracted": 0.13206106870229006,
+    "students": 10480
+   },
+   "on_scb": {
+    "auc": 0.8808871983538626,
+    "within_image_auc": 0.8528123947457056,
+    "balanced_acc": 0.7954596950617018,
+    "pred_distracted": 0.2810772085162665,
+    "true_distracted": 0.19947829601190367,
+    "students": 54437
+   }
+  },
+  "MLP (64-32)": {
+   "auc": 0.8934455304969632,
+   "within_image_auc": 0.8630102536550794,
+   "balanced_acc": 0.809114219658142,
+   "pred_distracted": 0.24973427607560422,
+   "true_distracted": 0.1885946670363695,
+   "students": 64917,
+   "on_clabehavior": {
+    "auc": 0.8515174999110325,
+    "within_image_auc": 0.8398277641365076,
+    "balanced_acc": 0.7596907870320944,
+    "pred_distracted": 0.18215648854961833,
+    "true_distracted": 0.13206106870229006,
+    "students": 10480
+   },
+   "on_scb": {
+    "auc": 0.898418762785006,
+    "within_image_auc": 0.873981138430448,
+    "balanced_acc": 0.8146178973566143,
+    "pred_distracted": 0.26274408949795175,
+    "true_distracted": 0.19947829601190367,
+    "students": 54437
+   }
+  }
+ }
+}

@@ -1,0 +1,94 @@
+{
+ "cv": {
+  "thesis/scb": {
+   "n": 36687,
+   "true_distracted": 0.2638536811404585,
+   "pred_distracted": 0.20497723989424046,
+   "auc": 0.8972669926101191,
+   "within_image_auc": 0.849248653246385,
+   "balanced_acc": 0.7656381824179651
+  },
+  "strict/pooled": {
+   "n": 41289,
+   "true_distracted": 0.19404684056286178,
+   "pred_distracted": 0.1794424665165056,
+   "auc": 0.9121697914858036,
+   "within_image_auc": 0.8604555360654866,
+   "balanced_acc": 0.7921738868242998
+  },
+  "strict/scb": {
+   "n": 34116,
+   "true_distracted": 0.20837730097315044,
+   "pred_distracted": 0.1763102356665494,
+   "auc": 0.9292579976048367,
+   "within_image_auc": 0.8688130803391199,
+   "balanced_acc": 0.80533287601054
+  },
+  "strict/clabehavior": {
+   "n": 7173,
+   "true_distracted": 0.12588874947720619,
+   "pred_distracted": 0.1943398856824202,
+   "auc": 0.8149579374793573,
+   "within_image_auc": 0.8443528313627878,
+   "balanced_acc": 0.7188656101140801
+  },
+  "lenient/pooled": {
+   "n": 43940,
+   "true_distracted": 0.24267182521620392,
+   "pred_distracted": 0.2038006372325899,
+   "auc": 0.8826057639210885,
+   "within_image_auc": 0.845977783203125,
+   "balanced_acc": 0.756264628533297
+  },
+  "lenient/scb": {
+   "n": 36687,
+   "true_distracted": 0.2638536811404585,
+   "pred_distracted": 0.204350314825415,
+   "auc": 0.8969968682744327,
+   "within_image_auc": 0.8492203005387015,
+   "balanced_acc": 0.7647308323339496
+  },
+  "lenient/clabehavior": {
+   "n": 7253,
+   "true_distracted": 0.1355301254653247,
+   "pred_distracted": 0.20102026747552737,
+   "auc": 0.815128232585533,
+   "within_image_auc": 0.8377395188013255,
+   "balanced_acc": 0.7138198659508292
+  }
+ },
+ "cross": {
+  "strict/clabehavior -> scb": {
+   "n": 34116,
+   "true_distracted": 0.20837730097315044,
+   "pred_distracted": 0.24850510024621877,
+   "auc": 0.6684281193453109,
+   "within_image_auc": 0.6391804602341542,
+   "balanced_acc": 0.6104704608058587
+  },
+  "strict/scb -> clabehavior": {
+   "n": 7173,
+   "true_distracted": 0.12588874947720619,
+   "pred_distracted": 0.3090757005437056,
+   "auc": 0.7201800307675461,
+   "within_image_auc": 0.7697184194150591,
+   "balanced_acc": 0.650701807372554
+  },
+  "lenient/clabehavior -> scb": {
+   "n": 36687,
+   "true_distracted": 0.2638536811404585,
+   "pred_distracted": 0.34456346934881565,
+   "auc": 0.6468730845568964,
+   "within_image_auc": 0.6096540969662603,
+   "balanced_acc": 0.6018556502951331
+  },
+  "lenient/scb -> clabehavior": {
+   "n": 7253,
+   "true_distracted": 0.1355301254653247,
+   "pred_distracted": 0.31063008410312976,
+   "auc": 0.7130021368041393,
+   "within_image_auc": 0.7618498775392595,
+   "balanced_acc": 0.6392432922684033
+  }
+ }
+}

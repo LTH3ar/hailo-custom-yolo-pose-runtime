@@ -1,0 +1,22 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+21963 students from 179 lesson groups; distracted share 22.5%
+rules   : AUC 0.537  balanced acc 53.9%
+learned : AUC 0.876  balanced acc 78.3%  (5-fold, split by lesson)
+
+per behavior, share predicted distracted (learned @0.5 | rules):
+  read          n=10127  14.3% | 13.4%
+  write         n= 3757   6.5% | 19.7%
+  hand-raising  n= 3137  15.8% | 15.0%
+  TurnHead      n= 3889  72.9% | 17.8%
+  BowHead       n=  239  31.0% | 36.4%
+  discuss       n=  814  63.5% | 43.9%
+
+AUC when one block is removed (5-fold):
+  without keypoint geometry                        AUC 0.835
+  without visibilities                             AUC 0.871
+  without position in room                         AUC 0.869
+  without rule features (yaw, head, face, hands)   AUC 0.861
+
+shortcut checks: 6346 students (29%) are in images that contain both classes
+  context only (where in the image, box size, crowd size; no pose): AUC 0.696
+  within-image AUC (only images with both classes): learned 0.819, rules 0.511

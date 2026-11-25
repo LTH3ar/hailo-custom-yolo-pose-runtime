@@ -1,0 +1,32 @@
+/home/raven/hailo-custom-yolo-pose/classifiers/common/families.py:66: RuntimeWarning: divide by zero encountered in divide
+  return 1.0 / (1.0 + np.exp(-(np.log(q / (1 - q)) + offset)))
+/home/raven/hailo-custom-yolo-pose/classifiers/common/families.py:66: RuntimeWarning: divide by zero encountered in divide
+  return 1.0 / (1.0 + np.exp(-(np.log(q / (1 - q)) + offset)))
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+[scb] 6175 same-picture pairs that are not byte-identical; 189 lesson groups -> 188 after joining them
+[clabehavior] 400 images, 42 camera groups
+64917 students (4 pose cache(s)), 210 lesson groups, distracted 18.9%; mapping strict
+  clabehavior: 10480 students, 41 groups, distracted 13.2%
+  scb: 54437 students, 169 groups, distracted 19.9%
+
+model                       AUC  within-img AUC  bal. acc  (5-fold, grouped by lesson)
+logistic regression       0.773           0.730    71.1%
+    on clabehavior        0.695           0.675    65.0%
+    on scb                0.781           0.756    71.9%
+gradient-boosted trees    0.876           0.846    79.1%
+    on clabehavior        0.840           0.830    75.9%
+    on scb                0.881           0.853    79.5%
+   per behavior, share predicted distracted: read 15%, write 6%, raise_hand 31%, lookup 18%, turn_head 75%
+MLP (64-32)               0.893           0.863    80.9%
+    on clabehavior        0.852           0.840    76.0%
+    on scb                0.898           0.874    81.5%
+
+train -> test                model                       AUC  within-img AUC  bal. acc  pred / true distracted
+clabehavior -> scb           logistic regression       0.667           0.665    63.5%         41% / 20%
+clabehavior -> scb           gradient-boosted trees    0.696           0.708    63.9%         28% / 20%
+clabehavior -> scb           MLP (64-32)               0.723           0.716    66.9%         35% / 20%
+scb -> clabehavior           logistic regression       0.655           0.647    60.6%         47% / 13%
+scb -> clabehavior           gradient-boosted trees    0.790           0.793    71.8%         34% / 13%
+scb -> clabehavior           MLP (64-32)               0.794           0.785    71.0%         18% / 13%
+
+wrote /home/raven/hcpose_paper/h05/cls_strict.json

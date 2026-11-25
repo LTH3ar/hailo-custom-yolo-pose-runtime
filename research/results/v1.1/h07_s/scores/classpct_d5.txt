@@ -1,0 +1,2 @@
+clip_2_s_auto_none.jsonl                          20.7%  width 26.3  size 48  outside-range frames 0/10710
+clip_2_s_none_none.jsonl                          26.5%  width 42.5  size 18  outside-range frames 0/10710

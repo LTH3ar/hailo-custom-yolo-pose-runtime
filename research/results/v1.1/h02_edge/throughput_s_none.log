@@ -1,0 +1,66 @@
+[hcpose] engagement: rule-based cues
+[hcpose] post-process loaded (filter_letterbox), score>=0.3 iou=0.7 kpt>=0.5
+[hcpose] model: 13 keypoints, 1 class(es), reg_max 16, input 640x640
+[hcpose]   stride 8: boxes=upper_body_s_dfc3331_seed2/conv43 scores=upper_body_s_dfc3331_seed2/conv44 kpts=upper_body_s_dfc3331_seed2/conv45
+[hcpose]   stride 16: boxes=upper_body_s_dfc3331_seed2/conv57 scores=upper_body_s_dfc3331_seed2/conv58 kpts=upper_body_s_dfc3331_seed2/conv59
+[hcpose]   stride 32: boxes=upper_body_s_dfc3331_seed2/conv70 scores=upper_body_s_dfc3331_seed2/conv71 kpts=upper_body_s_dfc3331_seed2/conv72
+[hcpose] class scores: already sigmoid in HEF
+[hcpose] keypoint visibility: logits -> sigmoid applied here
+[hcpose] seat 3 calibrated: {'yaw': 0.11382739618420601, 'head_height': 0.33318811655044556, 'torso_ratio': 0.5700345373705042, 'head_offset': 0.05453922413289547}
+[hcpose] seat 1 calibrated: {'yaw': 0.08210137486457825, 'head_height': 0.4982747733592987, 'torso_ratio': 0.41900061491171, 'head_offset': 0.029788268730044365}
+[hcpose] seat 11 calibrated: {'yaw': -0.06476814672350883, 'head_height': 0.4281071871519089, 'torso_ratio': 0.44377247677344206, 'head_offset': -0.191969096660614}
+[hcpose] seat 4 calibrated: {'yaw': -0.008499473333358765, 'head_height': 0.15078622847795486, 'torso_ratio': 0.581451050121014, 'head_offset': 0.016744651831686497}
+[hcpose] seat 14 calibrated: {'yaw': -0.02905977889895439, 'head_height': 0.4458122104406357, 'torso_ratio': 0.4585341389950814, 'head_offset': -0.22140982002019882}
+[hcpose] seat 17 calibrated: {'yaw': 0.023809313774108887, 'head_height': 0.49117815494537354, 'torso_ratio': 0.40152831865643307, 'head_offset': -0.11016964912414551}
+[hcpose] seat 2 calibrated: {'yaw': -0.0661606416106224, 'head_height': 0.24230213463306427, 'torso_ratio': 0.4900752872319567, 'head_offset': -0.010772908106446266}
+[hcpose] seat 6 calibrated: {'yaw': -0.01625625044107437, 'head_height': 0.3567424565553665, 'torso_ratio': 0.4756738615331607, 'head_offset': -0.22786018997430801}
+[hcpose] seat 18 calibrated: {'yaw': -0.04589805379509926, 'head_height': 0.510547012090683, 'torso_ratio': 0.44231990975324786, 'head_offset': -0.01890261098742485}
+[hcpose] seat 22 calibrated: {'yaw': 0.18410395085811615, 'head_height': 0.44799962639808655, 'torso_ratio': 0.3886617123816229, 'head_offset': 0.21064332127571106}
+[hcpose] seat 15 calibrated: {'yaw': 0.06448960676789284, 'head_height': 0.1410284787416458, 'torso_ratio': 0.4211631473156798, 'head_offset': 0.11032351851463318}
+[hcpose] seat 10 calibrated: {'yaw': 0.07282054796814919, 'head_height': 0.2354648932814598, 'torso_ratio': 0.45795180422961257, 'head_offset': 0.058893609791994095}
+[hcpose] seat 13 calibrated: {'yaw': 0.01905809249728918, 'head_height': 0.16212162375450134, 'torso_ratio': 0.45547661954689533, 'head_offset': -0.11601700633764267}
+[hcpose] seat 23 calibrated: {'yaw': 0.12348859757184982, 'head_height': 0.3701316565275192, 'torso_ratio': 0.2367867028323894, 'head_offset': 0.10633253306150436}
+[hcpose] seat 41 calibrated: {'yaw': -0.08947836235165596, 'head_height': 0.3995252102613449, 'torso_ratio': 0.4353457194429353, 'head_offset': -0.058595623821020126}
+[hcpose] seat 42 calibrated: {'yaw': -0.0761592835187912, 'head_height': 0.26132869720458984, 'torso_ratio': 0.4586127462328492, 'head_offset': 0.024979871697723866}
+[hcpose] seat 12 calibrated: {'yaw': 0.12069233879446983, 'head_height': 0.4160294085741043, 'torso_ratio': 0.3774038643261921, 'head_offset': -0.2239450439810753}
+[hcpose] seat 48 calibrated: {'yaw': -0.19004182517528534, 'head_height': 0.48662427067756653, 'torso_ratio': 0.5180220416742447, 'head_offset': 0.03352272883057594}
+[hcpose] end of stream
+[hcpose] /home/raven/models/upper_body_s.hef: 13 keypoints, 1 class(es), input 640x640
+[hcpose] engagement: rules, display=both camera=center no calibration file (pass --calibration room.json to keep what it learns)
+FPS:   61.2  Engagement: waiting for students
+FPS:   69.3  3% distracted (0-19%) | 23 of ~23 students | calibrating
+FPS:   69.8  13% distracted (5-30%) | 27 of ~27 students
+FPS:   69.4  8% distracted (3-24%) | 30 of ~30 students | calibrating
+FPS:   69.5  5% distracted (1-19%) | 29 of ~29 students | calibrating
+FPS:   69.9  4% distracted (1-21%) | 23 of ~28 students
+FPS:   69.4  0% distracted (0-16%) | 21 of ~27 students | calibrating
+FPS:   69.5  4% distracted (1-20%) | 24 of ~28 students | calibrating
+FPS:   69.7  5% distracted (1-21%) | 24 of ~28 students | calibrating
+FPS:   69.6  2% distracted (0-16%) | 24 of ~25 students | calibrating
+FPS:   69.6  4% distracted (1-20%) | 24 of ~25 students | calibrating
+FPS:   68.8  4% distracted (1-20%) | 24 of ~25 students | calibrating
+FPS:   70.4  4% distracted (1-19%) | 25 of ~27 students | calibrating
+FPS:   69.7  4% distracted (1-19%) | 25 of ~27 students | calibrating
+FPS:   69.6  2% distracted (0-18%) | 23 of ~27 students | calibrating
+FPS:   69.7  4% distracted (1-19%) | 25 of ~29 students | calibrating
+FPS:   68.2  4% distracted (1-21%) | 24 of ~28 students | calibrating
+FPS:   71.0  5% distracted (1-20%) | 26 of ~28 students | calibrating
+FPS:   69.7  8% distracted (2-24%) | 27 of ~28 students | calibrating
+FPS:   69.5  8% distracted (2-25%) | 25 of ~28 students | calibrating
+FPS:   69.7  8% distracted (2-25%) | 25 of ~27 students | calibrating
+FPS:   67.8  1% distracted (0-16%) | 23 of ~27 students | calibrating
+FPS:   71.4  0% distracted (0-14%) | 24 of ~27 students | calibrating
+FPS:   69.6  0% distracted (0-14%) | 23 of ~27 students | calibrating
+FPS:   69.6  0% distracted (0-14%) | 23 of ~27 students | calibrating
+FPS:   69.7  3% distracted (0-19%) | 23 of ~27 students | calibrating
+FPS:   69.7  5% distracted (1-21%) | 23 of ~27 students | calibrating
+FPS:   69.6  0% distracted (0-14%) | 24 of ~26 students | calibrating
+FPS:   69.6  1% distracted (0-15%) | 26 of ~26 students | calibrating
+FPS:   69.7  4% distracted (1-19%) | 26 of ~26 students | calibrating
+FPS:   69.6  4% distracted (1-19%) | 26 of ~26 students | calibrating
+FPS:   69.7  0% distracted (0-13%) | 26 of ~26 students
+FPS:   69.7  4% distracted (1-19%) | 26 of ~26 students
+FPS:   69.2  8% distracted (2-25%) | 26 of ~26 students | calibrating
+FPS:   69.8  6% distracted (2-22%) | 26 of ~26 students | calibrating
+[hcpose] 4952 frames in 71.4s (69.3 FPS avg)
+[hcpose] engagement: 1.6% of counted student-time distracted (3551.7 student-seconds, 40 seats)

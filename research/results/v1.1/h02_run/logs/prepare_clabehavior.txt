@@ -1,0 +1,6 @@
+400 images (0 listed in the json but not found) in ['train', 'val']
+boxes per class: lookup 4480, read 1021, turn_head 1011, raise_hand 684, write 579, discuss 242, stand 66
+107 camera groups (frames per group: [150, 121, 10, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+
+extractor argument:
+  /home/raven/datasets/clabehavior_yolo:write,read,lookup,turn_head,raise_hand,stand,discuss

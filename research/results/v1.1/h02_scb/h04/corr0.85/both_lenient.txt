@@ -1,0 +1,28 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+[scb] 6175 same-picture pairs that are not byte-identical; 189 lesson groups -> 188 after joining them
+[clabehavior] 400 images, 86 camera groups
+68575 students (4 pose cache(s)), 265 lesson groups, distracted 23.2%; mapping lenient
+  clabehavior: 10603 students, 85 groups, distracted 14.2%
+  scb: 57972 students, 180 groups, distracted 24.8%
+
+model                       AUC  within-img AUC  bal. acc  (5-fold, grouped by lesson)
+logistic regression       0.756           0.725    69.9%
+    on clabehavior        0.731           0.710    67.5%
+    on scb                0.757           0.731    70.0%
+gradient-boosted trees    0.852           0.835    77.6%
+    on clabehavior        0.840           0.828    76.1%
+    on scb                0.852           0.837    77.5%
+   per behavior, share predicted distracted: read 20%, write 12%, raise_hand 29%, lookup 15%, turn_head 77%, bow_head 33%, discuss 78%, stand 45%
+MLP (64-32)               0.862           0.834    78.6%
+    on clabehavior        0.837           0.825    76.0%
+    on scb                0.864           0.838    78.7%
+
+train -> test                model                       AUC  within-img AUC  bal. acc  pred / true distracted
+clabehavior -> scb           logistic regression       0.688           0.665    64.2%         49% / 25%
+clabehavior -> scb           gradient-boosted trees    0.695           0.695    63.8%         34% / 25%
+clabehavior -> scb           MLP (64-32)               0.721           0.701    67.0%         43% / 25%
+scb -> clabehavior           logistic regression       0.694           0.677    63.5%         43% / 14%
+scb -> clabehavior           gradient-boosted trees    0.789           0.785    72.7%         30% / 14%
+scb -> clabehavior           MLP (64-32)               0.810           0.810    73.6%         31% / 14%
+
+wrote /home/raven/hcpose_paper/h04/corr0.85/both_lenient.json

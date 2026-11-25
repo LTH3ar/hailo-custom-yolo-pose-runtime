@@ -1,0 +1,28 @@
+/home/raven/hcpose/venvs/cropcls/lib/python3.11/site-packages/numpy/_core/fromnumeric.py:3824: RuntimeWarning: Mean of empty slice
+  return _methods._mean(a, axis=axis, dtype=dtype,
+/home/raven/hcpose/venvs/cropcls/lib/python3.11/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+clip_3_m_tiles_lenient_crop_raw.jsonl             27.4%  width  nan  size None  outside-range frames 0/4448
+clip_3_m_tiles_lenient_crop_smooth.jsonl          23.9%  width  nan  size None  outside-range frames 0/4448
+clip_3_m_tiles_strict_crop_raw.jsonl              27.2%  width  nan  size None  outside-range frames 0/4448
+clip_3_m_tiles_strict_crop_smooth.jsonl           23.9%  width  nan  size None  outside-range frames 0/4448
+clip_3_n_tiles_lenient_crop_raw.jsonl             20.2%  width  nan  size None  outside-range frames 0/4463
+clip_3_n_tiles_lenient_crop_smooth.jsonl          18.3%  width  nan  size None  outside-range frames 0/4463
+clip_3_n_tiles_strict_crop_raw.jsonl              20.1%  width  nan  size None  outside-range frames 0/4463
+clip_3_n_tiles_strict_crop_smooth.jsonl           18.3%  width  nan  size None  outside-range frames 0/4463
+clip_m_tiles_lenient_crop_raw.jsonl                7.6%  width  nan  size None  outside-range frames 0/2149
+clip_m_tiles_lenient_crop_smooth.jsonl             3.3%  width  nan  size None  outside-range frames 0/2149
+clip_m_tiles_strict_crop_raw.jsonl                 5.6%  width  nan  size None  outside-range frames 0/2149
+clip_m_tiles_strict_crop_smooth.jsonl              3.2%  width  nan  size None  outside-range frames 0/2149
+clip_n_tiles_lenient_crop_raw.jsonl                6.6%  width  nan  size None  outside-range frames 0/2149
+clip_n_tiles_lenient_crop_smooth.jsonl             2.1%  width  nan  size None  outside-range frames 0/2149
+clip_n_tiles_strict_crop_raw.jsonl                 4.8%  width  nan  size None  outside-range frames 0/2149
+clip_n_tiles_strict_crop_smooth.jsonl              2.0%  width  nan  size None  outside-range frames 0/2149
+clip_5_m_tiles_lenient_crop_raw.jsonl              2.2%  width  nan  size None  outside-range frames 0/25223
+clip_5_m_tiles_lenient_crop_smooth.jsonl           1.0%  width  nan  size None  outside-range frames 0/25223
+clip_5_m_tiles_strict_crop_raw.jsonl               2.1%  width  nan  size None  outside-range frames 0/25223
+clip_5_m_tiles_strict_crop_smooth.jsonl            1.0%  width  nan  size None  outside-range frames 0/25223
+clip_5_n_tiles_lenient_crop_raw.jsonl              1.6%  width  nan  size None  outside-range frames 0/25223
+clip_5_n_tiles_lenient_crop_smooth.jsonl           0.4%  width  nan  size None  outside-range frames 0/25223
+clip_5_n_tiles_strict_crop_raw.jsonl               1.5%  width  nan  size None  outside-range frames 0/25223
+clip_5_n_tiles_strict_crop_smooth.jsonl            0.4%  width  nan  size None  outside-range frames 0/25223

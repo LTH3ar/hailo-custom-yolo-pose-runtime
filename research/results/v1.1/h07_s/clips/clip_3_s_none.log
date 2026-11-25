@@ -1,0 +1,46 @@
+[hcpose] post-process loaded (filter_letterbox), score>=0.3 iou=0.7 kpt>=0.5
+[hcpose] model: 13 keypoints, 1 class(es), reg_max 16, input 640x640
+[hcpose]   stride 8: boxes=upper_body_s_dfc3331_seed2/conv43 scores=upper_body_s_dfc3331_seed2/conv44 kpts=upper_body_s_dfc3331_seed2/conv45
+[hcpose]   stride 16: boxes=upper_body_s_dfc3331_seed2/conv57 scores=upper_body_s_dfc3331_seed2/conv58 kpts=upper_body_s_dfc3331_seed2/conv59
+[hcpose]   stride 32: boxes=upper_body_s_dfc3331_seed2/conv70 scores=upper_body_s_dfc3331_seed2/conv71 kpts=upper_body_s_dfc3331_seed2/conv72
+[hcpose] class scores: already sigmoid in HEF
+[hcpose] keypoint visibility: logits -> sigmoid applied here
+[hcpose] end of stream
+[hcpose] /home/raven/models/upper_body_s.hef: 13 keypoints, 1 class(es), input 640x640
+FPS:   61.2  persons: 0
+FPS:   69.4  persons: 21
+FPS:   69.9  persons: 0
+FPS:   69.4  persons: 20
+FPS:   69.5  persons: 21
+FPS:   69.9  persons: 0
+FPS:   69.4  persons: 21
+FPS:   69.5  persons: 22
+FPS:   69.7  persons: 21
+FPS:   69.6  persons: 23
+FPS:   69.5  persons: 24
+FPS:   69.7  persons: 24
+FPS:   69.7  persons: 24
+FPS:   69.5  persons: 23
+FPS:   69.7  persons: 23
+FPS:   69.7  persons: 22
+FPS:   69.6  persons: 25
+FPS:   69.6  persons: 24
+FPS:   69.6  persons: 23
+FPS:   69.6  persons: 22
+FPS:   69.6  persons: 21
+FPS:   69.7  persons: 22
+FPS:   69.7  persons: 19
+FPS:   69.6  persons: 20
+FPS:   69.6  persons: 19
+FPS:   69.6  persons: 21
+FPS:   69.6  persons: 18
+FPS:   69.6  persons: 21
+FPS:   69.6  persons: 22
+FPS:   69.6  persons: 21
+FPS:   69.6  persons: 23
+FPS:   69.8  persons: 0
+FPS:   69.6  persons: 0
+FPS:   69.4  persons: 24
+FPS:   69.6  persons: 23
+[hcpose] 4952 frames in 71.4s (69.3 FPS avg)
+[hcpose] skeletons saved to /home/raven/hcpose_paper/h07/clips/clip_3_s_none.skeleton.jsonl

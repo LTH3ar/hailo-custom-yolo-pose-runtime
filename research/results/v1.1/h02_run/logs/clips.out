@@ -1,0 +1,926 @@
+== clip: model n, tiles none
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_n_none.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+== clip: model n, tiles auto
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_n_auto.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+== clip: model m, tiles none
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_m_none.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+== clip: model m, tiles auto
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_m_auto.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+== clip_2: model n, tiles none
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_2_n_none.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 3 calibrated: {'yaw': -0.580763429403305, 'head_height': -0.1517636850476265, 'torso_ratio': 0.823349158735751, 'head_offset': -0.05682114139199257}
+[hcpose] seat 4 calibrated: {'yaw': 0.004221338778734207, 'head_height': 0.09139375388622284, 'torso_ratio': 0.5951032650053715, 'head_offset': -0.45369502902030945}
+[hcpose] seat 5 calibrated: {'yaw': -0.19476249814033508, 'head_height': -0.05600693263113499, 'torso_ratio': 0.44356654461165107, 'head_offset': -0.03442561998963356}
+[hcpose] seat 19 calibrated: {'yaw': -0.007476536091417074, 'head_height': 0.12228849530220032, 'torso_ratio': 0.5700747500777615, 'head_offset': -0.1997736617922783}
+[hcpose] seat 8 calibrated: {'yaw': -0.015873301774263382, 'head_height': -0.04796271026134491, 'torso_ratio': 0.8401360216614675, 'head_offset': 0.04938259348273277}
+[hcpose] seat 7 calibrated: {'yaw': 0.020591678097844124, 'head_height': 0.01959948055446148, 'torso_ratio': 0.3800303211238394, 'head_offset': -0.36053021252155304}
+[hcpose] seat 10 calibrated: {'yaw': -0.0090099829249084, 'head_height': -0.10594163835048676, 'torso_ratio': 0.6176430373005172, 'head_offset': 0.24637052416801453}
+[hcpose] seat 28 calibrated: {'yaw': 0.11801700666546822, 'head_height': 0.14625415951013565, 'torso_ratio': 0.4735243614319624, 'head_offset': -0.2660157084465027}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.580763429403305, 'head_height': -0.1517636850476265, 'torso_ratio': 0.823349158735751, 'head_offset': -0.05682114139199257}
+[hcpose] seat 4 calibrated: {'yaw': 0.004221338778734207, 'head_height': 0.09139375388622284, 'torso_ratio': 0.5951032650053715, 'head_offset': -0.45369502902030945}
+[hcpose] seat 5 calibrated: {'yaw': -0.19476249814033508, 'head_height': -0.05600693263113499, 'torso_ratio': 0.44356654461165107, 'head_offset': -0.03442561998963356}
+[hcpose] seat 19 calibrated: {'yaw': -0.007476536091417074, 'head_height': 0.12228849530220032, 'torso_ratio': 0.5700747500777615, 'head_offset': -0.1997736617922783}
+[hcpose] seat 8 calibrated: {'yaw': -0.015873301774263382, 'head_height': -0.04796271026134491, 'torso_ratio': 0.8401360216614675, 'head_offset': 0.04938259348273277}
+[hcpose] seat 7 calibrated: {'yaw': 0.020591678097844124, 'head_height': 0.01959948055446148, 'torso_ratio': 0.3800303211238394, 'head_offset': -0.36053021252155304}
+[hcpose] seat 10 calibrated: {'yaw': -0.0090099829249084, 'head_height': -0.10594163835048676, 'torso_ratio': 0.6176430373005172, 'head_offset': 0.24637052416801453}
+[hcpose] seat 28 calibrated: {'yaw': 0.11801700666546822, 'head_height': 0.14625415951013565, 'torso_ratio': 0.4735243614319624, 'head_offset': -0.2660157084465027}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.580763429403305, 'head_height': -0.1517636850476265, 'torso_ratio': 0.823349158735751, 'head_offset': -0.05682114139199257}
+[hcpose] seat 4 calibrated: {'yaw': 0.004221338778734207, 'head_height': 0.09139375388622284, 'torso_ratio': 0.5951032650053715, 'head_offset': -0.45369502902030945}
+[hcpose] seat 5 calibrated: {'yaw': -0.19476249814033508, 'head_height': -0.05600693263113499, 'torso_ratio': 0.44356654461165107, 'head_offset': -0.03442561998963356}
+[hcpose] seat 19 calibrated: {'yaw': -0.007476536091417074, 'head_height': 0.12228849530220032, 'torso_ratio': 0.5700747500777615, 'head_offset': -0.1997736617922783}
+[hcpose] seat 8 calibrated: {'yaw': -0.015873301774263382, 'head_height': -0.04796271026134491, 'torso_ratio': 0.8401360216614675, 'head_offset': 0.04938259348273277}
+[hcpose] seat 7 calibrated: {'yaw': 0.020591678097844124, 'head_height': 0.01959948055446148, 'torso_ratio': 0.3800303211238394, 'head_offset': -0.36053021252155304}
+[hcpose] seat 10 calibrated: {'yaw': -0.0090099829249084, 'head_height': -0.10594163835048676, 'torso_ratio': 0.6176430373005172, 'head_offset': 0.24637052416801453}
+[hcpose] seat 28 calibrated: {'yaw': 0.11801700666546822, 'head_height': 0.14625415951013565, 'torso_ratio': 0.4735243614319624, 'head_offset': -0.2660157084465027}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.580763429403305, 'head_height': -0.1517636850476265, 'torso_ratio': 0.823349158735751, 'head_offset': -0.05682114139199257}
+[hcpose] seat 4 calibrated: {'yaw': 0.004221338778734207, 'head_height': 0.09139375388622284, 'torso_ratio': 0.5951032650053715, 'head_offset': -0.45369502902030945}
+[hcpose] seat 5 calibrated: {'yaw': -0.19476249814033508, 'head_height': -0.05600693263113499, 'torso_ratio': 0.44356654461165107, 'head_offset': -0.03442561998963356}
+[hcpose] seat 19 calibrated: {'yaw': -0.007476536091417074, 'head_height': 0.12228849530220032, 'torso_ratio': 0.5700747500777615, 'head_offset': -0.1997736617922783}
+[hcpose] seat 8 calibrated: {'yaw': -0.015873301774263382, 'head_height': -0.04796271026134491, 'torso_ratio': 0.8401360216614675, 'head_offset': 0.04938259348273277}
+[hcpose] seat 7 calibrated: {'yaw': 0.020591678097844124, 'head_height': 0.01959948055446148, 'torso_ratio': 0.3800303211238394, 'head_offset': -0.36053021252155304}
+[hcpose] seat 10 calibrated: {'yaw': -0.0090099829249084, 'head_height': -0.10594163835048676, 'torso_ratio': 0.6176430373005172, 'head_offset': 0.24637052416801453}
+[hcpose] seat 28 calibrated: {'yaw': 0.11801700666546822, 'head_height': 0.14625415951013565, 'torso_ratio': 0.4735243614319624, 'head_offset': -0.2660157084465027}
+== clip_2: model n, tiles auto
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_2_n_auto.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 3 calibrated: {'yaw': -0.580763429403305, 'head_height': -0.1517636850476265, 'torso_ratio': 0.823349158735751, 'head_offset': -0.05682114139199257}
+[hcpose] seat 13 calibrated: {'yaw': 0.0686347670853138, 'head_height': -0.0469519067555666, 'torso_ratio': 0.7820212224259832, 'head_offset': -0.05750621482729912}
+[hcpose] seat 4 calibrated: {'yaw': -0.11508429795503616, 'head_height': 0.17482517659664154, 'torso_ratio': 0.8170176763732767, 'head_offset': -0.44547396898269653}
+[hcpose] seat 10 calibrated: {'yaw': -0.035489799454808235, 'head_height': 0.3460036814212799, 'torso_ratio': 0.778409939891887, 'head_offset': 0.12759855389595032}
+[hcpose] seat 1 calibrated: {'yaw': -0.1577325165271759, 'head_height': -0.04837086983025074, 'torso_ratio': 0.6537720921275384, 'head_offset': 0.2894618809223175}
+[hcpose] seat 56 calibrated: {'yaw': -0.1245068684220314, 'head_height': 0.12697502970695496, 'torso_ratio': 0.5073667564800324, 'head_offset': -0.45954152941703796}
+[hcpose] seat 14 calibrated: {'yaw': -0.1189948171377182, 'head_height': -0.19847099483013153, 'torso_ratio': 0.8522553165924882, 'head_offset': 0.09389380365610123}
+[hcpose] seat 40 calibrated: {'yaw': -0.24625976383686066, 'head_height': -0.018262583762407303, 'torso_ratio': 0.33989748979282086, 'head_offset': -0.759609580039978}
+[hcpose] seat 28 calibrated: {'yaw': 0.2493375688791275, 'head_height': 0.40309394896030426, 'torso_ratio': 0.8156408087929738, 'head_offset': 0.07619418203830719}
+[hcpose] seat 63 calibrated: {'yaw': 0.04965866729617119, 'head_height': 0.03328491747379303, 'torso_ratio': 0.4036589068757014, 'head_offset': -0.37091198563575745}
+[hcpose] seat 16 calibrated: {'yaw': 0.19338329881429672, 'head_height': 0.41999612748622894, 'torso_ratio': 0.45180818237093134, 'head_offset': -0.11294230446219444}
+[hcpose] seat 33 calibrated: {'yaw': -0.00941371638327837, 'head_height': 0.023165605030953884, 'torso_ratio': 0.7235037376473239, 'head_offset': 0.001989349373616278}
+[hcpose] seat 9 calibrated: {'yaw': 0.1202138215303421, 'head_height': 0.2724941372871399, 'torso_ratio': 0.6240717091954742, 'head_offset': 0.38864000141620636}
+[hcpose] seat 17 calibrated: {'yaw': -0.035449402406811714, 'head_height': 0.10497228056192398, 'torso_ratio': 0.5494154435169848, 'head_offset': -0.3497798442840576}
+[hcpose] seat 84 calibrated: {'yaw': -0.01559760794043541, 'head_height': 0.011866630986332893, 'torso_ratio': 0.7749451081865575, 'head_offset': 0.2816949486732483}
+[hcpose] seat 21 calibrated: {'yaw': -0.20655697584152222, 'head_height': 0.270587682723999, 'torso_ratio': 0.5319122426305769, 'head_offset': -0.12595486640930176}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.580763429403305, 'head_height': -0.1517636850476265, 'torso_ratio': 0.823349158735751, 'head_offset': -0.05682114139199257}
+[hcpose] seat 13 calibrated: {'yaw': 0.0686347670853138, 'head_height': -0.0469519067555666, 'torso_ratio': 0.7820212224259832, 'head_offset': -0.05750621482729912}
+[hcpose] seat 4 calibrated: {'yaw': -0.11508429795503616, 'head_height': 0.17482517659664154, 'torso_ratio': 0.8170176763732767, 'head_offset': -0.44547396898269653}
+[hcpose] seat 10 calibrated: {'yaw': -0.035489799454808235, 'head_height': 0.3460036814212799, 'torso_ratio': 0.778409939891887, 'head_offset': 0.12759855389595032}
+[hcpose] seat 1 calibrated: {'yaw': -0.1577325165271759, 'head_height': -0.04837086983025074, 'torso_ratio': 0.6537720921275384, 'head_offset': 0.2894618809223175}
+[hcpose] seat 56 calibrated: {'yaw': -0.1245068684220314, 'head_height': 0.12697502970695496, 'torso_ratio': 0.5073667564800324, 'head_offset': -0.45954152941703796}
+[hcpose] seat 14 calibrated: {'yaw': -0.1189948171377182, 'head_height': -0.19847099483013153, 'torso_ratio': 0.8522553165924882, 'head_offset': 0.09389380365610123}
+[hcpose] seat 40 calibrated: {'yaw': -0.24625976383686066, 'head_height': -0.018262583762407303, 'torso_ratio': 0.33989748979282086, 'head_offset': -0.759609580039978}
+[hcpose] seat 28 calibrated: {'yaw': 0.2493375688791275, 'head_height': 0.40309394896030426, 'torso_ratio': 0.8156408087929738, 'head_offset': 0.07619418203830719}
+[hcpose] seat 63 calibrated: {'yaw': 0.04965866729617119, 'head_height': 0.03328491747379303, 'torso_ratio': 0.4036589068757014, 'head_offset': -0.37091198563575745}
+[hcpose] seat 16 calibrated: {'yaw': 0.19338329881429672, 'head_height': 0.41999612748622894, 'torso_ratio': 0.45180818237093134, 'head_offset': -0.11294230446219444}
+[hcpose] seat 33 calibrated: {'yaw': -0.00941371638327837, 'head_height': 0.023165605030953884, 'torso_ratio': 0.7235037376473239, 'head_offset': 0.001989349373616278}
+[hcpose] seat 9 calibrated: {'yaw': 0.1202138215303421, 'head_height': 0.2724941372871399, 'torso_ratio': 0.6240717091954742, 'head_offset': 0.38864000141620636}
+[hcpose] seat 17 calibrated: {'yaw': -0.035449402406811714, 'head_height': 0.10497228056192398, 'torso_ratio': 0.5494154435169848, 'head_offset': -0.3497798442840576}
+[hcpose] seat 84 calibrated: {'yaw': -0.01559760794043541, 'head_height': 0.011866630986332893, 'torso_ratio': 0.7749451081865575, 'head_offset': 0.2816949486732483}
+[hcpose] seat 21 calibrated: {'yaw': -0.20655697584152222, 'head_height': 0.270587682723999, 'torso_ratio': 0.5319122426305769, 'head_offset': -0.12595486640930176}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.580763429403305, 'head_height': -0.1517636850476265, 'torso_ratio': 0.823349158735751, 'head_offset': -0.05682114139199257}
+[hcpose] seat 13 calibrated: {'yaw': 0.0686347670853138, 'head_height': -0.0469519067555666, 'torso_ratio': 0.7820212224259832, 'head_offset': -0.05750621482729912}
+[hcpose] seat 4 calibrated: {'yaw': -0.11508429795503616, 'head_height': 0.17482517659664154, 'torso_ratio': 0.8170176763732767, 'head_offset': -0.44547396898269653}
+[hcpose] seat 10 calibrated: {'yaw': -0.035489799454808235, 'head_height': 0.3460036814212799, 'torso_ratio': 0.778409939891887, 'head_offset': 0.12759855389595032}
+[hcpose] seat 1 calibrated: {'yaw': -0.1577325165271759, 'head_height': -0.04837086983025074, 'torso_ratio': 0.6537720921275384, 'head_offset': 0.2894618809223175}
+[hcpose] seat 56 calibrated: {'yaw': -0.1245068684220314, 'head_height': 0.12697502970695496, 'torso_ratio': 0.5073667564800324, 'head_offset': -0.45954152941703796}
+[hcpose] seat 14 calibrated: {'yaw': -0.1189948171377182, 'head_height': -0.19847099483013153, 'torso_ratio': 0.8522553165924882, 'head_offset': 0.09389380365610123}
+[hcpose] seat 40 calibrated: {'yaw': -0.24625976383686066, 'head_height': -0.018262583762407303, 'torso_ratio': 0.33989748979282086, 'head_offset': -0.759609580039978}
+[hcpose] seat 28 calibrated: {'yaw': 0.2493375688791275, 'head_height': 0.40309394896030426, 'torso_ratio': 0.8156408087929738, 'head_offset': 0.07619418203830719}
+[hcpose] seat 63 calibrated: {'yaw': 0.04965866729617119, 'head_height': 0.03328491747379303, 'torso_ratio': 0.4036589068757014, 'head_offset': -0.37091198563575745}
+[hcpose] seat 16 calibrated: {'yaw': 0.19338329881429672, 'head_height': 0.41999612748622894, 'torso_ratio': 0.45180818237093134, 'head_offset': -0.11294230446219444}
+[hcpose] seat 33 calibrated: {'yaw': -0.00941371638327837, 'head_height': 0.023165605030953884, 'torso_ratio': 0.7235037376473239, 'head_offset': 0.001989349373616278}
+[hcpose] seat 9 calibrated: {'yaw': 0.1202138215303421, 'head_height': 0.2724941372871399, 'torso_ratio': 0.6240717091954742, 'head_offset': 0.38864000141620636}
+[hcpose] seat 17 calibrated: {'yaw': -0.035449402406811714, 'head_height': 0.10497228056192398, 'torso_ratio': 0.5494154435169848, 'head_offset': -0.3497798442840576}
+[hcpose] seat 84 calibrated: {'yaw': -0.01559760794043541, 'head_height': 0.011866630986332893, 'torso_ratio': 0.7749451081865575, 'head_offset': 0.2816949486732483}
+[hcpose] seat 21 calibrated: {'yaw': -0.20655697584152222, 'head_height': 0.270587682723999, 'torso_ratio': 0.5319122426305769, 'head_offset': -0.12595486640930176}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.580763429403305, 'head_height': -0.1517636850476265, 'torso_ratio': 0.823349158735751, 'head_offset': -0.05682114139199257}
+[hcpose] seat 13 calibrated: {'yaw': 0.0686347670853138, 'head_height': -0.0469519067555666, 'torso_ratio': 0.7820212224259832, 'head_offset': -0.05750621482729912}
+[hcpose] seat 4 calibrated: {'yaw': -0.11508429795503616, 'head_height': 0.17482517659664154, 'torso_ratio': 0.8170176763732767, 'head_offset': -0.44547396898269653}
+[hcpose] seat 10 calibrated: {'yaw': -0.035489799454808235, 'head_height': 0.3460036814212799, 'torso_ratio': 0.778409939891887, 'head_offset': 0.12759855389595032}
+[hcpose] seat 1 calibrated: {'yaw': -0.1577325165271759, 'head_height': -0.04837086983025074, 'torso_ratio': 0.6537720921275384, 'head_offset': 0.2894618809223175}
+[hcpose] seat 56 calibrated: {'yaw': -0.1245068684220314, 'head_height': 0.12697502970695496, 'torso_ratio': 0.5073667564800324, 'head_offset': -0.45954152941703796}
+[hcpose] seat 14 calibrated: {'yaw': -0.1189948171377182, 'head_height': -0.19847099483013153, 'torso_ratio': 0.8522553165924882, 'head_offset': 0.09389380365610123}
+[hcpose] seat 40 calibrated: {'yaw': -0.24625976383686066, 'head_height': -0.018262583762407303, 'torso_ratio': 0.33989748979282086, 'head_offset': -0.759609580039978}
+[hcpose] seat 28 calibrated: {'yaw': 0.2493375688791275, 'head_height': 0.40309394896030426, 'torso_ratio': 0.8156408087929738, 'head_offset': 0.07619418203830719}
+[hcpose] seat 63 calibrated: {'yaw': 0.04965866729617119, 'head_height': 0.03328491747379303, 'torso_ratio': 0.4036589068757014, 'head_offset': -0.37091198563575745}
+[hcpose] seat 16 calibrated: {'yaw': 0.19338329881429672, 'head_height': 0.41999612748622894, 'torso_ratio': 0.45180818237093134, 'head_offset': -0.11294230446219444}
+[hcpose] seat 33 calibrated: {'yaw': -0.00941371638327837, 'head_height': 0.023165605030953884, 'torso_ratio': 0.7235037376473239, 'head_offset': 0.001989349373616278}
+[hcpose] seat 9 calibrated: {'yaw': 0.1202138215303421, 'head_height': 0.2724941372871399, 'torso_ratio': 0.6240717091954742, 'head_offset': 0.38864000141620636}
+[hcpose] seat 17 calibrated: {'yaw': -0.035449402406811714, 'head_height': 0.10497228056192398, 'torso_ratio': 0.5494154435169848, 'head_offset': -0.3497798442840576}
+[hcpose] seat 84 calibrated: {'yaw': -0.01559760794043541, 'head_height': 0.011866630986332893, 'torso_ratio': 0.7749451081865575, 'head_offset': 0.2816949486732483}
+[hcpose] seat 21 calibrated: {'yaw': -0.20655697584152222, 'head_height': 0.270587682723999, 'torso_ratio': 0.5319122426305769, 'head_offset': -0.12595486640930176}
+== clip_2: model m, tiles none
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_2_m_none.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 3 calibrated: {'yaw': -0.03968263976275921, 'head_height': 0.12243236601352692, 'torso_ratio': 0.714625161574674, 'head_offset': -0.08775258809328079}
+[hcpose] seat 4 calibrated: {'yaw': 0.23247701674699783, 'head_height': -0.22937853634357452, 'torso_ratio': 0.7638951028265726, 'head_offset': -0.1454852670431137}
+[hcpose] seat 2 calibrated: {'yaw': 0.168003112077713, 'head_height': -0.12179815769195557, 'torso_ratio': 0.7463761967985051, 'head_offset': -0.04788904823362827}
+[hcpose] seat 5 calibrated: {'yaw': 0.016697135753929615, 'head_height': -0.2004651129245758, 'torso_ratio': 0.988586727935489, 'head_offset': 0.03248397074639797}
+[hcpose] seat 8 calibrated: {'yaw': -0.007092415122315288, 'head_height': 0.0773625485599041, 'torso_ratio': 0.8307731824043469, 'head_offset': -0.46322229504585266}
+[hcpose] seat 6 calibrated: {'yaw': -0.34928783774375916, 'head_height': -0.15043150633573532, 'torso_ratio': 0.44922396006919235, 'head_offset': -0.5729560852050781}
+[hcpose] seat 10 calibrated: {'yaw': -0.3202190548181534, 'head_height': 0.12470392882823944, 'torso_ratio': 0.5142805767619214, 'head_offset': -0.47421884536743164}
+[hcpose] seat 1 calibrated: {'yaw': -0.004599863663315773, 'head_height': -0.1459285467863083, 'torso_ratio': 0.6686760313396936, 'head_offset': 0.2813463360071182}
+[hcpose] seat 17 calibrated: {'yaw': -0.10248693823814392, 'head_height': -0.019497288390994072, 'torso_ratio': 0.39148253641895026, 'head_offset': -0.8244443535804749}
+[hcpose] seat 27 calibrated: {'yaw': -0.25044603645801544, 'head_height': -0.02961348369717598, 'torso_ratio': 0.5772109543240995, 'head_offset': 0.14612311124801636}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.03968263976275921, 'head_height': 0.12243236601352692, 'torso_ratio': 0.714625161574674, 'head_offset': -0.08775258809328079}
+[hcpose] seat 4 calibrated: {'yaw': 0.23247701674699783, 'head_height': -0.22937853634357452, 'torso_ratio': 0.7638951028265726, 'head_offset': -0.1454852670431137}
+[hcpose] seat 2 calibrated: {'yaw': 0.168003112077713, 'head_height': -0.12179815769195557, 'torso_ratio': 0.7463761967985051, 'head_offset': -0.04788904823362827}
+[hcpose] seat 5 calibrated: {'yaw': 0.016697135753929615, 'head_height': -0.2004651129245758, 'torso_ratio': 0.988586727935489, 'head_offset': 0.03248397074639797}
+[hcpose] seat 8 calibrated: {'yaw': -0.007092415122315288, 'head_height': 0.0773625485599041, 'torso_ratio': 0.8307731824043469, 'head_offset': -0.46322229504585266}
+[hcpose] seat 6 calibrated: {'yaw': -0.34928783774375916, 'head_height': -0.15043150633573532, 'torso_ratio': 0.44922396006919235, 'head_offset': -0.5729560852050781}
+[hcpose] seat 10 calibrated: {'yaw': -0.3202190548181534, 'head_height': 0.12470392882823944, 'torso_ratio': 0.5142805767619214, 'head_offset': -0.47421884536743164}
+[hcpose] seat 1 calibrated: {'yaw': -0.004599863663315773, 'head_height': -0.1459285467863083, 'torso_ratio': 0.6686760313396936, 'head_offset': 0.2813463360071182}
+[hcpose] seat 17 calibrated: {'yaw': -0.10248693823814392, 'head_height': -0.019497288390994072, 'torso_ratio': 0.39148253641895026, 'head_offset': -0.8244443535804749}
+[hcpose] seat 27 calibrated: {'yaw': -0.25044603645801544, 'head_height': -0.02961348369717598, 'torso_ratio': 0.5772109543240995, 'head_offset': 0.14612311124801636}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.03968263976275921, 'head_height': 0.12243236601352692, 'torso_ratio': 0.714625161574674, 'head_offset': -0.08775258809328079}
+[hcpose] seat 4 calibrated: {'yaw': 0.23247701674699783, 'head_height': -0.22937853634357452, 'torso_ratio': 0.7638951028265726, 'head_offset': -0.1454852670431137}
+[hcpose] seat 2 calibrated: {'yaw': 0.168003112077713, 'head_height': -0.12179815769195557, 'torso_ratio': 0.7463761967985051, 'head_offset': -0.04788904823362827}
+[hcpose] seat 5 calibrated: {'yaw': 0.016697135753929615, 'head_height': -0.2004651129245758, 'torso_ratio': 0.988586727935489, 'head_offset': 0.03248397074639797}
+[hcpose] seat 8 calibrated: {'yaw': -0.007092415122315288, 'head_height': 0.0773625485599041, 'torso_ratio': 0.8307731824043469, 'head_offset': -0.46322229504585266}
+[hcpose] seat 6 calibrated: {'yaw': -0.34928783774375916, 'head_height': -0.15043150633573532, 'torso_ratio': 0.44922396006919235, 'head_offset': -0.5729560852050781}
+[hcpose] seat 10 calibrated: {'yaw': -0.3202190548181534, 'head_height': 0.12470392882823944, 'torso_ratio': 0.5142805767619214, 'head_offset': -0.47421884536743164}
+[hcpose] seat 1 calibrated: {'yaw': -0.004599863663315773, 'head_height': -0.1459285467863083, 'torso_ratio': 0.6686760313396936, 'head_offset': 0.2813463360071182}
+[hcpose] seat 17 calibrated: {'yaw': -0.10248693823814392, 'head_height': -0.019497288390994072, 'torso_ratio': 0.39148253641895026, 'head_offset': -0.8244443535804749}
+[hcpose] seat 27 calibrated: {'yaw': -0.25044603645801544, 'head_height': -0.02961348369717598, 'torso_ratio': 0.5772109543240995, 'head_offset': 0.14612311124801636}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.03968263976275921, 'head_height': 0.12243236601352692, 'torso_ratio': 0.714625161574674, 'head_offset': -0.08775258809328079}
+[hcpose] seat 4 calibrated: {'yaw': 0.23247701674699783, 'head_height': -0.22937853634357452, 'torso_ratio': 0.7638951028265726, 'head_offset': -0.1454852670431137}
+[hcpose] seat 2 calibrated: {'yaw': 0.168003112077713, 'head_height': -0.12179815769195557, 'torso_ratio': 0.7463761967985051, 'head_offset': -0.04788904823362827}
+[hcpose] seat 5 calibrated: {'yaw': 0.016697135753929615, 'head_height': -0.2004651129245758, 'torso_ratio': 0.988586727935489, 'head_offset': 0.03248397074639797}
+[hcpose] seat 8 calibrated: {'yaw': -0.007092415122315288, 'head_height': 0.0773625485599041, 'torso_ratio': 0.8307731824043469, 'head_offset': -0.46322229504585266}
+[hcpose] seat 6 calibrated: {'yaw': -0.34928783774375916, 'head_height': -0.15043150633573532, 'torso_ratio': 0.44922396006919235, 'head_offset': -0.5729560852050781}
+[hcpose] seat 10 calibrated: {'yaw': -0.3202190548181534, 'head_height': 0.12470392882823944, 'torso_ratio': 0.5142805767619214, 'head_offset': -0.47421884536743164}
+[hcpose] seat 1 calibrated: {'yaw': -0.004599863663315773, 'head_height': -0.1459285467863083, 'torso_ratio': 0.6686760313396936, 'head_offset': 0.2813463360071182}
+[hcpose] seat 17 calibrated: {'yaw': -0.10248693823814392, 'head_height': -0.019497288390994072, 'torso_ratio': 0.39148253641895026, 'head_offset': -0.8244443535804749}
+[hcpose] seat 27 calibrated: {'yaw': -0.25044603645801544, 'head_height': -0.02961348369717598, 'torso_ratio': 0.5772109543240995, 'head_offset': 0.14612311124801636}
+== clip_2: model m, tiles auto
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_2_m_auto.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 6 calibrated: {'yaw': 0.23247701674699783, 'head_height': -0.22937853634357452, 'torso_ratio': 0.7638951028265726, 'head_offset': -0.1454852670431137}
+[hcpose] seat 2 calibrated: {'yaw': 0.168003112077713, 'head_height': -0.12179815769195557, 'torso_ratio': 0.7463761967985051, 'head_offset': -0.04788904823362827}
+[hcpose] seat 13 calibrated: {'yaw': -0.1740936040878296, 'head_height': 0.11393514275550842, 'torso_ratio': 0.617748969191805, 'head_offset': -0.4337349534034729}
+[hcpose] seat 4 calibrated: {'yaw': 0.21239905059337616, 'head_height': 0.04198186472058296, 'torso_ratio': 0.8689377522707928, 'head_offset': -0.3682049810886383}
+[hcpose] seat 12 calibrated: {'yaw': -0.34928783774375916, 'head_height': -0.15043150633573532, 'torso_ratio': 0.44922396006919235, 'head_offset': -0.5729560852050781}
+[hcpose] seat 18 calibrated: {'yaw': -0.2609752118587494, 'head_height': -0.1911684200167656, 'torso_ratio': 0.7144424041101456, 'head_offset': 0.04602984897792339}
+[hcpose] seat 5 calibrated: {'yaw': -0.026118164882063866, 'head_height': 0.09857281297445297, 'torso_ratio': 0.6403318925337358, 'head_offset': -0.0822673812508583}
+[hcpose] seat 24 calibrated: {'yaw': -0.04133552685379982, 'head_height': -0.01932539138942957, 'torso_ratio': 0.6182856656521418, 'head_offset': 0.28031666576862335}
+[hcpose] seat 30 calibrated: {'yaw': 0.035967834293842316, 'head_height': 0.35055020451545715, 'torso_ratio': 0.7812749185869773, 'head_offset': 0.14505507051944733}
+[hcpose] seat 11 calibrated: {'yaw': 0.0203333618119359, 'head_height': 0.004630631767213345, 'torso_ratio': 0.7741655783798185, 'head_offset': -0.1027371734380722}
+[hcpose] seat 8 calibrated: {'yaw': 0.003269169945269823, 'head_height': -0.20860622078180313, 'torso_ratio': 0.9677963956780392, 'head_offset': 0.02755545638501644}
+[hcpose] seat 43 calibrated: {'yaw': -0.043526723980903625, 'head_height': -0.13706852495670319, 'torso_ratio': 0.6724472072105575, 'head_offset': 0.28975607454776764}
+[hcpose] seat 33 calibrated: {'yaw': -0.017306466586887836, 'head_height': -0.1790519580245018, 'torso_ratio': 0.9126675488331152, 'head_offset': -0.00885347556322813}
+[hcpose] seat 36 calibrated: {'yaw': 0.04761915281414986, 'head_height': 0.00755919748917222, 'torso_ratio': 0.37940981754228725, 'head_offset': -0.7933734655380249}
+[hcpose] seat 7 calibrated: {'yaw': 0.09840266406536102, 'head_height': -0.10279868543148041, 'torso_ratio': 0.6901841214751028, 'head_offset': -0.049045102670788765}
+[hcpose] seat 52 calibrated: {'yaw': 0.14777552336454391, 'head_height': 0.045142292976379395, 'torso_ratio': 0.7506905660525459, 'head_offset': -0.3727494776248932}
+[hcpose] seat 1 calibrated: {'yaw': -0.10298683494329453, 'head_height': -0.05751670338213444, 'torso_ratio': 0.59277816462151, 'head_offset': 0.35477977991104126}
+[hcpose] seat 46 calibrated: {'yaw': 0.19787543267011642, 'head_height': 0.39775437116622925, 'torso_ratio': 0.9031864342327119, 'head_offset': 0.07942105457186699}
+[hcpose] seat 58 calibrated: {'yaw': -0.19761788100004196, 'head_height': 0.21088194847106934, 'torso_ratio': 0.6061748354127129, 'head_offset': -0.16245674341917038}
+[hcpose] seat 37 calibrated: {'yaw': -0.17269113659858704, 'head_height': -0.1486954391002655, 'torso_ratio': 0.694977403177646, 'head_offset': 0.04176652058959007}
+[hcpose] seat 9 calibrated: {'yaw': 0.011260437779128551, 'head_height': 0.26321613788604736, 'torso_ratio': 0.7241611042699638, 'head_offset': 0.22715778648853302}
+[hcpose] seat 19 calibrated: {'yaw': -0.1237696073949337, 'head_height': -0.12103594094514847, 'torso_ratio': 0.7695711804030193, 'head_offset': 0.22089870274066925}
+[hcpose] seat 3 calibrated: {'yaw': -0.0912867933511734, 'head_height': 0.1626298502087593, 'torso_ratio': 0.6871086525517467, 'head_offset': -0.13407623767852783}
+[hcpose] seat 15 calibrated: {'yaw': -0.2609826922416687, 'head_height': -0.017905736342072487, 'torso_ratio': 0.6616237019684059, 'head_offset': 0.2500646412372589}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 6 calibrated: {'yaw': 0.23247701674699783, 'head_height': -0.22937853634357452, 'torso_ratio': 0.7638951028265726, 'head_offset': -0.1454852670431137}
+[hcpose] seat 2 calibrated: {'yaw': 0.168003112077713, 'head_height': -0.12179815769195557, 'torso_ratio': 0.7463761967985051, 'head_offset': -0.04788904823362827}
+[hcpose] seat 13 calibrated: {'yaw': -0.1740936040878296, 'head_height': 0.11393514275550842, 'torso_ratio': 0.617748969191805, 'head_offset': -0.4337349534034729}
+[hcpose] seat 4 calibrated: {'yaw': 0.21239905059337616, 'head_height': 0.04198186472058296, 'torso_ratio': 0.8689377522707928, 'head_offset': -0.3682049810886383}
+[hcpose] seat 12 calibrated: {'yaw': -0.34928783774375916, 'head_height': -0.15043150633573532, 'torso_ratio': 0.44922396006919235, 'head_offset': -0.5729560852050781}
+[hcpose] seat 18 calibrated: {'yaw': -0.2609752118587494, 'head_height': -0.1911684200167656, 'torso_ratio': 0.7144424041101456, 'head_offset': 0.04602984897792339}
+[hcpose] seat 5 calibrated: {'yaw': -0.026118164882063866, 'head_height': 0.09857281297445297, 'torso_ratio': 0.6403318925337358, 'head_offset': -0.0822673812508583}
+[hcpose] seat 24 calibrated: {'yaw': -0.04133552685379982, 'head_height': -0.01932539138942957, 'torso_ratio': 0.6182856656521418, 'head_offset': 0.28031666576862335}
+[hcpose] seat 30 calibrated: {'yaw': 0.035967834293842316, 'head_height': 0.35055020451545715, 'torso_ratio': 0.7812749185869773, 'head_offset': 0.14505507051944733}
+[hcpose] seat 11 calibrated: {'yaw': 0.0203333618119359, 'head_height': 0.004630631767213345, 'torso_ratio': 0.7741655783798185, 'head_offset': -0.1027371734380722}
+[hcpose] seat 8 calibrated: {'yaw': 0.003269169945269823, 'head_height': -0.20860622078180313, 'torso_ratio': 0.9677963956780392, 'head_offset': 0.02755545638501644}
+[hcpose] seat 43 calibrated: {'yaw': -0.043526723980903625, 'head_height': -0.13706852495670319, 'torso_ratio': 0.6724472072105575, 'head_offset': 0.28975607454776764}
+[hcpose] seat 33 calibrated: {'yaw': -0.017306466586887836, 'head_height': -0.1790519580245018, 'torso_ratio': 0.9126675488331152, 'head_offset': -0.00885347556322813}
+[hcpose] seat 36 calibrated: {'yaw': 0.04761915281414986, 'head_height': 0.00755919748917222, 'torso_ratio': 0.37940981754228725, 'head_offset': -0.7933734655380249}
+[hcpose] seat 7 calibrated: {'yaw': 0.09840266406536102, 'head_height': -0.10279868543148041, 'torso_ratio': 0.6901841214751028, 'head_offset': -0.049045102670788765}
+[hcpose] seat 52 calibrated: {'yaw': 0.14777552336454391, 'head_height': 0.045142292976379395, 'torso_ratio': 0.7506905660525459, 'head_offset': -0.3727494776248932}
+[hcpose] seat 1 calibrated: {'yaw': -0.10298683494329453, 'head_height': -0.05751670338213444, 'torso_ratio': 0.59277816462151, 'head_offset': 0.35477977991104126}
+[hcpose] seat 46 calibrated: {'yaw': 0.19787543267011642, 'head_height': 0.39775437116622925, 'torso_ratio': 0.9031864342327119, 'head_offset': 0.07942105457186699}
+[hcpose] seat 58 calibrated: {'yaw': -0.19761788100004196, 'head_height': 0.21088194847106934, 'torso_ratio': 0.6061748354127129, 'head_offset': -0.16245674341917038}
+[hcpose] seat 37 calibrated: {'yaw': -0.17269113659858704, 'head_height': -0.1486954391002655, 'torso_ratio': 0.694977403177646, 'head_offset': 0.04176652058959007}
+[hcpose] seat 9 calibrated: {'yaw': 0.011260437779128551, 'head_height': 0.26321613788604736, 'torso_ratio': 0.7241611042699638, 'head_offset': 0.22715778648853302}
+[hcpose] seat 19 calibrated: {'yaw': -0.1237696073949337, 'head_height': -0.12103594094514847, 'torso_ratio': 0.7695711804030193, 'head_offset': 0.22089870274066925}
+[hcpose] seat 3 calibrated: {'yaw': -0.0912867933511734, 'head_height': 0.1626298502087593, 'torso_ratio': 0.6871086525517467, 'head_offset': -0.13407623767852783}
+[hcpose] seat 15 calibrated: {'yaw': -0.2609826922416687, 'head_height': -0.017905736342072487, 'torso_ratio': 0.6616237019684059, 'head_offset': 0.2500646412372589}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 6 calibrated: {'yaw': 0.23247701674699783, 'head_height': -0.22937853634357452, 'torso_ratio': 0.7638951028265726, 'head_offset': -0.1454852670431137}
+[hcpose] seat 2 calibrated: {'yaw': 0.168003112077713, 'head_height': -0.12179815769195557, 'torso_ratio': 0.7463761967985051, 'head_offset': -0.04788904823362827}
+[hcpose] seat 13 calibrated: {'yaw': -0.1740936040878296, 'head_height': 0.11393514275550842, 'torso_ratio': 0.617748969191805, 'head_offset': -0.4337349534034729}
+[hcpose] seat 4 calibrated: {'yaw': 0.21239905059337616, 'head_height': 0.04198186472058296, 'torso_ratio': 0.8689377522707928, 'head_offset': -0.3682049810886383}
+[hcpose] seat 12 calibrated: {'yaw': -0.34928783774375916, 'head_height': -0.15043150633573532, 'torso_ratio': 0.44922396006919235, 'head_offset': -0.5729560852050781}
+[hcpose] seat 18 calibrated: {'yaw': -0.2609752118587494, 'head_height': -0.1911684200167656, 'torso_ratio': 0.7144424041101456, 'head_offset': 0.04602984897792339}
+[hcpose] seat 5 calibrated: {'yaw': -0.026118164882063866, 'head_height': 0.09857281297445297, 'torso_ratio': 0.6403318925337358, 'head_offset': -0.0822673812508583}
+[hcpose] seat 24 calibrated: {'yaw': -0.04133552685379982, 'head_height': -0.01932539138942957, 'torso_ratio': 0.6182856656521418, 'head_offset': 0.28031666576862335}
+[hcpose] seat 30 calibrated: {'yaw': 0.035967834293842316, 'head_height': 0.35055020451545715, 'torso_ratio': 0.7812749185869773, 'head_offset': 0.14505507051944733}
+[hcpose] seat 11 calibrated: {'yaw': 0.0203333618119359, 'head_height': 0.004630631767213345, 'torso_ratio': 0.7741655783798185, 'head_offset': -0.1027371734380722}
+[hcpose] seat 8 calibrated: {'yaw': 0.003269169945269823, 'head_height': -0.20860622078180313, 'torso_ratio': 0.9677963956780392, 'head_offset': 0.02755545638501644}
+[hcpose] seat 43 calibrated: {'yaw': -0.043526723980903625, 'head_height': -0.13706852495670319, 'torso_ratio': 0.6724472072105575, 'head_offset': 0.28975607454776764}
+[hcpose] seat 33 calibrated: {'yaw': -0.017306466586887836, 'head_height': -0.1790519580245018, 'torso_ratio': 0.9126675488331152, 'head_offset': -0.00885347556322813}
+[hcpose] seat 36 calibrated: {'yaw': 0.04761915281414986, 'head_height': 0.00755919748917222, 'torso_ratio': 0.37940981754228725, 'head_offset': -0.7933734655380249}
+[hcpose] seat 7 calibrated: {'yaw': 0.09840266406536102, 'head_height': -0.10279868543148041, 'torso_ratio': 0.6901841214751028, 'head_offset': -0.049045102670788765}
+[hcpose] seat 52 calibrated: {'yaw': 0.14777552336454391, 'head_height': 0.045142292976379395, 'torso_ratio': 0.7506905660525459, 'head_offset': -0.3727494776248932}
+[hcpose] seat 1 calibrated: {'yaw': -0.10298683494329453, 'head_height': -0.05751670338213444, 'torso_ratio': 0.59277816462151, 'head_offset': 0.35477977991104126}
+[hcpose] seat 46 calibrated: {'yaw': 0.19787543267011642, 'head_height': 0.39775437116622925, 'torso_ratio': 0.9031864342327119, 'head_offset': 0.07942105457186699}
+[hcpose] seat 58 calibrated: {'yaw': -0.19761788100004196, 'head_height': 0.21088194847106934, 'torso_ratio': 0.6061748354127129, 'head_offset': -0.16245674341917038}
+[hcpose] seat 37 calibrated: {'yaw': -0.17269113659858704, 'head_height': -0.1486954391002655, 'torso_ratio': 0.694977403177646, 'head_offset': 0.04176652058959007}
+[hcpose] seat 9 calibrated: {'yaw': 0.011260437779128551, 'head_height': 0.26321613788604736, 'torso_ratio': 0.7241611042699638, 'head_offset': 0.22715778648853302}
+[hcpose] seat 19 calibrated: {'yaw': -0.1237696073949337, 'head_height': -0.12103594094514847, 'torso_ratio': 0.7695711804030193, 'head_offset': 0.22089870274066925}
+[hcpose] seat 3 calibrated: {'yaw': -0.0912867933511734, 'head_height': 0.1626298502087593, 'torso_ratio': 0.6871086525517467, 'head_offset': -0.13407623767852783}
+[hcpose] seat 15 calibrated: {'yaw': -0.2609826922416687, 'head_height': -0.017905736342072487, 'torso_ratio': 0.6616237019684059, 'head_offset': 0.2500646412372589}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 6 calibrated: {'yaw': 0.23247701674699783, 'head_height': -0.22937853634357452, 'torso_ratio': 0.7638951028265726, 'head_offset': -0.1454852670431137}
+[hcpose] seat 2 calibrated: {'yaw': 0.168003112077713, 'head_height': -0.12179815769195557, 'torso_ratio': 0.7463761967985051, 'head_offset': -0.04788904823362827}
+[hcpose] seat 13 calibrated: {'yaw': -0.1740936040878296, 'head_height': 0.11393514275550842, 'torso_ratio': 0.617748969191805, 'head_offset': -0.4337349534034729}
+[hcpose] seat 4 calibrated: {'yaw': 0.21239905059337616, 'head_height': 0.04198186472058296, 'torso_ratio': 0.8689377522707928, 'head_offset': -0.3682049810886383}
+[hcpose] seat 12 calibrated: {'yaw': -0.34928783774375916, 'head_height': -0.15043150633573532, 'torso_ratio': 0.44922396006919235, 'head_offset': -0.5729560852050781}
+[hcpose] seat 18 calibrated: {'yaw': -0.2609752118587494, 'head_height': -0.1911684200167656, 'torso_ratio': 0.7144424041101456, 'head_offset': 0.04602984897792339}
+[hcpose] seat 5 calibrated: {'yaw': -0.026118164882063866, 'head_height': 0.09857281297445297, 'torso_ratio': 0.6403318925337358, 'head_offset': -0.0822673812508583}
+[hcpose] seat 24 calibrated: {'yaw': -0.04133552685379982, 'head_height': -0.01932539138942957, 'torso_ratio': 0.6182856656521418, 'head_offset': 0.28031666576862335}
+[hcpose] seat 30 calibrated: {'yaw': 0.035967834293842316, 'head_height': 0.35055020451545715, 'torso_ratio': 0.7812749185869773, 'head_offset': 0.14505507051944733}
+[hcpose] seat 11 calibrated: {'yaw': 0.0203333618119359, 'head_height': 0.004630631767213345, 'torso_ratio': 0.7741655783798185, 'head_offset': -0.1027371734380722}
+[hcpose] seat 8 calibrated: {'yaw': 0.003269169945269823, 'head_height': -0.20860622078180313, 'torso_ratio': 0.9677963956780392, 'head_offset': 0.02755545638501644}
+[hcpose] seat 43 calibrated: {'yaw': -0.043526723980903625, 'head_height': -0.13706852495670319, 'torso_ratio': 0.6724472072105575, 'head_offset': 0.28975607454776764}
+[hcpose] seat 33 calibrated: {'yaw': -0.017306466586887836, 'head_height': -0.1790519580245018, 'torso_ratio': 0.9126675488331152, 'head_offset': -0.00885347556322813}
+[hcpose] seat 36 calibrated: {'yaw': 0.04761915281414986, 'head_height': 0.00755919748917222, 'torso_ratio': 0.37940981754228725, 'head_offset': -0.7933734655380249}
+[hcpose] seat 7 calibrated: {'yaw': 0.09840266406536102, 'head_height': -0.10279868543148041, 'torso_ratio': 0.6901841214751028, 'head_offset': -0.049045102670788765}
+[hcpose] seat 52 calibrated: {'yaw': 0.14777552336454391, 'head_height': 0.045142292976379395, 'torso_ratio': 0.7506905660525459, 'head_offset': -0.3727494776248932}
+[hcpose] seat 1 calibrated: {'yaw': -0.10298683494329453, 'head_height': -0.05751670338213444, 'torso_ratio': 0.59277816462151, 'head_offset': 0.35477977991104126}
+[hcpose] seat 46 calibrated: {'yaw': 0.19787543267011642, 'head_height': 0.39775437116622925, 'torso_ratio': 0.9031864342327119, 'head_offset': 0.07942105457186699}
+[hcpose] seat 58 calibrated: {'yaw': -0.19761788100004196, 'head_height': 0.21088194847106934, 'torso_ratio': 0.6061748354127129, 'head_offset': -0.16245674341917038}
+[hcpose] seat 37 calibrated: {'yaw': -0.17269113659858704, 'head_height': -0.1486954391002655, 'torso_ratio': 0.694977403177646, 'head_offset': 0.04176652058959007}
+[hcpose] seat 9 calibrated: {'yaw': 0.011260437779128551, 'head_height': 0.26321613788604736, 'torso_ratio': 0.7241611042699638, 'head_offset': 0.22715778648853302}
+[hcpose] seat 19 calibrated: {'yaw': -0.1237696073949337, 'head_height': -0.12103594094514847, 'torso_ratio': 0.7695711804030193, 'head_offset': 0.22089870274066925}
+[hcpose] seat 3 calibrated: {'yaw': -0.0912867933511734, 'head_height': 0.1626298502087593, 'torso_ratio': 0.6871086525517467, 'head_offset': -0.13407623767852783}
+[hcpose] seat 15 calibrated: {'yaw': -0.2609826922416687, 'head_height': -0.017905736342072487, 'torso_ratio': 0.6616237019684059, 'head_offset': 0.2500646412372589}
+== clip_3: model n, tiles none
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_3_n_none.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 7 calibrated: {'yaw': 0.21159207820892334, 'head_height': 0.3641766458749771, 'torso_ratio': 0.558044157585059, 'head_offset': 0.08198723196983337}
+[hcpose] seat 8 calibrated: {'yaw': 0.07309601455926895, 'head_height': 0.5393332839012146, 'torso_ratio': 0.4383578296184509, 'head_offset': 0.13304123282432556}
+[hcpose] seat 14 calibrated: {'yaw': -0.17840322107076645, 'head_height': 0.44411104917526245, 'torso_ratio': 0.4721017585406613, 'head_offset': -0.14427626132965088}
+[hcpose] seat 6 calibrated: {'yaw': 0.1283656805753708, 'head_height': 0.35251812636852264, 'torso_ratio': 0.450448562905213, 'head_offset': 0.1666644886136055}
+[hcpose] seat 16 calibrated: {'yaw': 0.14338874071836472, 'head_height': 0.5079473257064819, 'torso_ratio': 0.4624708167007092, 'head_offset': -0.029108036309480667}
+[hcpose] seat 19 calibrated: {'yaw': 0.2357155978679657, 'head_height': 0.5955972969532013, 'torso_ratio': 0.4391759120967253, 'head_offset': 0.01676343008875847}
+[hcpose] seat 1 calibrated: {'yaw': 0.05033373087644577, 'head_height': 0.34776104986667633, 'torso_ratio': 0.48838575315658184, 'head_offset': -0.051039811223745346}
+[hcpose] seat 20 calibrated: {'yaw': 0.10357831791043282, 'head_height': 0.3999258279800415, 'torso_ratio': 0.305067271310112, 'head_offset': 0.34847015142440796}
+[hcpose] seat 3 calibrated: {'yaw': 0.06382716447114944, 'head_height': 0.372794970870018, 'torso_ratio': 0.48060653784431007, 'head_offset': 0.043622659519314766}
+[hcpose] seat 11 calibrated: {'yaw': 0.03280392847955227, 'head_height': 0.1986142173409462, 'torso_ratio': 0.47503286628505426, 'head_offset': 0.2491210326552391}
+[hcpose] seat 5 calibrated: {'yaw': -0.01865098997950554, 'head_height': 0.3849271833896637, 'torso_ratio': 0.43529251758990983, 'head_offset': 0.14556236565113068}
+[hcpose] seat 4 calibrated: {'yaw': -0.01612940151244402, 'head_height': 0.1923758164048195, 'torso_ratio': 0.5371101992975535, 'head_offset': 0.00852904561907053}
+[hcpose] seat 18 calibrated: {'yaw': -0.08971092849969864, 'head_height': 0.4012454152107239, 'torso_ratio': 0.24929770666102774, 'head_offset': 0.226042240858078}
+[hcpose] seat 42 calibrated: {'yaw': 0.2676917463541031, 'head_height': 0.42141304910182953, 'torso_ratio': 0.4453394976474118, 'head_offset': 0.1066739559173584}
+[hcpose] seat 43 calibrated: {'yaw': -0.12620466947555542, 'head_height': 0.4748349189758301, 'torso_ratio': 0.3483466301624707, 'head_offset': 0.12809855490922928}
+[hcpose] seat 23 calibrated: {'yaw': 0.028326143510639668, 'head_height': 0.45627452433109283, 'torso_ratio': 0.40992375772402523, 'head_offset': -0.149766705930233}
+[hcpose] seat 10 calibrated: {'yaw': 0.20471937954425812, 'head_height': 0.46468454599380493, 'torso_ratio': 0.3586640023657318, 'head_offset': -0.048100754618644714}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 7 calibrated: {'yaw': 0.21159207820892334, 'head_height': 0.3641766458749771, 'torso_ratio': 0.558044157585059, 'head_offset': 0.08198723196983337}
+[hcpose] seat 8 calibrated: {'yaw': 0.07309601455926895, 'head_height': 0.5393332839012146, 'torso_ratio': 0.4383578296184509, 'head_offset': 0.13304123282432556}
+[hcpose] seat 14 calibrated: {'yaw': -0.17840322107076645, 'head_height': 0.44411104917526245, 'torso_ratio': 0.4721017585406613, 'head_offset': -0.14427626132965088}
+[hcpose] seat 6 calibrated: {'yaw': 0.1283656805753708, 'head_height': 0.35251812636852264, 'torso_ratio': 0.450448562905213, 'head_offset': 0.1666644886136055}
+[hcpose] seat 16 calibrated: {'yaw': 0.14338874071836472, 'head_height': 0.5079473257064819, 'torso_ratio': 0.4624708167007092, 'head_offset': -0.029108036309480667}
+[hcpose] seat 19 calibrated: {'yaw': 0.2357155978679657, 'head_height': 0.5955972969532013, 'torso_ratio': 0.4391759120967253, 'head_offset': 0.01676343008875847}
+[hcpose] seat 1 calibrated: {'yaw': 0.05033373087644577, 'head_height': 0.34776104986667633, 'torso_ratio': 0.48838575315658184, 'head_offset': -0.051039811223745346}
+[hcpose] seat 20 calibrated: {'yaw': 0.10357831791043282, 'head_height': 0.3999258279800415, 'torso_ratio': 0.305067271310112, 'head_offset': 0.34847015142440796}
+[hcpose] seat 3 calibrated: {'yaw': 0.06382716447114944, 'head_height': 0.372794970870018, 'torso_ratio': 0.48060653784431007, 'head_offset': 0.043622659519314766}
+[hcpose] seat 11 calibrated: {'yaw': 0.03280392847955227, 'head_height': 0.1986142173409462, 'torso_ratio': 0.47503286628505426, 'head_offset': 0.2491210326552391}
+[hcpose] seat 5 calibrated: {'yaw': -0.01865098997950554, 'head_height': 0.3849271833896637, 'torso_ratio': 0.43529251758990983, 'head_offset': 0.14556236565113068}
+[hcpose] seat 4 calibrated: {'yaw': -0.01612940151244402, 'head_height': 0.1923758164048195, 'torso_ratio': 0.5371101992975535, 'head_offset': 0.00852904561907053}
+[hcpose] seat 18 calibrated: {'yaw': -0.08971092849969864, 'head_height': 0.4012454152107239, 'torso_ratio': 0.24929770666102774, 'head_offset': 0.226042240858078}
+[hcpose] seat 42 calibrated: {'yaw': 0.2676917463541031, 'head_height': 0.42141304910182953, 'torso_ratio': 0.4453394976474118, 'head_offset': 0.1066739559173584}
+[hcpose] seat 43 calibrated: {'yaw': -0.12620466947555542, 'head_height': 0.4748349189758301, 'torso_ratio': 0.3483466301624707, 'head_offset': 0.12809855490922928}
+[hcpose] seat 23 calibrated: {'yaw': 0.028326143510639668, 'head_height': 0.45627452433109283, 'torso_ratio': 0.40992375772402523, 'head_offset': -0.149766705930233}
+[hcpose] seat 10 calibrated: {'yaw': 0.20471937954425812, 'head_height': 0.46468454599380493, 'torso_ratio': 0.3586640023657318, 'head_offset': -0.048100754618644714}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 7 calibrated: {'yaw': 0.21159207820892334, 'head_height': 0.3641766458749771, 'torso_ratio': 0.558044157585059, 'head_offset': 0.08198723196983337}
+[hcpose] seat 8 calibrated: {'yaw': 0.07309601455926895, 'head_height': 0.5393332839012146, 'torso_ratio': 0.4383578296184509, 'head_offset': 0.13304123282432556}
+[hcpose] seat 14 calibrated: {'yaw': -0.17840322107076645, 'head_height': 0.44411104917526245, 'torso_ratio': 0.4721017585406613, 'head_offset': -0.14427626132965088}
+[hcpose] seat 6 calibrated: {'yaw': 0.1283656805753708, 'head_height': 0.35251812636852264, 'torso_ratio': 0.450448562905213, 'head_offset': 0.1666644886136055}
+[hcpose] seat 16 calibrated: {'yaw': 0.14338874071836472, 'head_height': 0.5079473257064819, 'torso_ratio': 0.4624708167007092, 'head_offset': -0.029108036309480667}
+[hcpose] seat 19 calibrated: {'yaw': 0.2357155978679657, 'head_height': 0.5955972969532013, 'torso_ratio': 0.4391759120967253, 'head_offset': 0.01676343008875847}
+[hcpose] seat 1 calibrated: {'yaw': 0.05033373087644577, 'head_height': 0.34776104986667633, 'torso_ratio': 0.48838575315658184, 'head_offset': -0.051039811223745346}
+[hcpose] seat 20 calibrated: {'yaw': 0.10357831791043282, 'head_height': 0.3999258279800415, 'torso_ratio': 0.305067271310112, 'head_offset': 0.34847015142440796}
+[hcpose] seat 3 calibrated: {'yaw': 0.06382716447114944, 'head_height': 0.372794970870018, 'torso_ratio': 0.48060653784431007, 'head_offset': 0.043622659519314766}
+[hcpose] seat 11 calibrated: {'yaw': 0.03280392847955227, 'head_height': 0.1986142173409462, 'torso_ratio': 0.47503286628505426, 'head_offset': 0.2491210326552391}
+[hcpose] seat 5 calibrated: {'yaw': -0.01865098997950554, 'head_height': 0.3849271833896637, 'torso_ratio': 0.43529251758990983, 'head_offset': 0.14556236565113068}
+[hcpose] seat 4 calibrated: {'yaw': -0.01612940151244402, 'head_height': 0.1923758164048195, 'torso_ratio': 0.5371101992975535, 'head_offset': 0.00852904561907053}
+[hcpose] seat 18 calibrated: {'yaw': -0.08971092849969864, 'head_height': 0.4012454152107239, 'torso_ratio': 0.24929770666102774, 'head_offset': 0.226042240858078}
+[hcpose] seat 42 calibrated: {'yaw': 0.2676917463541031, 'head_height': 0.42141304910182953, 'torso_ratio': 0.4453394976474118, 'head_offset': 0.1066739559173584}
+[hcpose] seat 43 calibrated: {'yaw': -0.12620466947555542, 'head_height': 0.4748349189758301, 'torso_ratio': 0.3483466301624707, 'head_offset': 0.12809855490922928}
+[hcpose] seat 23 calibrated: {'yaw': 0.028326143510639668, 'head_height': 0.45627452433109283, 'torso_ratio': 0.40992375772402523, 'head_offset': -0.149766705930233}
+[hcpose] seat 10 calibrated: {'yaw': 0.20471937954425812, 'head_height': 0.46468454599380493, 'torso_ratio': 0.3586640023657318, 'head_offset': -0.048100754618644714}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 7 calibrated: {'yaw': 0.21159207820892334, 'head_height': 0.3641766458749771, 'torso_ratio': 0.558044157585059, 'head_offset': 0.08198723196983337}
+[hcpose] seat 8 calibrated: {'yaw': 0.07309601455926895, 'head_height': 0.5393332839012146, 'torso_ratio': 0.4383578296184509, 'head_offset': 0.13304123282432556}
+[hcpose] seat 14 calibrated: {'yaw': -0.17840322107076645, 'head_height': 0.44411104917526245, 'torso_ratio': 0.4721017585406613, 'head_offset': -0.14427626132965088}
+[hcpose] seat 6 calibrated: {'yaw': 0.1283656805753708, 'head_height': 0.35251812636852264, 'torso_ratio': 0.450448562905213, 'head_offset': 0.1666644886136055}
+[hcpose] seat 16 calibrated: {'yaw': 0.14338874071836472, 'head_height': 0.5079473257064819, 'torso_ratio': 0.4624708167007092, 'head_offset': -0.029108036309480667}
+[hcpose] seat 19 calibrated: {'yaw': 0.2357155978679657, 'head_height': 0.5955972969532013, 'torso_ratio': 0.4391759120967253, 'head_offset': 0.01676343008875847}
+[hcpose] seat 1 calibrated: {'yaw': 0.05033373087644577, 'head_height': 0.34776104986667633, 'torso_ratio': 0.48838575315658184, 'head_offset': -0.051039811223745346}
+[hcpose] seat 20 calibrated: {'yaw': 0.10357831791043282, 'head_height': 0.3999258279800415, 'torso_ratio': 0.305067271310112, 'head_offset': 0.34847015142440796}
+[hcpose] seat 3 calibrated: {'yaw': 0.06382716447114944, 'head_height': 0.372794970870018, 'torso_ratio': 0.48060653784431007, 'head_offset': 0.043622659519314766}
+[hcpose] seat 11 calibrated: {'yaw': 0.03280392847955227, 'head_height': 0.1986142173409462, 'torso_ratio': 0.47503286628505426, 'head_offset': 0.2491210326552391}
+[hcpose] seat 5 calibrated: {'yaw': -0.01865098997950554, 'head_height': 0.3849271833896637, 'torso_ratio': 0.43529251758990983, 'head_offset': 0.14556236565113068}
+[hcpose] seat 4 calibrated: {'yaw': -0.01612940151244402, 'head_height': 0.1923758164048195, 'torso_ratio': 0.5371101992975535, 'head_offset': 0.00852904561907053}
+[hcpose] seat 18 calibrated: {'yaw': -0.08971092849969864, 'head_height': 0.4012454152107239, 'torso_ratio': 0.24929770666102774, 'head_offset': 0.226042240858078}
+[hcpose] seat 42 calibrated: {'yaw': 0.2676917463541031, 'head_height': 0.42141304910182953, 'torso_ratio': 0.4453394976474118, 'head_offset': 0.1066739559173584}
+[hcpose] seat 43 calibrated: {'yaw': -0.12620466947555542, 'head_height': 0.4748349189758301, 'torso_ratio': 0.3483466301624707, 'head_offset': 0.12809855490922928}
+[hcpose] seat 23 calibrated: {'yaw': 0.028326143510639668, 'head_height': 0.45627452433109283, 'torso_ratio': 0.40992375772402523, 'head_offset': -0.149766705930233}
+[hcpose] seat 10 calibrated: {'yaw': 0.20471937954425812, 'head_height': 0.46468454599380493, 'torso_ratio': 0.3586640023657318, 'head_offset': -0.048100754618644714}
+== clip_3: model n, tiles auto
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_3_n_auto.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 9 calibrated: {'yaw': 0.21159207820892334, 'head_height': 0.3641766458749771, 'torso_ratio': 0.558044157585059, 'head_offset': 0.08198723196983337}
+[hcpose] seat 10 calibrated: {'yaw': 0.07418308407068253, 'head_height': 0.5393332839012146, 'torso_ratio': 0.4383596656637242, 'head_offset': 0.13286633789539337}
+[hcpose] seat 6 calibrated: {'yaw': -0.03461686335504055, 'head_height': 0.32577913999557495, 'torso_ratio': 0.416751345466165, 'head_offset': -0.25118690729141235}
+[hcpose] seat 16 calibrated: {'yaw': -0.17840322107076645, 'head_height': 0.44411104917526245, 'torso_ratio': 0.4721017585406613, 'head_offset': -0.14427626132965088}
+[hcpose] seat 8 calibrated: {'yaw': 0.1283656805753708, 'head_height': 0.35251812636852264, 'torso_ratio': 0.450448562905213, 'head_offset': 0.1666644886136055}
+[hcpose] seat 18 calibrated: {'yaw': 0.14384343475103378, 'head_height': 0.5082318186759949, 'torso_ratio': 0.46244382443630194, 'head_offset': -0.029108036309480667}
+[hcpose] seat 21 calibrated: {'yaw': 0.2357155978679657, 'head_height': 0.5955972969532013, 'torso_ratio': 0.43914418517526854, 'head_offset': 0.016818220727145672}
+[hcpose] seat 1 calibrated: {'yaw': 0.05120657943189144, 'head_height': 0.34786659479141235, 'torso_ratio': 0.488398650596882, 'head_offset': -0.05101777985692024}
+[hcpose] seat 22 calibrated: {'yaw': 0.10357831791043282, 'head_height': 0.3999258279800415, 'torso_ratio': 0.305067271310112, 'head_offset': 0.34847015142440796}
+[hcpose] seat 3 calibrated: {'yaw': 0.06382716447114944, 'head_height': 0.372794970870018, 'torso_ratio': 0.48060653784431007, 'head_offset': 0.043622659519314766}
+[hcpose] seat 13 calibrated: {'yaw': 0.03280392847955227, 'head_height': 0.1986142173409462, 'torso_ratio': 0.47503286628505426, 'head_offset': 0.2491210326552391}
+[hcpose] seat 5 calibrated: {'yaw': -0.01865098997950554, 'head_height': 0.3849271833896637, 'torso_ratio': 0.43529251758990983, 'head_offset': 0.14556236565113068}
+[hcpose] seat 4 calibrated: {'yaw': -0.01612940151244402, 'head_height': 0.1923758164048195, 'torso_ratio': 0.5371101992975535, 'head_offset': 0.00852904561907053}
+[hcpose] seat 20 calibrated: {'yaw': -0.08971092849969864, 'head_height': 0.4012454152107239, 'torso_ratio': 0.24929770666102774, 'head_offset': 0.226042240858078}
+[hcpose] seat 47 calibrated: {'yaw': -0.07339611649513245, 'head_height': 0.2414167821407318, 'torso_ratio': 0.6354647668255486, 'head_offset': -0.05607656575739384}
+[hcpose] seat 46 calibrated: {'yaw': 0.2676917463541031, 'head_height': 0.42141304910182953, 'torso_ratio': 0.4453394976474118, 'head_offset': 0.1066739559173584}
+[hcpose] seat 48 calibrated: {'yaw': -0.12620466947555542, 'head_height': 0.4748349189758301, 'torso_ratio': 0.3483466301624707, 'head_offset': 0.12809855490922928}
+[hcpose] seat 24 calibrated: {'yaw': 0.028326143510639668, 'head_height': 0.45627452433109283, 'torso_ratio': 0.40992375772402523, 'head_offset': -0.149766705930233}
+[hcpose] seat 12 calibrated: {'yaw': 0.20471937954425812, 'head_height': 0.46468454599380493, 'torso_ratio': 0.3586640023657318, 'head_offset': -0.048100754618644714}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 9 calibrated: {'yaw': 0.21159207820892334, 'head_height': 0.3641766458749771, 'torso_ratio': 0.558044157585059, 'head_offset': 0.08198723196983337}
+[hcpose] seat 10 calibrated: {'yaw': 0.07418308407068253, 'head_height': 0.5393332839012146, 'torso_ratio': 0.4383596656637242, 'head_offset': 0.13286633789539337}
+[hcpose] seat 6 calibrated: {'yaw': -0.03461686335504055, 'head_height': 0.32577913999557495, 'torso_ratio': 0.416751345466165, 'head_offset': -0.25118690729141235}
+[hcpose] seat 16 calibrated: {'yaw': -0.17840322107076645, 'head_height': 0.44411104917526245, 'torso_ratio': 0.4721017585406613, 'head_offset': -0.14427626132965088}
+[hcpose] seat 8 calibrated: {'yaw': 0.1283656805753708, 'head_height': 0.35251812636852264, 'torso_ratio': 0.450448562905213, 'head_offset': 0.1666644886136055}
+[hcpose] seat 18 calibrated: {'yaw': 0.14384343475103378, 'head_height': 0.5082318186759949, 'torso_ratio': 0.46244382443630194, 'head_offset': -0.029108036309480667}
+[hcpose] seat 21 calibrated: {'yaw': 0.2357155978679657, 'head_height': 0.5955972969532013, 'torso_ratio': 0.43914418517526854, 'head_offset': 0.016818220727145672}
+[hcpose] seat 1 calibrated: {'yaw': 0.05120657943189144, 'head_height': 0.34786659479141235, 'torso_ratio': 0.488398650596882, 'head_offset': -0.05101777985692024}
+[hcpose] seat 22 calibrated: {'yaw': 0.10357831791043282, 'head_height': 0.3999258279800415, 'torso_ratio': 0.305067271310112, 'head_offset': 0.34847015142440796}
+[hcpose] seat 3 calibrated: {'yaw': 0.06382716447114944, 'head_height': 0.372794970870018, 'torso_ratio': 0.48060653784431007, 'head_offset': 0.043622659519314766}
+[hcpose] seat 13 calibrated: {'yaw': 0.03280392847955227, 'head_height': 0.1986142173409462, 'torso_ratio': 0.47503286628505426, 'head_offset': 0.2491210326552391}
+[hcpose] seat 5 calibrated: {'yaw': -0.01865098997950554, 'head_height': 0.3849271833896637, 'torso_ratio': 0.43529251758990983, 'head_offset': 0.14556236565113068}
+[hcpose] seat 4 calibrated: {'yaw': -0.01612940151244402, 'head_height': 0.1923758164048195, 'torso_ratio': 0.5371101992975535, 'head_offset': 0.00852904561907053}
+[hcpose] seat 20 calibrated: {'yaw': -0.08971092849969864, 'head_height': 0.4012454152107239, 'torso_ratio': 0.24929770666102774, 'head_offset': 0.226042240858078}
+[hcpose] seat 47 calibrated: {'yaw': -0.07339611649513245, 'head_height': 0.2414167821407318, 'torso_ratio': 0.6354647668255486, 'head_offset': -0.05607656575739384}
+[hcpose] seat 46 calibrated: {'yaw': 0.2676917463541031, 'head_height': 0.42141304910182953, 'torso_ratio': 0.4453394976474118, 'head_offset': 0.1066739559173584}
+[hcpose] seat 48 calibrated: {'yaw': -0.12620466947555542, 'head_height': 0.4748349189758301, 'torso_ratio': 0.3483466301624707, 'head_offset': 0.12809855490922928}
+[hcpose] seat 24 calibrated: {'yaw': 0.028326143510639668, 'head_height': 0.45627452433109283, 'torso_ratio': 0.40992375772402523, 'head_offset': -0.149766705930233}
+[hcpose] seat 12 calibrated: {'yaw': 0.20471937954425812, 'head_height': 0.46468454599380493, 'torso_ratio': 0.3586640023657318, 'head_offset': -0.048100754618644714}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 9 calibrated: {'yaw': 0.21159207820892334, 'head_height': 0.3641766458749771, 'torso_ratio': 0.558044157585059, 'head_offset': 0.08198723196983337}
+[hcpose] seat 10 calibrated: {'yaw': 0.07418308407068253, 'head_height': 0.5393332839012146, 'torso_ratio': 0.4383596656637242, 'head_offset': 0.13286633789539337}
+[hcpose] seat 6 calibrated: {'yaw': -0.03461686335504055, 'head_height': 0.32577913999557495, 'torso_ratio': 0.416751345466165, 'head_offset': -0.25118690729141235}
+[hcpose] seat 16 calibrated: {'yaw': -0.17840322107076645, 'head_height': 0.44411104917526245, 'torso_ratio': 0.4721017585406613, 'head_offset': -0.14427626132965088}
+[hcpose] seat 8 calibrated: {'yaw': 0.1283656805753708, 'head_height': 0.35251812636852264, 'torso_ratio': 0.450448562905213, 'head_offset': 0.1666644886136055}
+[hcpose] seat 18 calibrated: {'yaw': 0.14384343475103378, 'head_height': 0.5082318186759949, 'torso_ratio': 0.46244382443630194, 'head_offset': -0.029108036309480667}
+[hcpose] seat 21 calibrated: {'yaw': 0.2357155978679657, 'head_height': 0.5955972969532013, 'torso_ratio': 0.43914418517526854, 'head_offset': 0.016818220727145672}
+[hcpose] seat 1 calibrated: {'yaw': 0.05120657943189144, 'head_height': 0.34786659479141235, 'torso_ratio': 0.488398650596882, 'head_offset': -0.05101777985692024}
+[hcpose] seat 22 calibrated: {'yaw': 0.10357831791043282, 'head_height': 0.3999258279800415, 'torso_ratio': 0.305067271310112, 'head_offset': 0.34847015142440796}
+[hcpose] seat 3 calibrated: {'yaw': 0.06382716447114944, 'head_height': 0.372794970870018, 'torso_ratio': 0.48060653784431007, 'head_offset': 0.043622659519314766}
+[hcpose] seat 13 calibrated: {'yaw': 0.03280392847955227, 'head_height': 0.1986142173409462, 'torso_ratio': 0.47503286628505426, 'head_offset': 0.2491210326552391}
+[hcpose] seat 5 calibrated: {'yaw': -0.01865098997950554, 'head_height': 0.3849271833896637, 'torso_ratio': 0.43529251758990983, 'head_offset': 0.14556236565113068}
+[hcpose] seat 4 calibrated: {'yaw': -0.01612940151244402, 'head_height': 0.1923758164048195, 'torso_ratio': 0.5371101992975535, 'head_offset': 0.00852904561907053}
+[hcpose] seat 20 calibrated: {'yaw': -0.08971092849969864, 'head_height': 0.4012454152107239, 'torso_ratio': 0.24929770666102774, 'head_offset': 0.226042240858078}
+[hcpose] seat 47 calibrated: {'yaw': -0.07339611649513245, 'head_height': 0.2414167821407318, 'torso_ratio': 0.6354647668255486, 'head_offset': -0.05607656575739384}
+[hcpose] seat 46 calibrated: {'yaw': 0.2676917463541031, 'head_height': 0.42141304910182953, 'torso_ratio': 0.4453394976474118, 'head_offset': 0.1066739559173584}
+[hcpose] seat 48 calibrated: {'yaw': -0.12620466947555542, 'head_height': 0.4748349189758301, 'torso_ratio': 0.3483466301624707, 'head_offset': 0.12809855490922928}
+[hcpose] seat 24 calibrated: {'yaw': 0.028326143510639668, 'head_height': 0.45627452433109283, 'torso_ratio': 0.40992375772402523, 'head_offset': -0.149766705930233}
+[hcpose] seat 12 calibrated: {'yaw': 0.20471937954425812, 'head_height': 0.46468454599380493, 'torso_ratio': 0.3586640023657318, 'head_offset': -0.048100754618644714}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 9 calibrated: {'yaw': 0.21159207820892334, 'head_height': 0.3641766458749771, 'torso_ratio': 0.558044157585059, 'head_offset': 0.08198723196983337}
+[hcpose] seat 10 calibrated: {'yaw': 0.07418308407068253, 'head_height': 0.5393332839012146, 'torso_ratio': 0.4383596656637242, 'head_offset': 0.13286633789539337}
+[hcpose] seat 6 calibrated: {'yaw': -0.03461686335504055, 'head_height': 0.32577913999557495, 'torso_ratio': 0.416751345466165, 'head_offset': -0.25118690729141235}
+[hcpose] seat 16 calibrated: {'yaw': -0.17840322107076645, 'head_height': 0.44411104917526245, 'torso_ratio': 0.4721017585406613, 'head_offset': -0.14427626132965088}
+[hcpose] seat 8 calibrated: {'yaw': 0.1283656805753708, 'head_height': 0.35251812636852264, 'torso_ratio': 0.450448562905213, 'head_offset': 0.1666644886136055}
+[hcpose] seat 18 calibrated: {'yaw': 0.14384343475103378, 'head_height': 0.5082318186759949, 'torso_ratio': 0.46244382443630194, 'head_offset': -0.029108036309480667}
+[hcpose] seat 21 calibrated: {'yaw': 0.2357155978679657, 'head_height': 0.5955972969532013, 'torso_ratio': 0.43914418517526854, 'head_offset': 0.016818220727145672}
+[hcpose] seat 1 calibrated: {'yaw': 0.05120657943189144, 'head_height': 0.34786659479141235, 'torso_ratio': 0.488398650596882, 'head_offset': -0.05101777985692024}
+[hcpose] seat 22 calibrated: {'yaw': 0.10357831791043282, 'head_height': 0.3999258279800415, 'torso_ratio': 0.305067271310112, 'head_offset': 0.34847015142440796}
+[hcpose] seat 3 calibrated: {'yaw': 0.06382716447114944, 'head_height': 0.372794970870018, 'torso_ratio': 0.48060653784431007, 'head_offset': 0.043622659519314766}
+[hcpose] seat 13 calibrated: {'yaw': 0.03280392847955227, 'head_height': 0.1986142173409462, 'torso_ratio': 0.47503286628505426, 'head_offset': 0.2491210326552391}
+[hcpose] seat 5 calibrated: {'yaw': -0.01865098997950554, 'head_height': 0.3849271833896637, 'torso_ratio': 0.43529251758990983, 'head_offset': 0.14556236565113068}
+[hcpose] seat 4 calibrated: {'yaw': -0.01612940151244402, 'head_height': 0.1923758164048195, 'torso_ratio': 0.5371101992975535, 'head_offset': 0.00852904561907053}
+[hcpose] seat 20 calibrated: {'yaw': -0.08971092849969864, 'head_height': 0.4012454152107239, 'torso_ratio': 0.24929770666102774, 'head_offset': 0.226042240858078}
+[hcpose] seat 47 calibrated: {'yaw': -0.07339611649513245, 'head_height': 0.2414167821407318, 'torso_ratio': 0.6354647668255486, 'head_offset': -0.05607656575739384}
+[hcpose] seat 46 calibrated: {'yaw': 0.2676917463541031, 'head_height': 0.42141304910182953, 'torso_ratio': 0.4453394976474118, 'head_offset': 0.1066739559173584}
+[hcpose] seat 48 calibrated: {'yaw': -0.12620466947555542, 'head_height': 0.4748349189758301, 'torso_ratio': 0.3483466301624707, 'head_offset': 0.12809855490922928}
+[hcpose] seat 24 calibrated: {'yaw': 0.028326143510639668, 'head_height': 0.45627452433109283, 'torso_ratio': 0.40992375772402523, 'head_offset': -0.149766705930233}
+[hcpose] seat 12 calibrated: {'yaw': 0.20471937954425812, 'head_height': 0.46468454599380493, 'torso_ratio': 0.3586640023657318, 'head_offset': -0.048100754618644714}
+== clip_3: model m, tiles none
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_3_m_none.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 1 calibrated: {'yaw': 0.07952825725078583, 'head_height': 0.2927701473236084, 'torso_ratio': 0.6015639503796892, 'head_offset': 0.059884076938033104}
+[hcpose] seat 14 calibrated: {'yaw': -0.22728542238473892, 'head_height': 0.41312189400196075, 'torso_ratio': 0.4546265446395452, 'head_offset': -0.2256777510046959}
+[hcpose] seat 12 calibrated: {'yaw': -0.05233467184007168, 'head_height': 0.3192867636680603, 'torso_ratio': 0.4351186652735356, 'head_offset': 0.04071405157446861}
+[hcpose] seat 2 calibrated: {'yaw': -0.08724744617938995, 'head_height': 0.5552644729614258, 'torso_ratio': 0.4949653245744662, 'head_offset': 0.02386637032032013}
+[hcpose] seat 10 calibrated: {'yaw': -0.04368752986192703, 'head_height': 0.2729693055152893, 'torso_ratio': 0.5509908301044573, 'head_offset': 0.003523258143104613}
+[hcpose] seat 15 calibrated: {'yaw': -0.039290525019168854, 'head_height': 0.4077571630477905, 'torso_ratio': 0.4534235420765671, 'head_offset': -0.20199000090360641}
+[hcpose] seat 4 calibrated: {'yaw': -0.20505326986312866, 'head_height': 0.32278087735176086, 'torso_ratio': 0.49085317421535696, 'head_offset': -0.21863490343093872}
+[hcpose] seat 3 calibrated: {'yaw': -0.2666659951210022, 'head_height': 0.2503221929073334, 'torso_ratio': 0.530692025889521, 'head_offset': -0.035167865455150604}
+[hcpose] seat 18 calibrated: {'yaw': -0.07076322287321091, 'head_height': 0.5120678544044495, 'torso_ratio': 0.447824665695755, 'head_offset': -0.050661854445934296}
+[hcpose] seat 21 calibrated: {'yaw': -0.053366415202617645, 'head_height': 0.45722876489162445, 'torso_ratio': 0.3795363640050521, 'head_offset': 0.16103094816207886}
+[hcpose] seat 17 calibrated: {'yaw': -0.09908193349838257, 'head_height': 0.1787186563014984, 'torso_ratio': 0.37999924565798643, 'head_offset': 0.1119210496544838}
+[hcpose] seat 8 calibrated: {'yaw': -0.17075461149215698, 'head_height': 0.18495092540979385, 'torso_ratio': 0.46069036752659376, 'head_offset': -0.11512676626443863}
+[hcpose] seat 19 calibrated: {'yaw': -0.2561420500278473, 'head_height': 0.3878849297761917, 'torso_ratio': 0.2176819872620842, 'head_offset': 0.024725967086851597}
+[hcpose] seat 16 calibrated: {'yaw': -0.15027618408203125, 'head_height': 0.4056446850299835, 'torso_ratio': 0.3992179132276968, 'head_offset': -0.2491670399904251}
+[hcpose] seat 13 calibrated: {'yaw': -0.01894770748913288, 'head_height': 0.43153637647628784, 'torso_ratio': 0.42738510119024203, 'head_offset': -0.13033363223075867}
+[hcpose] seat 23 calibrated: {'yaw': -0.2526666522026062, 'head_height': 0.4614963233470917, 'torso_ratio': 0.31929219293122824, 'head_offset': 0.02348020114004612}
+[hcpose] seat 40 calibrated: {'yaw': -0.22908058762550354, 'head_height': 0.4093272089958191, 'torso_ratio': 0.43542913864751964, 'head_offset': -0.06876001134514809}
+[hcpose] seat 41 calibrated: {'yaw': -0.16197622567415237, 'head_height': 0.13737645000219345, 'torso_ratio': 0.47333655591259427, 'head_offset': 0.08735436201095581}
+[hcpose] seat 20 calibrated: {'yaw': -0.14942624419927597, 'head_height': 0.3993876576423645, 'torso_ratio': 0.4045475798839018, 'head_offset': -0.25357750058174133}
+[hcpose] seat 42 calibrated: {'yaw': 0.059406086802482605, 'head_height': 0.4191804826259613, 'torso_ratio': 0.544359388905052, 'head_offset': 0.005904059857130051}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': 0.07952825725078583, 'head_height': 0.2927701473236084, 'torso_ratio': 0.6015639503796892, 'head_offset': 0.059884076938033104}
+[hcpose] seat 14 calibrated: {'yaw': -0.22728542238473892, 'head_height': 0.41312189400196075, 'torso_ratio': 0.4546265446395452, 'head_offset': -0.2256777510046959}
+[hcpose] seat 12 calibrated: {'yaw': -0.05233467184007168, 'head_height': 0.3192867636680603, 'torso_ratio': 0.4351186652735356, 'head_offset': 0.04071405157446861}
+[hcpose] seat 2 calibrated: {'yaw': -0.08724744617938995, 'head_height': 0.5552644729614258, 'torso_ratio': 0.4949653245744662, 'head_offset': 0.02386637032032013}
+[hcpose] seat 10 calibrated: {'yaw': -0.04368752986192703, 'head_height': 0.2729693055152893, 'torso_ratio': 0.5509908301044573, 'head_offset': 0.003523258143104613}
+[hcpose] seat 15 calibrated: {'yaw': -0.039290525019168854, 'head_height': 0.4077571630477905, 'torso_ratio': 0.4534235420765671, 'head_offset': -0.20199000090360641}
+[hcpose] seat 4 calibrated: {'yaw': -0.20505326986312866, 'head_height': 0.32278087735176086, 'torso_ratio': 0.49085317421535696, 'head_offset': -0.21863490343093872}
+[hcpose] seat 3 calibrated: {'yaw': -0.2666659951210022, 'head_height': 0.2503221929073334, 'torso_ratio': 0.530692025889521, 'head_offset': -0.035167865455150604}
+[hcpose] seat 18 calibrated: {'yaw': -0.07076322287321091, 'head_height': 0.5120678544044495, 'torso_ratio': 0.447824665695755, 'head_offset': -0.050661854445934296}
+[hcpose] seat 21 calibrated: {'yaw': -0.053366415202617645, 'head_height': 0.45722876489162445, 'torso_ratio': 0.3795363640050521, 'head_offset': 0.16103094816207886}
+[hcpose] seat 17 calibrated: {'yaw': -0.09908193349838257, 'head_height': 0.1787186563014984, 'torso_ratio': 0.37999924565798643, 'head_offset': 0.1119210496544838}
+[hcpose] seat 8 calibrated: {'yaw': -0.17075461149215698, 'head_height': 0.18495092540979385, 'torso_ratio': 0.46069036752659376, 'head_offset': -0.11512676626443863}
+[hcpose] seat 19 calibrated: {'yaw': -0.2561420500278473, 'head_height': 0.3878849297761917, 'torso_ratio': 0.2176819872620842, 'head_offset': 0.024725967086851597}
+[hcpose] seat 16 calibrated: {'yaw': -0.15027618408203125, 'head_height': 0.4056446850299835, 'torso_ratio': 0.3992179132276968, 'head_offset': -0.2491670399904251}
+[hcpose] seat 13 calibrated: {'yaw': -0.01894770748913288, 'head_height': 0.43153637647628784, 'torso_ratio': 0.42738510119024203, 'head_offset': -0.13033363223075867}
+[hcpose] seat 23 calibrated: {'yaw': -0.2526666522026062, 'head_height': 0.4614963233470917, 'torso_ratio': 0.31929219293122824, 'head_offset': 0.02348020114004612}
+[hcpose] seat 40 calibrated: {'yaw': -0.22908058762550354, 'head_height': 0.4093272089958191, 'torso_ratio': 0.43542913864751964, 'head_offset': -0.06876001134514809}
+[hcpose] seat 41 calibrated: {'yaw': -0.16197622567415237, 'head_height': 0.13737645000219345, 'torso_ratio': 0.47333655591259427, 'head_offset': 0.08735436201095581}
+[hcpose] seat 20 calibrated: {'yaw': -0.14942624419927597, 'head_height': 0.3993876576423645, 'torso_ratio': 0.4045475798839018, 'head_offset': -0.25357750058174133}
+[hcpose] seat 42 calibrated: {'yaw': 0.059406086802482605, 'head_height': 0.4191804826259613, 'torso_ratio': 0.544359388905052, 'head_offset': 0.005904059857130051}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': 0.07952825725078583, 'head_height': 0.2927701473236084, 'torso_ratio': 0.6015639503796892, 'head_offset': 0.059884076938033104}
+[hcpose] seat 14 calibrated: {'yaw': -0.22728542238473892, 'head_height': 0.41312189400196075, 'torso_ratio': 0.4546265446395452, 'head_offset': -0.2256777510046959}
+[hcpose] seat 12 calibrated: {'yaw': -0.05233467184007168, 'head_height': 0.3192867636680603, 'torso_ratio': 0.4351186652735356, 'head_offset': 0.04071405157446861}
+[hcpose] seat 2 calibrated: {'yaw': -0.08724744617938995, 'head_height': 0.5552644729614258, 'torso_ratio': 0.4949653245744662, 'head_offset': 0.02386637032032013}
+[hcpose] seat 10 calibrated: {'yaw': -0.04368752986192703, 'head_height': 0.2729693055152893, 'torso_ratio': 0.5509908301044573, 'head_offset': 0.003523258143104613}
+[hcpose] seat 15 calibrated: {'yaw': -0.039290525019168854, 'head_height': 0.4077571630477905, 'torso_ratio': 0.4534235420765671, 'head_offset': -0.20199000090360641}
+[hcpose] seat 4 calibrated: {'yaw': -0.20505326986312866, 'head_height': 0.32278087735176086, 'torso_ratio': 0.49085317421535696, 'head_offset': -0.21863490343093872}
+[hcpose] seat 3 calibrated: {'yaw': -0.2666659951210022, 'head_height': 0.2503221929073334, 'torso_ratio': 0.530692025889521, 'head_offset': -0.035167865455150604}
+[hcpose] seat 18 calibrated: {'yaw': -0.07076322287321091, 'head_height': 0.5120678544044495, 'torso_ratio': 0.447824665695755, 'head_offset': -0.050661854445934296}
+[hcpose] seat 21 calibrated: {'yaw': -0.053366415202617645, 'head_height': 0.45722876489162445, 'torso_ratio': 0.3795363640050521, 'head_offset': 0.16103094816207886}
+[hcpose] seat 17 calibrated: {'yaw': -0.09908193349838257, 'head_height': 0.1787186563014984, 'torso_ratio': 0.37999924565798643, 'head_offset': 0.1119210496544838}
+[hcpose] seat 8 calibrated: {'yaw': -0.17075461149215698, 'head_height': 0.18495092540979385, 'torso_ratio': 0.46069036752659376, 'head_offset': -0.11512676626443863}
+[hcpose] seat 19 calibrated: {'yaw': -0.2561420500278473, 'head_height': 0.3878849297761917, 'torso_ratio': 0.2176819872620842, 'head_offset': 0.024725967086851597}
+[hcpose] seat 16 calibrated: {'yaw': -0.15027618408203125, 'head_height': 0.4056446850299835, 'torso_ratio': 0.3992179132276968, 'head_offset': -0.2491670399904251}
+[hcpose] seat 13 calibrated: {'yaw': -0.01894770748913288, 'head_height': 0.43153637647628784, 'torso_ratio': 0.42738510119024203, 'head_offset': -0.13033363223075867}
+[hcpose] seat 23 calibrated: {'yaw': -0.2526666522026062, 'head_height': 0.4614963233470917, 'torso_ratio': 0.31929219293122824, 'head_offset': 0.02348020114004612}
+[hcpose] seat 40 calibrated: {'yaw': -0.22908058762550354, 'head_height': 0.4093272089958191, 'torso_ratio': 0.43542913864751964, 'head_offset': -0.06876001134514809}
+[hcpose] seat 41 calibrated: {'yaw': -0.16197622567415237, 'head_height': 0.13737645000219345, 'torso_ratio': 0.47333655591259427, 'head_offset': 0.08735436201095581}
+[hcpose] seat 20 calibrated: {'yaw': -0.14942624419927597, 'head_height': 0.3993876576423645, 'torso_ratio': 0.4045475798839018, 'head_offset': -0.25357750058174133}
+[hcpose] seat 42 calibrated: {'yaw': 0.059406086802482605, 'head_height': 0.4191804826259613, 'torso_ratio': 0.544359388905052, 'head_offset': 0.005904059857130051}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': 0.07952825725078583, 'head_height': 0.2927701473236084, 'torso_ratio': 0.6015639503796892, 'head_offset': 0.059884076938033104}
+[hcpose] seat 14 calibrated: {'yaw': -0.22728542238473892, 'head_height': 0.41312189400196075, 'torso_ratio': 0.4546265446395452, 'head_offset': -0.2256777510046959}
+[hcpose] seat 12 calibrated: {'yaw': -0.05233467184007168, 'head_height': 0.3192867636680603, 'torso_ratio': 0.4351186652735356, 'head_offset': 0.04071405157446861}
+[hcpose] seat 2 calibrated: {'yaw': -0.08724744617938995, 'head_height': 0.5552644729614258, 'torso_ratio': 0.4949653245744662, 'head_offset': 0.02386637032032013}
+[hcpose] seat 10 calibrated: {'yaw': -0.04368752986192703, 'head_height': 0.2729693055152893, 'torso_ratio': 0.5509908301044573, 'head_offset': 0.003523258143104613}
+[hcpose] seat 15 calibrated: {'yaw': -0.039290525019168854, 'head_height': 0.4077571630477905, 'torso_ratio': 0.4534235420765671, 'head_offset': -0.20199000090360641}
+[hcpose] seat 4 calibrated: {'yaw': -0.20505326986312866, 'head_height': 0.32278087735176086, 'torso_ratio': 0.49085317421535696, 'head_offset': -0.21863490343093872}
+[hcpose] seat 3 calibrated: {'yaw': -0.2666659951210022, 'head_height': 0.2503221929073334, 'torso_ratio': 0.530692025889521, 'head_offset': -0.035167865455150604}
+[hcpose] seat 18 calibrated: {'yaw': -0.07076322287321091, 'head_height': 0.5120678544044495, 'torso_ratio': 0.447824665695755, 'head_offset': -0.050661854445934296}
+[hcpose] seat 21 calibrated: {'yaw': -0.053366415202617645, 'head_height': 0.45722876489162445, 'torso_ratio': 0.3795363640050521, 'head_offset': 0.16103094816207886}
+[hcpose] seat 17 calibrated: {'yaw': -0.09908193349838257, 'head_height': 0.1787186563014984, 'torso_ratio': 0.37999924565798643, 'head_offset': 0.1119210496544838}
+[hcpose] seat 8 calibrated: {'yaw': -0.17075461149215698, 'head_height': 0.18495092540979385, 'torso_ratio': 0.46069036752659376, 'head_offset': -0.11512676626443863}
+[hcpose] seat 19 calibrated: {'yaw': -0.2561420500278473, 'head_height': 0.3878849297761917, 'torso_ratio': 0.2176819872620842, 'head_offset': 0.024725967086851597}
+[hcpose] seat 16 calibrated: {'yaw': -0.15027618408203125, 'head_height': 0.4056446850299835, 'torso_ratio': 0.3992179132276968, 'head_offset': -0.2491670399904251}
+[hcpose] seat 13 calibrated: {'yaw': -0.01894770748913288, 'head_height': 0.43153637647628784, 'torso_ratio': 0.42738510119024203, 'head_offset': -0.13033363223075867}
+[hcpose] seat 23 calibrated: {'yaw': -0.2526666522026062, 'head_height': 0.4614963233470917, 'torso_ratio': 0.31929219293122824, 'head_offset': 0.02348020114004612}
+[hcpose] seat 40 calibrated: {'yaw': -0.22908058762550354, 'head_height': 0.4093272089958191, 'torso_ratio': 0.43542913864751964, 'head_offset': -0.06876001134514809}
+[hcpose] seat 41 calibrated: {'yaw': -0.16197622567415237, 'head_height': 0.13737645000219345, 'torso_ratio': 0.47333655591259427, 'head_offset': 0.08735436201095581}
+[hcpose] seat 20 calibrated: {'yaw': -0.14942624419927597, 'head_height': 0.3993876576423645, 'torso_ratio': 0.4045475798839018, 'head_offset': -0.25357750058174133}
+[hcpose] seat 42 calibrated: {'yaw': 0.059406086802482605, 'head_height': 0.4191804826259613, 'torso_ratio': 0.544359388905052, 'head_offset': 0.005904059857130051}
+== clip_3: model m, tiles auto
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_3_m_auto.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 1 calibrated: {'yaw': 0.07952825725078583, 'head_height': 0.2927701473236084, 'torso_ratio': 0.6015639503796892, 'head_offset': 0.059884076938033104}
+[hcpose] seat 15 calibrated: {'yaw': -0.22728542238473892, 'head_height': 0.41312189400196075, 'torso_ratio': 0.4546265446395452, 'head_offset': -0.2256777510046959}
+[hcpose] seat 13 calibrated: {'yaw': -0.05233467184007168, 'head_height': 0.3192867636680603, 'torso_ratio': 0.4351186652735356, 'head_offset': 0.04071405157446861}
+[hcpose] seat 2 calibrated: {'yaw': -0.08724753558635712, 'head_height': 0.5554174184799194, 'torso_ratio': 0.4949695204270375, 'head_offset': 0.023622050881385803}
+[hcpose] seat 10 calibrated: {'yaw': -0.04368752986192703, 'head_height': 0.2729693055152893, 'torso_ratio': 0.5509908301044573, 'head_offset': 0.003523258143104613}
+[hcpose] seat 16 calibrated: {'yaw': -0.03933011740446091, 'head_height': 0.40782782435417175, 'torso_ratio': 0.4534235420765671, 'head_offset': -0.20170195400714874}
+[hcpose] seat 19 calibrated: {'yaw': -0.19885429739952087, 'head_height': 0.3474385589361191, 'torso_ratio': 0.3852904987558549, 'head_offset': -0.3926289230585098}
+[hcpose] seat 4 calibrated: {'yaw': -0.20507289469242096, 'head_height': 0.3226661682128906, 'torso_ratio': 0.4908570495458825, 'head_offset': -0.21868135035037994}
+[hcpose] seat 3 calibrated: {'yaw': -0.2666659951210022, 'head_height': 0.2503221929073334, 'torso_ratio': 0.530692025889521, 'head_offset': -0.035167865455150604}
+[hcpose] seat 20 calibrated: {'yaw': -0.07076322287321091, 'head_height': 0.5120678544044495, 'torso_ratio': 0.447824665695755, 'head_offset': -0.050661854445934296}
+[hcpose] seat 23 calibrated: {'yaw': -0.053366415202617645, 'head_height': 0.45722876489162445, 'torso_ratio': 0.3795363640050521, 'head_offset': 0.16103094816207886}
+[hcpose] seat 18 calibrated: {'yaw': -0.09908193349838257, 'head_height': 0.1787186563014984, 'torso_ratio': 0.37999924565798643, 'head_offset': 0.1119210496544838}
+[hcpose] seat 8 calibrated: {'yaw': -0.17075461149215698, 'head_height': 0.18495092540979385, 'torso_ratio': 0.46069036752659376, 'head_offset': -0.11512676626443863}
+[hcpose] seat 6 calibrated: {'yaw': -0.19681907445192337, 'head_height': 0.445447102189064, 'torso_ratio': 0.47860240782922686, 'head_offset': -0.15687214583158493}
+[hcpose] seat 21 calibrated: {'yaw': -0.2561420500278473, 'head_height': 0.3878849297761917, 'torso_ratio': 0.2176819872620842, 'head_offset': 0.024725967086851597}
+[hcpose] seat 17 calibrated: {'yaw': -0.15027618408203125, 'head_height': 0.4056446850299835, 'torso_ratio': 0.3992179132276968, 'head_offset': -0.2491670399904251}
+[hcpose] seat 14 calibrated: {'yaw': -0.01894770748913288, 'head_height': 0.4314257651567459, 'torso_ratio': 0.42738510119024203, 'head_offset': -0.13044817745685577}
+[hcpose] seat 25 calibrated: {'yaw': -0.2526666522026062, 'head_height': 0.4614963233470917, 'torso_ratio': 0.31929219293122824, 'head_offset': 0.02348020114004612}
+[hcpose] seat 43 calibrated: {'yaw': -0.09090999886393547, 'head_height': 0.29435843229293823, 'torso_ratio': 0.5320537996147178, 'head_offset': -0.10227161645889282}
+[hcpose] seat 44 calibrated: {'yaw': -0.22908058762550354, 'head_height': 0.4093272089958191, 'torso_ratio': 0.43542913864751964, 'head_offset': -0.06876001134514809}
+[hcpose] seat 45 calibrated: {'yaw': -0.16197622567415237, 'head_height': 0.13737645000219345, 'torso_ratio': 0.47333655591259427, 'head_offset': 0.08735436201095581}
+[hcpose] seat 22 calibrated: {'yaw': -0.14942624419927597, 'head_height': 0.3993876576423645, 'torso_ratio': 0.4045475798839018, 'head_offset': -0.25357750058174133}
+[hcpose] seat 46 calibrated: {'yaw': -0.1048949733376503, 'head_height': 0.4128592908382416, 'torso_ratio': 0.5090761133802612, 'head_offset': -0.006197880022227764}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': 0.07952825725078583, 'head_height': 0.2927701473236084, 'torso_ratio': 0.6015639503796892, 'head_offset': 0.059884076938033104}
+[hcpose] seat 15 calibrated: {'yaw': -0.22728542238473892, 'head_height': 0.41312189400196075, 'torso_ratio': 0.4546265446395452, 'head_offset': -0.2256777510046959}
+[hcpose] seat 13 calibrated: {'yaw': -0.05233467184007168, 'head_height': 0.3192867636680603, 'torso_ratio': 0.4351186652735356, 'head_offset': 0.04071405157446861}
+[hcpose] seat 2 calibrated: {'yaw': -0.08724753558635712, 'head_height': 0.5554174184799194, 'torso_ratio': 0.4949695204270375, 'head_offset': 0.023622050881385803}
+[hcpose] seat 10 calibrated: {'yaw': -0.04368752986192703, 'head_height': 0.2729693055152893, 'torso_ratio': 0.5509908301044573, 'head_offset': 0.003523258143104613}
+[hcpose] seat 16 calibrated: {'yaw': -0.03933011740446091, 'head_height': 0.40782782435417175, 'torso_ratio': 0.4534235420765671, 'head_offset': -0.20170195400714874}
+[hcpose] seat 19 calibrated: {'yaw': -0.19885429739952087, 'head_height': 0.3474385589361191, 'torso_ratio': 0.3852904987558549, 'head_offset': -0.3926289230585098}
+[hcpose] seat 4 calibrated: {'yaw': -0.20507289469242096, 'head_height': 0.3226661682128906, 'torso_ratio': 0.4908570495458825, 'head_offset': -0.21868135035037994}
+[hcpose] seat 3 calibrated: {'yaw': -0.2666659951210022, 'head_height': 0.2503221929073334, 'torso_ratio': 0.530692025889521, 'head_offset': -0.035167865455150604}
+[hcpose] seat 20 calibrated: {'yaw': -0.07076322287321091, 'head_height': 0.5120678544044495, 'torso_ratio': 0.447824665695755, 'head_offset': -0.050661854445934296}
+[hcpose] seat 23 calibrated: {'yaw': -0.053366415202617645, 'head_height': 0.45722876489162445, 'torso_ratio': 0.3795363640050521, 'head_offset': 0.16103094816207886}
+[hcpose] seat 18 calibrated: {'yaw': -0.09908193349838257, 'head_height': 0.1787186563014984, 'torso_ratio': 0.37999924565798643, 'head_offset': 0.1119210496544838}
+[hcpose] seat 8 calibrated: {'yaw': -0.17075461149215698, 'head_height': 0.18495092540979385, 'torso_ratio': 0.46069036752659376, 'head_offset': -0.11512676626443863}
+[hcpose] seat 6 calibrated: {'yaw': -0.19681907445192337, 'head_height': 0.445447102189064, 'torso_ratio': 0.47860240782922686, 'head_offset': -0.15687214583158493}
+[hcpose] seat 21 calibrated: {'yaw': -0.2561420500278473, 'head_height': 0.3878849297761917, 'torso_ratio': 0.2176819872620842, 'head_offset': 0.024725967086851597}
+[hcpose] seat 17 calibrated: {'yaw': -0.15027618408203125, 'head_height': 0.4056446850299835, 'torso_ratio': 0.3992179132276968, 'head_offset': -0.2491670399904251}
+[hcpose] seat 14 calibrated: {'yaw': -0.01894770748913288, 'head_height': 0.4314257651567459, 'torso_ratio': 0.42738510119024203, 'head_offset': -0.13044817745685577}
+[hcpose] seat 25 calibrated: {'yaw': -0.2526666522026062, 'head_height': 0.4614963233470917, 'torso_ratio': 0.31929219293122824, 'head_offset': 0.02348020114004612}
+[hcpose] seat 43 calibrated: {'yaw': -0.09090999886393547, 'head_height': 0.29435843229293823, 'torso_ratio': 0.5320537996147178, 'head_offset': -0.10227161645889282}
+[hcpose] seat 44 calibrated: {'yaw': -0.22908058762550354, 'head_height': 0.4093272089958191, 'torso_ratio': 0.43542913864751964, 'head_offset': -0.06876001134514809}
+[hcpose] seat 45 calibrated: {'yaw': -0.16197622567415237, 'head_height': 0.13737645000219345, 'torso_ratio': 0.47333655591259427, 'head_offset': 0.08735436201095581}
+[hcpose] seat 22 calibrated: {'yaw': -0.14942624419927597, 'head_height': 0.3993876576423645, 'torso_ratio': 0.4045475798839018, 'head_offset': -0.25357750058174133}
+[hcpose] seat 46 calibrated: {'yaw': -0.1048949733376503, 'head_height': 0.4128592908382416, 'torso_ratio': 0.5090761133802612, 'head_offset': -0.006197880022227764}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': 0.07952825725078583, 'head_height': 0.2927701473236084, 'torso_ratio': 0.6015639503796892, 'head_offset': 0.059884076938033104}
+[hcpose] seat 15 calibrated: {'yaw': -0.22728542238473892, 'head_height': 0.41312189400196075, 'torso_ratio': 0.4546265446395452, 'head_offset': -0.2256777510046959}
+[hcpose] seat 13 calibrated: {'yaw': -0.05233467184007168, 'head_height': 0.3192867636680603, 'torso_ratio': 0.4351186652735356, 'head_offset': 0.04071405157446861}
+[hcpose] seat 2 calibrated: {'yaw': -0.08724753558635712, 'head_height': 0.5554174184799194, 'torso_ratio': 0.4949695204270375, 'head_offset': 0.023622050881385803}
+[hcpose] seat 10 calibrated: {'yaw': -0.04368752986192703, 'head_height': 0.2729693055152893, 'torso_ratio': 0.5509908301044573, 'head_offset': 0.003523258143104613}
+[hcpose] seat 16 calibrated: {'yaw': -0.03933011740446091, 'head_height': 0.40782782435417175, 'torso_ratio': 0.4534235420765671, 'head_offset': -0.20170195400714874}
+[hcpose] seat 19 calibrated: {'yaw': -0.19885429739952087, 'head_height': 0.3474385589361191, 'torso_ratio': 0.3852904987558549, 'head_offset': -0.3926289230585098}
+[hcpose] seat 4 calibrated: {'yaw': -0.20507289469242096, 'head_height': 0.3226661682128906, 'torso_ratio': 0.4908570495458825, 'head_offset': -0.21868135035037994}
+[hcpose] seat 3 calibrated: {'yaw': -0.2666659951210022, 'head_height': 0.2503221929073334, 'torso_ratio': 0.530692025889521, 'head_offset': -0.035167865455150604}
+[hcpose] seat 20 calibrated: {'yaw': -0.07076322287321091, 'head_height': 0.5120678544044495, 'torso_ratio': 0.447824665695755, 'head_offset': -0.050661854445934296}
+[hcpose] seat 23 calibrated: {'yaw': -0.053366415202617645, 'head_height': 0.45722876489162445, 'torso_ratio': 0.3795363640050521, 'head_offset': 0.16103094816207886}
+[hcpose] seat 18 calibrated: {'yaw': -0.09908193349838257, 'head_height': 0.1787186563014984, 'torso_ratio': 0.37999924565798643, 'head_offset': 0.1119210496544838}
+[hcpose] seat 8 calibrated: {'yaw': -0.17075461149215698, 'head_height': 0.18495092540979385, 'torso_ratio': 0.46069036752659376, 'head_offset': -0.11512676626443863}
+[hcpose] seat 6 calibrated: {'yaw': -0.19681907445192337, 'head_height': 0.445447102189064, 'torso_ratio': 0.47860240782922686, 'head_offset': -0.15687214583158493}
+[hcpose] seat 21 calibrated: {'yaw': -0.2561420500278473, 'head_height': 0.3878849297761917, 'torso_ratio': 0.2176819872620842, 'head_offset': 0.024725967086851597}
+[hcpose] seat 17 calibrated: {'yaw': -0.15027618408203125, 'head_height': 0.4056446850299835, 'torso_ratio': 0.3992179132276968, 'head_offset': -0.2491670399904251}
+[hcpose] seat 14 calibrated: {'yaw': -0.01894770748913288, 'head_height': 0.4314257651567459, 'torso_ratio': 0.42738510119024203, 'head_offset': -0.13044817745685577}
+[hcpose] seat 25 calibrated: {'yaw': -0.2526666522026062, 'head_height': 0.4614963233470917, 'torso_ratio': 0.31929219293122824, 'head_offset': 0.02348020114004612}
+[hcpose] seat 43 calibrated: {'yaw': -0.09090999886393547, 'head_height': 0.29435843229293823, 'torso_ratio': 0.5320537996147178, 'head_offset': -0.10227161645889282}
+[hcpose] seat 44 calibrated: {'yaw': -0.22908058762550354, 'head_height': 0.4093272089958191, 'torso_ratio': 0.43542913864751964, 'head_offset': -0.06876001134514809}
+[hcpose] seat 45 calibrated: {'yaw': -0.16197622567415237, 'head_height': 0.13737645000219345, 'torso_ratio': 0.47333655591259427, 'head_offset': 0.08735436201095581}
+[hcpose] seat 22 calibrated: {'yaw': -0.14942624419927597, 'head_height': 0.3993876576423645, 'torso_ratio': 0.4045475798839018, 'head_offset': -0.25357750058174133}
+[hcpose] seat 46 calibrated: {'yaw': -0.1048949733376503, 'head_height': 0.4128592908382416, 'torso_ratio': 0.5090761133802612, 'head_offset': -0.006197880022227764}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': 0.07952825725078583, 'head_height': 0.2927701473236084, 'torso_ratio': 0.6015639503796892, 'head_offset': 0.059884076938033104}
+[hcpose] seat 15 calibrated: {'yaw': -0.22728542238473892, 'head_height': 0.41312189400196075, 'torso_ratio': 0.4546265446395452, 'head_offset': -0.2256777510046959}
+[hcpose] seat 13 calibrated: {'yaw': -0.05233467184007168, 'head_height': 0.3192867636680603, 'torso_ratio': 0.4351186652735356, 'head_offset': 0.04071405157446861}
+[hcpose] seat 2 calibrated: {'yaw': -0.08724753558635712, 'head_height': 0.5554174184799194, 'torso_ratio': 0.4949695204270375, 'head_offset': 0.023622050881385803}
+[hcpose] seat 10 calibrated: {'yaw': -0.04368752986192703, 'head_height': 0.2729693055152893, 'torso_ratio': 0.5509908301044573, 'head_offset': 0.003523258143104613}
+[hcpose] seat 16 calibrated: {'yaw': -0.03933011740446091, 'head_height': 0.40782782435417175, 'torso_ratio': 0.4534235420765671, 'head_offset': -0.20170195400714874}
+[hcpose] seat 19 calibrated: {'yaw': -0.19885429739952087, 'head_height': 0.3474385589361191, 'torso_ratio': 0.3852904987558549, 'head_offset': -0.3926289230585098}
+[hcpose] seat 4 calibrated: {'yaw': -0.20507289469242096, 'head_height': 0.3226661682128906, 'torso_ratio': 0.4908570495458825, 'head_offset': -0.21868135035037994}
+[hcpose] seat 3 calibrated: {'yaw': -0.2666659951210022, 'head_height': 0.2503221929073334, 'torso_ratio': 0.530692025889521, 'head_offset': -0.035167865455150604}
+[hcpose] seat 20 calibrated: {'yaw': -0.07076322287321091, 'head_height': 0.5120678544044495, 'torso_ratio': 0.447824665695755, 'head_offset': -0.050661854445934296}
+[hcpose] seat 23 calibrated: {'yaw': -0.053366415202617645, 'head_height': 0.45722876489162445, 'torso_ratio': 0.3795363640050521, 'head_offset': 0.16103094816207886}
+[hcpose] seat 18 calibrated: {'yaw': -0.09908193349838257, 'head_height': 0.1787186563014984, 'torso_ratio': 0.37999924565798643, 'head_offset': 0.1119210496544838}
+[hcpose] seat 8 calibrated: {'yaw': -0.17075461149215698, 'head_height': 0.18495092540979385, 'torso_ratio': 0.46069036752659376, 'head_offset': -0.11512676626443863}
+[hcpose] seat 6 calibrated: {'yaw': -0.19681907445192337, 'head_height': 0.445447102189064, 'torso_ratio': 0.47860240782922686, 'head_offset': -0.15687214583158493}
+[hcpose] seat 21 calibrated: {'yaw': -0.2561420500278473, 'head_height': 0.3878849297761917, 'torso_ratio': 0.2176819872620842, 'head_offset': 0.024725967086851597}
+[hcpose] seat 17 calibrated: {'yaw': -0.15027618408203125, 'head_height': 0.4056446850299835, 'torso_ratio': 0.3992179132276968, 'head_offset': -0.2491670399904251}
+[hcpose] seat 14 calibrated: {'yaw': -0.01894770748913288, 'head_height': 0.4314257651567459, 'torso_ratio': 0.42738510119024203, 'head_offset': -0.13044817745685577}
+[hcpose] seat 25 calibrated: {'yaw': -0.2526666522026062, 'head_height': 0.4614963233470917, 'torso_ratio': 0.31929219293122824, 'head_offset': 0.02348020114004612}
+[hcpose] seat 43 calibrated: {'yaw': -0.09090999886393547, 'head_height': 0.29435843229293823, 'torso_ratio': 0.5320537996147178, 'head_offset': -0.10227161645889282}
+[hcpose] seat 44 calibrated: {'yaw': -0.22908058762550354, 'head_height': 0.4093272089958191, 'torso_ratio': 0.43542913864751964, 'head_offset': -0.06876001134514809}
+[hcpose] seat 45 calibrated: {'yaw': -0.16197622567415237, 'head_height': 0.13737645000219345, 'torso_ratio': 0.47333655591259427, 'head_offset': 0.08735436201095581}
+[hcpose] seat 22 calibrated: {'yaw': -0.14942624419927597, 'head_height': 0.3993876576423645, 'torso_ratio': 0.4045475798839018, 'head_offset': -0.25357750058174133}
+[hcpose] seat 46 calibrated: {'yaw': -0.1048949733376503, 'head_height': 0.4128592908382416, 'torso_ratio': 0.5090761133802612, 'head_offset': -0.006197880022227764}
+== clip_5_720p: model n, tiles none
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_5_720p_n_none.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 2 calibrated: {'yaw': -0.18249310553073883, 'head_height': 0.24880799651145935, 'torso_ratio': 0.44508076902969124, 'head_offset': 0.18920312821865082}
+[hcpose] seat 1 calibrated: {'yaw': 0.022871507331728935, 'head_height': 0.16416024416685104, 'torso_ratio': 0.3499902098241117, 'head_offset': 0.20025154948234558}
+[hcpose] seat 5 calibrated: {'yaw': -0.013733703643083572, 'head_height': 0.36806732416152954, 'torso_ratio': 0.4459753764332263, 'head_offset': 0.023488713428378105}
+[hcpose] seat 3 calibrated: {'yaw': 0.13682004064321518, 'head_height': 0.2374085634946823, 'torso_ratio': 0.22240248939015947, 'head_offset': -0.061468902975320816}
+[hcpose] seat 10 calibrated: {'yaw': 0.20507404953241348, 'head_height': 0.5133512914180756, 'torso_ratio': 0.22999191217934636, 'head_offset': 0.062075987458229065}
+[hcpose] seat 13 calibrated: {'yaw': 0.18392246961593628, 'head_height': 0.29891274869441986, 'torso_ratio': 0.2535075518331122, 'head_offset': -0.07385367900133133}
+[hcpose] seat 11 calibrated: {'yaw': 0.19725751131772995, 'head_height': 0.3880380690097809, 'torso_ratio': 0.1924190857070753, 'head_offset': 0.020244061015546322}
+[hcpose] seat 6 calibrated: {'yaw': 0.20359957218170166, 'head_height': 0.3776684105396271, 'torso_ratio': 0.18993046177186657, 'head_offset': 0.09590032696723938}
+[hcpose] seat 4 calibrated: {'yaw': 0.11403407901525497, 'head_height': 0.34158021211624146, 'torso_ratio': 0.4326545309975205, 'head_offset': -0.14895173907279968}
+[hcpose] seat 14 calibrated: {'yaw': 0.06761658936738968, 'head_height': 0.23227189481258392, 'torso_ratio': 0.19526146463556446, 'head_offset': -0.0709872767329216}
+[hcpose] seat 15 calibrated: {'yaw': 0.044451478868722916, 'head_height': 0.4244566708803177, 'torso_ratio': 0.4414592582774436, 'head_offset': 0.04782119579613209}
+[hcpose] seat 18 calibrated: {'yaw': 0.10123592615127563, 'head_height': 0.11583071574568748, 'torso_ratio': 0.2000280029826616, 'head_offset': 0.18204940855503082}
+[hcpose] seat 7 calibrated: {'yaw': 0.028186872601509094, 'head_height': 0.4545161873102188, 'torso_ratio': 0.39841075641916995, 'head_offset': 0.0917367935180664}
+[hcpose] seat 17 calibrated: {'yaw': 0.12885186076164246, 'head_height': 0.4192618727684021, 'torso_ratio': 0.2347494075319162, 'head_offset': -0.056512998417019844}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 2 calibrated: {'yaw': -0.18249310553073883, 'head_height': 0.24880799651145935, 'torso_ratio': 0.44508076902969124, 'head_offset': 0.18920312821865082}
+[hcpose] seat 1 calibrated: {'yaw': 0.022871507331728935, 'head_height': 0.16416024416685104, 'torso_ratio': 0.3499902098241117, 'head_offset': 0.20025154948234558}
+[hcpose] seat 5 calibrated: {'yaw': -0.013733703643083572, 'head_height': 0.36806732416152954, 'torso_ratio': 0.4459753764332263, 'head_offset': 0.023488713428378105}
+[hcpose] seat 3 calibrated: {'yaw': 0.13682004064321518, 'head_height': 0.2374085634946823, 'torso_ratio': 0.22240248939015947, 'head_offset': -0.061468902975320816}
+[hcpose] seat 10 calibrated: {'yaw': 0.20507404953241348, 'head_height': 0.5133512914180756, 'torso_ratio': 0.22999191217934636, 'head_offset': 0.062075987458229065}
+[hcpose] seat 13 calibrated: {'yaw': 0.18392246961593628, 'head_height': 0.29891274869441986, 'torso_ratio': 0.2535075518331122, 'head_offset': -0.07385367900133133}
+[hcpose] seat 11 calibrated: {'yaw': 0.19725751131772995, 'head_height': 0.3880380690097809, 'torso_ratio': 0.1924190857070753, 'head_offset': 0.020244061015546322}
+[hcpose] seat 6 calibrated: {'yaw': 0.20359957218170166, 'head_height': 0.3776684105396271, 'torso_ratio': 0.18993046177186657, 'head_offset': 0.09590032696723938}
+[hcpose] seat 4 calibrated: {'yaw': 0.11403407901525497, 'head_height': 0.34158021211624146, 'torso_ratio': 0.4326545309975205, 'head_offset': -0.14895173907279968}
+[hcpose] seat 14 calibrated: {'yaw': 0.06761658936738968, 'head_height': 0.23227189481258392, 'torso_ratio': 0.19526146463556446, 'head_offset': -0.0709872767329216}
+[hcpose] seat 15 calibrated: {'yaw': 0.044451478868722916, 'head_height': 0.4244566708803177, 'torso_ratio': 0.4414592582774436, 'head_offset': 0.04782119579613209}
+[hcpose] seat 18 calibrated: {'yaw': 0.10123592615127563, 'head_height': 0.11583071574568748, 'torso_ratio': 0.2000280029826616, 'head_offset': 0.18204940855503082}
+[hcpose] seat 7 calibrated: {'yaw': 0.028186872601509094, 'head_height': 0.4545161873102188, 'torso_ratio': 0.39841075641916995, 'head_offset': 0.0917367935180664}
+[hcpose] seat 17 calibrated: {'yaw': 0.12885186076164246, 'head_height': 0.4192618727684021, 'torso_ratio': 0.2347494075319162, 'head_offset': -0.056512998417019844}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 2 calibrated: {'yaw': -0.18249310553073883, 'head_height': 0.24880799651145935, 'torso_ratio': 0.44508076902969124, 'head_offset': 0.18920312821865082}
+[hcpose] seat 1 calibrated: {'yaw': 0.022871507331728935, 'head_height': 0.16416024416685104, 'torso_ratio': 0.3499902098241117, 'head_offset': 0.20025154948234558}
+[hcpose] seat 5 calibrated: {'yaw': -0.013733703643083572, 'head_height': 0.36806732416152954, 'torso_ratio': 0.4459753764332263, 'head_offset': 0.023488713428378105}
+[hcpose] seat 3 calibrated: {'yaw': 0.13682004064321518, 'head_height': 0.2374085634946823, 'torso_ratio': 0.22240248939015947, 'head_offset': -0.061468902975320816}
+[hcpose] seat 10 calibrated: {'yaw': 0.20507404953241348, 'head_height': 0.5133512914180756, 'torso_ratio': 0.22999191217934636, 'head_offset': 0.062075987458229065}
+[hcpose] seat 13 calibrated: {'yaw': 0.18392246961593628, 'head_height': 0.29891274869441986, 'torso_ratio': 0.2535075518331122, 'head_offset': -0.07385367900133133}
+[hcpose] seat 11 calibrated: {'yaw': 0.19725751131772995, 'head_height': 0.3880380690097809, 'torso_ratio': 0.1924190857070753, 'head_offset': 0.020244061015546322}
+[hcpose] seat 6 calibrated: {'yaw': 0.20359957218170166, 'head_height': 0.3776684105396271, 'torso_ratio': 0.18993046177186657, 'head_offset': 0.09590032696723938}
+[hcpose] seat 4 calibrated: {'yaw': 0.11403407901525497, 'head_height': 0.34158021211624146, 'torso_ratio': 0.4326545309975205, 'head_offset': -0.14895173907279968}
+[hcpose] seat 14 calibrated: {'yaw': 0.06761658936738968, 'head_height': 0.23227189481258392, 'torso_ratio': 0.19526146463556446, 'head_offset': -0.0709872767329216}
+[hcpose] seat 15 calibrated: {'yaw': 0.044451478868722916, 'head_height': 0.4244566708803177, 'torso_ratio': 0.4414592582774436, 'head_offset': 0.04782119579613209}
+[hcpose] seat 18 calibrated: {'yaw': 0.10123592615127563, 'head_height': 0.11583071574568748, 'torso_ratio': 0.2000280029826616, 'head_offset': 0.18204940855503082}
+[hcpose] seat 7 calibrated: {'yaw': 0.028186872601509094, 'head_height': 0.4545161873102188, 'torso_ratio': 0.39841075641916995, 'head_offset': 0.0917367935180664}
+[hcpose] seat 17 calibrated: {'yaw': 0.12885186076164246, 'head_height': 0.4192618727684021, 'torso_ratio': 0.2347494075319162, 'head_offset': -0.056512998417019844}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 2 calibrated: {'yaw': -0.18249310553073883, 'head_height': 0.24880799651145935, 'torso_ratio': 0.44508076902969124, 'head_offset': 0.18920312821865082}
+[hcpose] seat 1 calibrated: {'yaw': 0.022871507331728935, 'head_height': 0.16416024416685104, 'torso_ratio': 0.3499902098241117, 'head_offset': 0.20025154948234558}
+[hcpose] seat 5 calibrated: {'yaw': -0.013733703643083572, 'head_height': 0.36806732416152954, 'torso_ratio': 0.4459753764332263, 'head_offset': 0.023488713428378105}
+[hcpose] seat 3 calibrated: {'yaw': 0.13682004064321518, 'head_height': 0.2374085634946823, 'torso_ratio': 0.22240248939015947, 'head_offset': -0.061468902975320816}
+[hcpose] seat 10 calibrated: {'yaw': 0.20507404953241348, 'head_height': 0.5133512914180756, 'torso_ratio': 0.22999191217934636, 'head_offset': 0.062075987458229065}
+[hcpose] seat 13 calibrated: {'yaw': 0.18392246961593628, 'head_height': 0.29891274869441986, 'torso_ratio': 0.2535075518331122, 'head_offset': -0.07385367900133133}
+[hcpose] seat 11 calibrated: {'yaw': 0.19725751131772995, 'head_height': 0.3880380690097809, 'torso_ratio': 0.1924190857070753, 'head_offset': 0.020244061015546322}
+[hcpose] seat 6 calibrated: {'yaw': 0.20359957218170166, 'head_height': 0.3776684105396271, 'torso_ratio': 0.18993046177186657, 'head_offset': 0.09590032696723938}
+[hcpose] seat 4 calibrated: {'yaw': 0.11403407901525497, 'head_height': 0.34158021211624146, 'torso_ratio': 0.4326545309975205, 'head_offset': -0.14895173907279968}
+[hcpose] seat 14 calibrated: {'yaw': 0.06761658936738968, 'head_height': 0.23227189481258392, 'torso_ratio': 0.19526146463556446, 'head_offset': -0.0709872767329216}
+[hcpose] seat 15 calibrated: {'yaw': 0.044451478868722916, 'head_height': 0.4244566708803177, 'torso_ratio': 0.4414592582774436, 'head_offset': 0.04782119579613209}
+[hcpose] seat 18 calibrated: {'yaw': 0.10123592615127563, 'head_height': 0.11583071574568748, 'torso_ratio': 0.2000280029826616, 'head_offset': 0.18204940855503082}
+[hcpose] seat 7 calibrated: {'yaw': 0.028186872601509094, 'head_height': 0.4545161873102188, 'torso_ratio': 0.39841075641916995, 'head_offset': 0.0917367935180664}
+[hcpose] seat 17 calibrated: {'yaw': 0.12885186076164246, 'head_height': 0.4192618727684021, 'torso_ratio': 0.2347494075319162, 'head_offset': -0.056512998417019844}
+== clip_5_720p: model n, tiles auto
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_5_720p_n_auto.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 2 calibrated: {'yaw': -0.1634037345647812, 'head_height': 0.25073865056037903, 'torso_ratio': 0.43760776358545683, 'head_offset': 0.17732533067464828}
+[hcpose] seat 1 calibrated: {'yaw': 0.022871507331728935, 'head_height': 0.16416024416685104, 'torso_ratio': 0.3499902098241117, 'head_offset': 0.20025154948234558}
+[hcpose] seat 5 calibrated: {'yaw': 0.08397222310304642, 'head_height': 0.2786710858345032, 'torso_ratio': 0.4845233854612081, 'head_offset': 0.021822592243552208}
+[hcpose] seat 14 calibrated: {'yaw': 0.07058536261320114, 'head_height': 0.4695175588130951, 'torso_ratio': 0.44179696210610525, 'head_offset': -0.03998451679944992}
+[hcpose] seat 15 calibrated: {'yaw': 0.14893838763237, 'head_height': 0.3379746824502945, 'torso_ratio': 0.25909761558942423, 'head_offset': 0.039995450526475906}
+[hcpose] seat 4 calibrated: {'yaw': -0.09090821444988251, 'head_height': 0.19089975208044052, 'torso_ratio': 0.49135008194635266, 'head_offset': -0.045085322111845016}
+[hcpose] seat 3 calibrated: {'yaw': 0.13682004064321518, 'head_height': 0.2374085634946823, 'torso_ratio': 0.22240248939015947, 'head_offset': -0.061468902975320816}
+[hcpose] seat 6 calibrated: {'yaw': 0.0424700602889061, 'head_height': 0.3355197310447693, 'torso_ratio': 0.43218533087775496, 'head_offset': 0.03785073757171631}
+[hcpose] seat 11 calibrated: {'yaw': 0.19725751131772995, 'head_height': 0.3880380690097809, 'torso_ratio': 0.1924190857070753, 'head_offset': 0.020244061015546322}
+[hcpose] seat 8 calibrated: {'yaw': 0.20359957218170166, 'head_height': 0.3776684105396271, 'torso_ratio': 0.18993046177186657, 'head_offset': 0.09590032696723938}
+[hcpose] seat 12 calibrated: {'yaw': 0.06761658936738968, 'head_height': 0.23227189481258392, 'torso_ratio': 0.19526146463556446, 'head_offset': -0.0709872767329216}
+[hcpose] seat 16 calibrated: {'yaw': 0.2121250480413437, 'head_height': 0.342541366815567, 'torso_ratio': 0.270410945681293, 'head_offset': 0.08953002467751503}
+[hcpose] seat 19 calibrated: {'yaw': 0.10123592615127563, 'head_height': 0.11583071574568748, 'torso_ratio': 0.2000280029826616, 'head_offset': 0.18204940855503082}
+[hcpose] seat 17 calibrated: {'yaw': 0.004384980769827962, 'head_height': 0.41209477186203003, 'torso_ratio': 0.43465308893739807, 'head_offset': 0.027503589168190956}
+[hcpose] seat 10 calibrated: {'yaw': 0.015869172289967537, 'head_height': 0.27395831048488617, 'torso_ratio': 0.21659832467033108, 'head_offset': -0.024506812915205956}
+[hcpose] seat 18 calibrated: {'yaw': -0.016134947538375854, 'head_height': 0.1652541309595108, 'torso_ratio': 0.445434221255234, 'head_offset': -0.04722275584936142}
+[hcpose] seat 23 calibrated: {'yaw': 0.1838189661502838, 'head_height': 0.25972287356853485, 'torso_ratio': 0.503234028060863, 'head_offset': 0.10897734016180038}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 2 calibrated: {'yaw': -0.1634037345647812, 'head_height': 0.25073865056037903, 'torso_ratio': 0.43760776358545683, 'head_offset': 0.17732533067464828}
+[hcpose] seat 1 calibrated: {'yaw': 0.022871507331728935, 'head_height': 0.16416024416685104, 'torso_ratio': 0.3499902098241117, 'head_offset': 0.20025154948234558}
+[hcpose] seat 5 calibrated: {'yaw': 0.08397222310304642, 'head_height': 0.2786710858345032, 'torso_ratio': 0.4845233854612081, 'head_offset': 0.021822592243552208}
+[hcpose] seat 14 calibrated: {'yaw': 0.07058536261320114, 'head_height': 0.4695175588130951, 'torso_ratio': 0.44179696210610525, 'head_offset': -0.03998451679944992}
+[hcpose] seat 15 calibrated: {'yaw': 0.14893838763237, 'head_height': 0.3379746824502945, 'torso_ratio': 0.25909761558942423, 'head_offset': 0.039995450526475906}
+[hcpose] seat 4 calibrated: {'yaw': -0.09090821444988251, 'head_height': 0.19089975208044052, 'torso_ratio': 0.49135008194635266, 'head_offset': -0.045085322111845016}
+[hcpose] seat 3 calibrated: {'yaw': 0.13682004064321518, 'head_height': 0.2374085634946823, 'torso_ratio': 0.22240248939015947, 'head_offset': -0.061468902975320816}
+[hcpose] seat 6 calibrated: {'yaw': 0.0424700602889061, 'head_height': 0.3355197310447693, 'torso_ratio': 0.43218533087775496, 'head_offset': 0.03785073757171631}
+[hcpose] seat 11 calibrated: {'yaw': 0.19725751131772995, 'head_height': 0.3880380690097809, 'torso_ratio': 0.1924190857070753, 'head_offset': 0.020244061015546322}
+[hcpose] seat 8 calibrated: {'yaw': 0.20359957218170166, 'head_height': 0.3776684105396271, 'torso_ratio': 0.18993046177186657, 'head_offset': 0.09590032696723938}
+[hcpose] seat 12 calibrated: {'yaw': 0.06761658936738968, 'head_height': 0.23227189481258392, 'torso_ratio': 0.19526146463556446, 'head_offset': -0.0709872767329216}
+[hcpose] seat 16 calibrated: {'yaw': 0.2121250480413437, 'head_height': 0.342541366815567, 'torso_ratio': 0.270410945681293, 'head_offset': 0.08953002467751503}
+[hcpose] seat 19 calibrated: {'yaw': 0.10123592615127563, 'head_height': 0.11583071574568748, 'torso_ratio': 0.2000280029826616, 'head_offset': 0.18204940855503082}
+[hcpose] seat 17 calibrated: {'yaw': 0.004384980769827962, 'head_height': 0.41209477186203003, 'torso_ratio': 0.43465308893739807, 'head_offset': 0.027503589168190956}
+[hcpose] seat 10 calibrated: {'yaw': 0.015869172289967537, 'head_height': 0.27395831048488617, 'torso_ratio': 0.21659832467033108, 'head_offset': -0.024506812915205956}
+[hcpose] seat 18 calibrated: {'yaw': -0.016134947538375854, 'head_height': 0.1652541309595108, 'torso_ratio': 0.445434221255234, 'head_offset': -0.04722275584936142}
+[hcpose] seat 23 calibrated: {'yaw': 0.1838189661502838, 'head_height': 0.25972287356853485, 'torso_ratio': 0.503234028060863, 'head_offset': 0.10897734016180038}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 2 calibrated: {'yaw': -0.1634037345647812, 'head_height': 0.25073865056037903, 'torso_ratio': 0.43760776358545683, 'head_offset': 0.17732533067464828}
+[hcpose] seat 1 calibrated: {'yaw': 0.022871507331728935, 'head_height': 0.16416024416685104, 'torso_ratio': 0.3499902098241117, 'head_offset': 0.20025154948234558}
+[hcpose] seat 5 calibrated: {'yaw': 0.08397222310304642, 'head_height': 0.2786710858345032, 'torso_ratio': 0.4845233854612081, 'head_offset': 0.021822592243552208}
+[hcpose] seat 14 calibrated: {'yaw': 0.07058536261320114, 'head_height': 0.4695175588130951, 'torso_ratio': 0.44179696210610525, 'head_offset': -0.03998451679944992}
+[hcpose] seat 15 calibrated: {'yaw': 0.14893838763237, 'head_height': 0.3379746824502945, 'torso_ratio': 0.25909761558942423, 'head_offset': 0.039995450526475906}
+[hcpose] seat 4 calibrated: {'yaw': -0.09090821444988251, 'head_height': 0.19089975208044052, 'torso_ratio': 0.49135008194635266, 'head_offset': -0.045085322111845016}
+[hcpose] seat 3 calibrated: {'yaw': 0.13682004064321518, 'head_height': 0.2374085634946823, 'torso_ratio': 0.22240248939015947, 'head_offset': -0.061468902975320816}
+[hcpose] seat 6 calibrated: {'yaw': 0.0424700602889061, 'head_height': 0.3355197310447693, 'torso_ratio': 0.43218533087775496, 'head_offset': 0.03785073757171631}
+[hcpose] seat 11 calibrated: {'yaw': 0.19725751131772995, 'head_height': 0.3880380690097809, 'torso_ratio': 0.1924190857070753, 'head_offset': 0.020244061015546322}
+[hcpose] seat 8 calibrated: {'yaw': 0.20359957218170166, 'head_height': 0.3776684105396271, 'torso_ratio': 0.18993046177186657, 'head_offset': 0.09590032696723938}
+[hcpose] seat 12 calibrated: {'yaw': 0.06761658936738968, 'head_height': 0.23227189481258392, 'torso_ratio': 0.19526146463556446, 'head_offset': -0.0709872767329216}
+[hcpose] seat 16 calibrated: {'yaw': 0.2121250480413437, 'head_height': 0.342541366815567, 'torso_ratio': 0.270410945681293, 'head_offset': 0.08953002467751503}
+[hcpose] seat 19 calibrated: {'yaw': 0.10123592615127563, 'head_height': 0.11583071574568748, 'torso_ratio': 0.2000280029826616, 'head_offset': 0.18204940855503082}
+[hcpose] seat 17 calibrated: {'yaw': 0.004384980769827962, 'head_height': 0.41209477186203003, 'torso_ratio': 0.43465308893739807, 'head_offset': 0.027503589168190956}
+[hcpose] seat 10 calibrated: {'yaw': 0.015869172289967537, 'head_height': 0.27395831048488617, 'torso_ratio': 0.21659832467033108, 'head_offset': -0.024506812915205956}
+[hcpose] seat 18 calibrated: {'yaw': -0.016134947538375854, 'head_height': 0.1652541309595108, 'torso_ratio': 0.445434221255234, 'head_offset': -0.04722275584936142}
+[hcpose] seat 23 calibrated: {'yaw': 0.1838189661502838, 'head_height': 0.25972287356853485, 'torso_ratio': 0.503234028060863, 'head_offset': 0.10897734016180038}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 2 calibrated: {'yaw': -0.1634037345647812, 'head_height': 0.25073865056037903, 'torso_ratio': 0.43760776358545683, 'head_offset': 0.17732533067464828}
+[hcpose] seat 1 calibrated: {'yaw': 0.022871507331728935, 'head_height': 0.16416024416685104, 'torso_ratio': 0.3499902098241117, 'head_offset': 0.20025154948234558}
+[hcpose] seat 5 calibrated: {'yaw': 0.08397222310304642, 'head_height': 0.2786710858345032, 'torso_ratio': 0.4845233854612081, 'head_offset': 0.021822592243552208}
+[hcpose] seat 14 calibrated: {'yaw': 0.07058536261320114, 'head_height': 0.4695175588130951, 'torso_ratio': 0.44179696210610525, 'head_offset': -0.03998451679944992}
+[hcpose] seat 15 calibrated: {'yaw': 0.14893838763237, 'head_height': 0.3379746824502945, 'torso_ratio': 0.25909761558942423, 'head_offset': 0.039995450526475906}
+[hcpose] seat 4 calibrated: {'yaw': -0.09090821444988251, 'head_height': 0.19089975208044052, 'torso_ratio': 0.49135008194635266, 'head_offset': -0.045085322111845016}
+[hcpose] seat 3 calibrated: {'yaw': 0.13682004064321518, 'head_height': 0.2374085634946823, 'torso_ratio': 0.22240248939015947, 'head_offset': -0.061468902975320816}
+[hcpose] seat 6 calibrated: {'yaw': 0.0424700602889061, 'head_height': 0.3355197310447693, 'torso_ratio': 0.43218533087775496, 'head_offset': 0.03785073757171631}
+[hcpose] seat 11 calibrated: {'yaw': 0.19725751131772995, 'head_height': 0.3880380690097809, 'torso_ratio': 0.1924190857070753, 'head_offset': 0.020244061015546322}
+[hcpose] seat 8 calibrated: {'yaw': 0.20359957218170166, 'head_height': 0.3776684105396271, 'torso_ratio': 0.18993046177186657, 'head_offset': 0.09590032696723938}
+[hcpose] seat 12 calibrated: {'yaw': 0.06761658936738968, 'head_height': 0.23227189481258392, 'torso_ratio': 0.19526146463556446, 'head_offset': -0.0709872767329216}
+[hcpose] seat 16 calibrated: {'yaw': 0.2121250480413437, 'head_height': 0.342541366815567, 'torso_ratio': 0.270410945681293, 'head_offset': 0.08953002467751503}
+[hcpose] seat 19 calibrated: {'yaw': 0.10123592615127563, 'head_height': 0.11583071574568748, 'torso_ratio': 0.2000280029826616, 'head_offset': 0.18204940855503082}
+[hcpose] seat 17 calibrated: {'yaw': 0.004384980769827962, 'head_height': 0.41209477186203003, 'torso_ratio': 0.43465308893739807, 'head_offset': 0.027503589168190956}
+[hcpose] seat 10 calibrated: {'yaw': 0.015869172289967537, 'head_height': 0.27395831048488617, 'torso_ratio': 0.21659832467033108, 'head_offset': -0.024506812915205956}
+[hcpose] seat 18 calibrated: {'yaw': -0.016134947538375854, 'head_height': 0.1652541309595108, 'torso_ratio': 0.445434221255234, 'head_offset': -0.04722275584936142}
+[hcpose] seat 23 calibrated: {'yaw': 0.1838189661502838, 'head_height': 0.25972287356853485, 'torso_ratio': 0.503234028060863, 'head_offset': 0.10897734016180038}
+== clip_5_720p: model m, tiles none
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_5_720p_m_none.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 3 calibrated: {'yaw': -0.07252854853868484, 'head_height': 0.14031852036714554, 'torso_ratio': 0.3693683203192146, 'head_offset': 0.10896950215101242}
+[hcpose] seat 1 calibrated: {'yaw': -0.04654255695641041, 'head_height': 0.249613918364048, 'torso_ratio': 0.4000062720552887, 'head_offset': 0.08064467087388039}
+[hcpose] seat 6 calibrated: {'yaw': -0.03780578449368477, 'head_height': 0.27363502979278564, 'torso_ratio': 0.4855564008796751, 'head_offset': -0.06178000941872597}
+[hcpose] seat 4 calibrated: {'yaw': 0.09796171635389328, 'head_height': 0.2545933574438095, 'torso_ratio': 0.5372026988438199, 'head_offset': -0.11297427117824554}
+[hcpose] seat 2 calibrated: {'yaw': 0.012045268900692463, 'head_height': 0.28609004616737366, 'torso_ratio': 0.5491633773539106, 'head_offset': 0.003975833998993039}
+[hcpose] seat 5 calibrated: {'yaw': -0.10647125542163849, 'head_height': 0.1571182981133461, 'torso_ratio': 0.21700832332332515, 'head_offset': -0.037113990634679794}
+[hcpose] seat 7 calibrated: {'yaw': 0.24001465737819672, 'head_height': 0.41526806354522705, 'torso_ratio': 0.45130097087304183, 'head_offset': -0.07840404659509659}
+[hcpose] seat 9 calibrated: {'yaw': -0.05851585231721401, 'head_height': 0.1728869155049324, 'torso_ratio': 0.2513302198951519, 'head_offset': -0.12380039319396019}
+[hcpose] seat 10 calibrated: {'yaw': 0.2163895070552826, 'head_height': 0.35905563831329346, 'torso_ratio': 0.24225401379860984, 'head_offset': -0.036031417548656464}
+[hcpose] seat 11 calibrated: {'yaw': 0.19155961275100708, 'head_height': 0.3768285661935806, 'torso_ratio': 0.23695683379954652, 'head_offset': -0.06666457280516624}
+[hcpose] seat 13 calibrated: {'yaw': -0.050231873989105225, 'head_height': 0.05022747442126274, 'torso_ratio': 0.2110370768275432, 'head_offset': 0.0933750718832016}
+[hcpose] seat 15 calibrated: {'yaw': -0.022808242589235306, 'head_height': 0.09292352199554443, 'torso_ratio': 0.22377031942957604, 'head_offset': -0.06213477998971939}
+[hcpose] seat 18 calibrated: {'yaw': -0.09208844602108002, 'head_height': -0.06525997817516327, 'torso_ratio': 0.23444134825089785, 'head_offset': 0.030016804113984108}
+[hcpose] seat 8 calibrated: {'yaw': 0.17142857611179352, 'head_height': 0.332833856344223, 'torso_ratio': 0.5028168935961711, 'head_offset': 0.10416342318058014}
+[hcpose] seat 17 calibrated: {'yaw': -0.08974751085042953, 'head_height': 0.32641124725341797, 'torso_ratio': 0.4559092091319009, 'head_offset': -0.0346275232732296}
+[hcpose] seat 25 calibrated: {'yaw': -0.09387954324483871, 'head_height': 0.2281753197312355, 'torso_ratio': 0.48838798223380187, 'head_offset': 0.03446286357939243}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.07252854853868484, 'head_height': 0.14031852036714554, 'torso_ratio': 0.3693683203192146, 'head_offset': 0.10896950215101242}
+[hcpose] seat 1 calibrated: {'yaw': -0.04654255695641041, 'head_height': 0.249613918364048, 'torso_ratio': 0.4000062720552887, 'head_offset': 0.08064467087388039}
+[hcpose] seat 6 calibrated: {'yaw': -0.03780578449368477, 'head_height': 0.27363502979278564, 'torso_ratio': 0.4855564008796751, 'head_offset': -0.06178000941872597}
+[hcpose] seat 4 calibrated: {'yaw': 0.09796171635389328, 'head_height': 0.2545933574438095, 'torso_ratio': 0.5372026988438199, 'head_offset': -0.11297427117824554}
+[hcpose] seat 2 calibrated: {'yaw': 0.012045268900692463, 'head_height': 0.28609004616737366, 'torso_ratio': 0.5491633773539106, 'head_offset': 0.003975833998993039}
+[hcpose] seat 5 calibrated: {'yaw': -0.10647125542163849, 'head_height': 0.1571182981133461, 'torso_ratio': 0.21700832332332515, 'head_offset': -0.037113990634679794}
+[hcpose] seat 7 calibrated: {'yaw': 0.24001465737819672, 'head_height': 0.41526806354522705, 'torso_ratio': 0.45130097087304183, 'head_offset': -0.07840404659509659}
+[hcpose] seat 9 calibrated: {'yaw': -0.05851585231721401, 'head_height': 0.1728869155049324, 'torso_ratio': 0.2513302198951519, 'head_offset': -0.12380039319396019}
+[hcpose] seat 10 calibrated: {'yaw': 0.2163895070552826, 'head_height': 0.35905563831329346, 'torso_ratio': 0.24225401379860984, 'head_offset': -0.036031417548656464}
+[hcpose] seat 11 calibrated: {'yaw': 0.19155961275100708, 'head_height': 0.3768285661935806, 'torso_ratio': 0.23695683379954652, 'head_offset': -0.06666457280516624}
+[hcpose] seat 13 calibrated: {'yaw': -0.050231873989105225, 'head_height': 0.05022747442126274, 'torso_ratio': 0.2110370768275432, 'head_offset': 0.0933750718832016}
+[hcpose] seat 15 calibrated: {'yaw': -0.022808242589235306, 'head_height': 0.09292352199554443, 'torso_ratio': 0.22377031942957604, 'head_offset': -0.06213477998971939}
+[hcpose] seat 18 calibrated: {'yaw': -0.09208844602108002, 'head_height': -0.06525997817516327, 'torso_ratio': 0.23444134825089785, 'head_offset': 0.030016804113984108}
+[hcpose] seat 8 calibrated: {'yaw': 0.17142857611179352, 'head_height': 0.332833856344223, 'torso_ratio': 0.5028168935961711, 'head_offset': 0.10416342318058014}
+[hcpose] seat 17 calibrated: {'yaw': -0.08974751085042953, 'head_height': 0.32641124725341797, 'torso_ratio': 0.4559092091319009, 'head_offset': -0.0346275232732296}
+[hcpose] seat 25 calibrated: {'yaw': -0.09387954324483871, 'head_height': 0.2281753197312355, 'torso_ratio': 0.48838798223380187, 'head_offset': 0.03446286357939243}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.07252854853868484, 'head_height': 0.14031852036714554, 'torso_ratio': 0.3693683203192146, 'head_offset': 0.10896950215101242}
+[hcpose] seat 1 calibrated: {'yaw': -0.04654255695641041, 'head_height': 0.249613918364048, 'torso_ratio': 0.4000062720552887, 'head_offset': 0.08064467087388039}
+[hcpose] seat 6 calibrated: {'yaw': -0.03780578449368477, 'head_height': 0.27363502979278564, 'torso_ratio': 0.4855564008796751, 'head_offset': -0.06178000941872597}
+[hcpose] seat 4 calibrated: {'yaw': 0.09796171635389328, 'head_height': 0.2545933574438095, 'torso_ratio': 0.5372026988438199, 'head_offset': -0.11297427117824554}
+[hcpose] seat 2 calibrated: {'yaw': 0.012045268900692463, 'head_height': 0.28609004616737366, 'torso_ratio': 0.5491633773539106, 'head_offset': 0.003975833998993039}
+[hcpose] seat 5 calibrated: {'yaw': -0.10647125542163849, 'head_height': 0.1571182981133461, 'torso_ratio': 0.21700832332332515, 'head_offset': -0.037113990634679794}
+[hcpose] seat 7 calibrated: {'yaw': 0.24001465737819672, 'head_height': 0.41526806354522705, 'torso_ratio': 0.45130097087304183, 'head_offset': -0.07840404659509659}
+[hcpose] seat 9 calibrated: {'yaw': -0.05851585231721401, 'head_height': 0.1728869155049324, 'torso_ratio': 0.2513302198951519, 'head_offset': -0.12380039319396019}
+[hcpose] seat 10 calibrated: {'yaw': 0.2163895070552826, 'head_height': 0.35905563831329346, 'torso_ratio': 0.24225401379860984, 'head_offset': -0.036031417548656464}
+[hcpose] seat 11 calibrated: {'yaw': 0.19155961275100708, 'head_height': 0.3768285661935806, 'torso_ratio': 0.23695683379954652, 'head_offset': -0.06666457280516624}
+[hcpose] seat 13 calibrated: {'yaw': -0.050231873989105225, 'head_height': 0.05022747442126274, 'torso_ratio': 0.2110370768275432, 'head_offset': 0.0933750718832016}
+[hcpose] seat 15 calibrated: {'yaw': -0.022808242589235306, 'head_height': 0.09292352199554443, 'torso_ratio': 0.22377031942957604, 'head_offset': -0.06213477998971939}
+[hcpose] seat 18 calibrated: {'yaw': -0.09208844602108002, 'head_height': -0.06525997817516327, 'torso_ratio': 0.23444134825089785, 'head_offset': 0.030016804113984108}
+[hcpose] seat 8 calibrated: {'yaw': 0.17142857611179352, 'head_height': 0.332833856344223, 'torso_ratio': 0.5028168935961711, 'head_offset': 0.10416342318058014}
+[hcpose] seat 17 calibrated: {'yaw': -0.08974751085042953, 'head_height': 0.32641124725341797, 'torso_ratio': 0.4559092091319009, 'head_offset': -0.0346275232732296}
+[hcpose] seat 25 calibrated: {'yaw': -0.09387954324483871, 'head_height': 0.2281753197312355, 'torso_ratio': 0.48838798223380187, 'head_offset': 0.03446286357939243}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 3 calibrated: {'yaw': -0.07252854853868484, 'head_height': 0.14031852036714554, 'torso_ratio': 0.3693683203192146, 'head_offset': 0.10896950215101242}
+[hcpose] seat 1 calibrated: {'yaw': -0.04654255695641041, 'head_height': 0.249613918364048, 'torso_ratio': 0.4000062720552887, 'head_offset': 0.08064467087388039}
+[hcpose] seat 6 calibrated: {'yaw': -0.03780578449368477, 'head_height': 0.27363502979278564, 'torso_ratio': 0.4855564008796751, 'head_offset': -0.06178000941872597}
+[hcpose] seat 4 calibrated: {'yaw': 0.09796171635389328, 'head_height': 0.2545933574438095, 'torso_ratio': 0.5372026988438199, 'head_offset': -0.11297427117824554}
+[hcpose] seat 2 calibrated: {'yaw': 0.012045268900692463, 'head_height': 0.28609004616737366, 'torso_ratio': 0.5491633773539106, 'head_offset': 0.003975833998993039}
+[hcpose] seat 5 calibrated: {'yaw': -0.10647125542163849, 'head_height': 0.1571182981133461, 'torso_ratio': 0.21700832332332515, 'head_offset': -0.037113990634679794}
+[hcpose] seat 7 calibrated: {'yaw': 0.24001465737819672, 'head_height': 0.41526806354522705, 'torso_ratio': 0.45130097087304183, 'head_offset': -0.07840404659509659}
+[hcpose] seat 9 calibrated: {'yaw': -0.05851585231721401, 'head_height': 0.1728869155049324, 'torso_ratio': 0.2513302198951519, 'head_offset': -0.12380039319396019}
+[hcpose] seat 10 calibrated: {'yaw': 0.2163895070552826, 'head_height': 0.35905563831329346, 'torso_ratio': 0.24225401379860984, 'head_offset': -0.036031417548656464}
+[hcpose] seat 11 calibrated: {'yaw': 0.19155961275100708, 'head_height': 0.3768285661935806, 'torso_ratio': 0.23695683379954652, 'head_offset': -0.06666457280516624}
+[hcpose] seat 13 calibrated: {'yaw': -0.050231873989105225, 'head_height': 0.05022747442126274, 'torso_ratio': 0.2110370768275432, 'head_offset': 0.0933750718832016}
+[hcpose] seat 15 calibrated: {'yaw': -0.022808242589235306, 'head_height': 0.09292352199554443, 'torso_ratio': 0.22377031942957604, 'head_offset': -0.06213477998971939}
+[hcpose] seat 18 calibrated: {'yaw': -0.09208844602108002, 'head_height': -0.06525997817516327, 'torso_ratio': 0.23444134825089785, 'head_offset': 0.030016804113984108}
+[hcpose] seat 8 calibrated: {'yaw': 0.17142857611179352, 'head_height': 0.332833856344223, 'torso_ratio': 0.5028168935961711, 'head_offset': 0.10416342318058014}
+[hcpose] seat 17 calibrated: {'yaw': -0.08974751085042953, 'head_height': 0.32641124725341797, 'torso_ratio': 0.4559092091319009, 'head_offset': -0.0346275232732296}
+[hcpose] seat 25 calibrated: {'yaw': -0.09387954324483871, 'head_height': 0.2281753197312355, 'torso_ratio': 0.48838798223380187, 'head_offset': 0.03446286357939243}
+== clip_5_720p: model m, tiles auto
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_5_720p_m_auto.skeleton.jsonl
+[hcpose] engagement: rule-based cues
+[hcpose] seat 4 calibrated: {'yaw': -0.05923597514629364, 'head_height': 0.259124293923378, 'torso_ratio': 0.5146219251423113, 'head_offset': -0.08305563405156136}
+[hcpose] seat 3 calibrated: {'yaw': -0.007094792556017637, 'head_height': 0.33979055285453796, 'torso_ratio': 0.4887257256655496, 'head_offset': -0.02759053185582161}
+[hcpose] seat 1 calibrated: {'yaw': -0.042832547798752785, 'head_height': 0.253142312169075, 'torso_ratio': 0.3977886993524472, 'head_offset': 0.07960747182369232}
+[hcpose] seat 6 calibrated: {'yaw': -0.07252854853868484, 'head_height': 0.14031852036714554, 'torso_ratio': 0.3693683203192146, 'head_offset': 0.10896950215101242}
+[hcpose] seat 2 calibrated: {'yaw': 0.05594325065612793, 'head_height': 0.2674011290073395, 'torso_ratio': 0.5119140496414698, 'head_offset': -0.0021878734696656466}
+[hcpose] seat 5 calibrated: {'yaw': 0.005074899643659592, 'head_height': 0.39586466550827026, 'torso_ratio': 0.4648664562087387, 'head_offset': -0.07652565091848373}
+[hcpose] seat 8 calibrated: {'yaw': -0.10647125542163849, 'head_height': 0.1571182981133461, 'torso_ratio': 0.21700832332332515, 'head_offset': -0.037113990634679794}
+[hcpose] seat 10 calibrated: {'yaw': -0.05851585231721401, 'head_height': 0.1728869155049324, 'torso_ratio': 0.2513302198951519, 'head_offset': -0.12380039319396019}
+[hcpose] seat 7 calibrated: {'yaw': -0.0777265802025795, 'head_height': 0.35864172875881195, 'torso_ratio': 0.486991016903658, 'head_offset': -0.011360594537109137}
+[hcpose] seat 9 calibrated: {'yaw': -0.10638287663459778, 'head_height': 0.28072893619537354, 'torso_ratio': 0.493620162619684, 'head_offset': -0.0551062747836113}
+[hcpose] seat 12 calibrated: {'yaw': -0.050231873989105225, 'head_height': 0.05022747442126274, 'torso_ratio': 0.2110370768275432, 'head_offset': 0.0933750718832016}
+[hcpose] seat 11 calibrated: {'yaw': -0.08885613828897476, 'head_height': 0.24139831960201263, 'torso_ratio': 0.47504811712544925, 'head_offset': -0.03844199702143669}
+[hcpose] seat 13 calibrated: {'yaw': -0.022808242589235306, 'head_height': 0.09292352199554443, 'torso_ratio': 0.22377031942957604, 'head_offset': -0.06213477998971939}
+[hcpose] seat 15 calibrated: {'yaw': -0.09208844602108002, 'head_height': -0.06525997817516327, 'torso_ratio': 0.23444134825089785, 'head_offset': 0.030016804113984108}
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 4 calibrated: {'yaw': -0.05923597514629364, 'head_height': 0.259124293923378, 'torso_ratio': 0.5146219251423113, 'head_offset': -0.08305563405156136}
+[hcpose] seat 3 calibrated: {'yaw': -0.007094792556017637, 'head_height': 0.33979055285453796, 'torso_ratio': 0.4887257256655496, 'head_offset': -0.02759053185582161}
+[hcpose] seat 1 calibrated: {'yaw': -0.042832547798752785, 'head_height': 0.253142312169075, 'torso_ratio': 0.3977886993524472, 'head_offset': 0.07960747182369232}
+[hcpose] seat 6 calibrated: {'yaw': -0.07252854853868484, 'head_height': 0.14031852036714554, 'torso_ratio': 0.3693683203192146, 'head_offset': 0.10896950215101242}
+[hcpose] seat 2 calibrated: {'yaw': 0.05594325065612793, 'head_height': 0.2674011290073395, 'torso_ratio': 0.5119140496414698, 'head_offset': -0.0021878734696656466}
+[hcpose] seat 5 calibrated: {'yaw': 0.005074899643659592, 'head_height': 0.39586466550827026, 'torso_ratio': 0.4648664562087387, 'head_offset': -0.07652565091848373}
+[hcpose] seat 8 calibrated: {'yaw': -0.10647125542163849, 'head_height': 0.1571182981133461, 'torso_ratio': 0.21700832332332515, 'head_offset': -0.037113990634679794}
+[hcpose] seat 10 calibrated: {'yaw': -0.05851585231721401, 'head_height': 0.1728869155049324, 'torso_ratio': 0.2513302198951519, 'head_offset': -0.12380039319396019}
+[hcpose] seat 7 calibrated: {'yaw': -0.0777265802025795, 'head_height': 0.35864172875881195, 'torso_ratio': 0.486991016903658, 'head_offset': -0.011360594537109137}
+[hcpose] seat 9 calibrated: {'yaw': -0.10638287663459778, 'head_height': 0.28072893619537354, 'torso_ratio': 0.493620162619684, 'head_offset': -0.0551062747836113}
+[hcpose] seat 12 calibrated: {'yaw': -0.050231873989105225, 'head_height': 0.05022747442126274, 'torso_ratio': 0.2110370768275432, 'head_offset': 0.0933750718832016}
+[hcpose] seat 11 calibrated: {'yaw': -0.08885613828897476, 'head_height': 0.24139831960201263, 'torso_ratio': 0.47504811712544925, 'head_offset': -0.03844199702143669}
+[hcpose] seat 13 calibrated: {'yaw': -0.022808242589235306, 'head_height': 0.09292352199554443, 'torso_ratio': 0.22377031942957604, 'head_offset': -0.06213477998971939}
+[hcpose] seat 15 calibrated: {'yaw': -0.09208844602108002, 'head_height': -0.06525997817516327, 'torso_ratio': 0.23444134825089785, 'head_offset': 0.030016804113984108}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 4 calibrated: {'yaw': -0.05923597514629364, 'head_height': 0.259124293923378, 'torso_ratio': 0.5146219251423113, 'head_offset': -0.08305563405156136}
+[hcpose] seat 3 calibrated: {'yaw': -0.007094792556017637, 'head_height': 0.33979055285453796, 'torso_ratio': 0.4887257256655496, 'head_offset': -0.02759053185582161}
+[hcpose] seat 1 calibrated: {'yaw': -0.042832547798752785, 'head_height': 0.253142312169075, 'torso_ratio': 0.3977886993524472, 'head_offset': 0.07960747182369232}
+[hcpose] seat 6 calibrated: {'yaw': -0.07252854853868484, 'head_height': 0.14031852036714554, 'torso_ratio': 0.3693683203192146, 'head_offset': 0.10896950215101242}
+[hcpose] seat 2 calibrated: {'yaw': 0.05594325065612793, 'head_height': 0.2674011290073395, 'torso_ratio': 0.5119140496414698, 'head_offset': -0.0021878734696656466}
+[hcpose] seat 5 calibrated: {'yaw': 0.005074899643659592, 'head_height': 0.39586466550827026, 'torso_ratio': 0.4648664562087387, 'head_offset': -0.07652565091848373}
+[hcpose] seat 8 calibrated: {'yaw': -0.10647125542163849, 'head_height': 0.1571182981133461, 'torso_ratio': 0.21700832332332515, 'head_offset': -0.037113990634679794}
+[hcpose] seat 10 calibrated: {'yaw': -0.05851585231721401, 'head_height': 0.1728869155049324, 'torso_ratio': 0.2513302198951519, 'head_offset': -0.12380039319396019}
+[hcpose] seat 7 calibrated: {'yaw': -0.0777265802025795, 'head_height': 0.35864172875881195, 'torso_ratio': 0.486991016903658, 'head_offset': -0.011360594537109137}
+[hcpose] seat 9 calibrated: {'yaw': -0.10638287663459778, 'head_height': 0.28072893619537354, 'torso_ratio': 0.493620162619684, 'head_offset': -0.0551062747836113}
+[hcpose] seat 12 calibrated: {'yaw': -0.050231873989105225, 'head_height': 0.05022747442126274, 'torso_ratio': 0.2110370768275432, 'head_offset': 0.0933750718832016}
+[hcpose] seat 11 calibrated: {'yaw': -0.08885613828897476, 'head_height': 0.24139831960201263, 'torso_ratio': 0.47504811712544925, 'head_offset': -0.03844199702143669}
+[hcpose] seat 13 calibrated: {'yaw': -0.022808242589235306, 'head_height': 0.09292352199554443, 'torso_ratio': 0.22377031942957604, 'head_offset': -0.06213477998971939}
+[hcpose] seat 15 calibrated: {'yaw': -0.09208844602108002, 'head_height': -0.06525997817516327, 'torso_ratio': 0.23444134825089785, 'head_offset': 0.030016804113984108}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 4 calibrated: {'yaw': -0.05923597514629364, 'head_height': 0.259124293923378, 'torso_ratio': 0.5146219251423113, 'head_offset': -0.08305563405156136}
+[hcpose] seat 3 calibrated: {'yaw': -0.007094792556017637, 'head_height': 0.33979055285453796, 'torso_ratio': 0.4887257256655496, 'head_offset': -0.02759053185582161}
+[hcpose] seat 1 calibrated: {'yaw': -0.042832547798752785, 'head_height': 0.253142312169075, 'torso_ratio': 0.3977886993524472, 'head_offset': 0.07960747182369232}
+[hcpose] seat 6 calibrated: {'yaw': -0.07252854853868484, 'head_height': 0.14031852036714554, 'torso_ratio': 0.3693683203192146, 'head_offset': 0.10896950215101242}
+[hcpose] seat 2 calibrated: {'yaw': 0.05594325065612793, 'head_height': 0.2674011290073395, 'torso_ratio': 0.5119140496414698, 'head_offset': -0.0021878734696656466}
+[hcpose] seat 5 calibrated: {'yaw': 0.005074899643659592, 'head_height': 0.39586466550827026, 'torso_ratio': 0.4648664562087387, 'head_offset': -0.07652565091848373}
+[hcpose] seat 8 calibrated: {'yaw': -0.10647125542163849, 'head_height': 0.1571182981133461, 'torso_ratio': 0.21700832332332515, 'head_offset': -0.037113990634679794}
+[hcpose] seat 10 calibrated: {'yaw': -0.05851585231721401, 'head_height': 0.1728869155049324, 'torso_ratio': 0.2513302198951519, 'head_offset': -0.12380039319396019}
+[hcpose] seat 7 calibrated: {'yaw': -0.0777265802025795, 'head_height': 0.35864172875881195, 'torso_ratio': 0.486991016903658, 'head_offset': -0.011360594537109137}
+[hcpose] seat 9 calibrated: {'yaw': -0.10638287663459778, 'head_height': 0.28072893619537354, 'torso_ratio': 0.493620162619684, 'head_offset': -0.0551062747836113}
+[hcpose] seat 12 calibrated: {'yaw': -0.050231873989105225, 'head_height': 0.05022747442126274, 'torso_ratio': 0.2110370768275432, 'head_offset': 0.0933750718832016}
+[hcpose] seat 11 calibrated: {'yaw': -0.08885613828897476, 'head_height': 0.24139831960201263, 'torso_ratio': 0.47504811712544925, 'head_offset': -0.03844199702143669}
+[hcpose] seat 13 calibrated: {'yaw': -0.022808242589235306, 'head_height': 0.09292352199554443, 'torso_ratio': 0.22377031942957604, 'head_offset': -0.06213477998971939}
+[hcpose] seat 15 calibrated: {'yaw': -0.09208844602108002, 'head_height': -0.06525997817516327, 'torso_ratio': 0.23444134825089785, 'head_offset': 0.030016804113984108}
+# Classroom clips on the deployed models
+
+## clip_2 (class % after 2:30)
+
+| Model | Tiles | FPS | Students / frame | Duplicates / frame | Class size | Rules | Trees | Logistic | MLP | Range width, rules (pts) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| n | off | 111.9 | 10.3 | 0.00 | 25 | 64.2% | 31.0% | 40.9% | 32.1% | 40 |
+| n | on | 32.8 | 23.6 | 0.01 | 59 | 55.4% | 38.6% | 39.0% | 40.8% | 28 |
+| m | off | 31.5 | 10.6 | 0.00 | 19 | 43.7% | 11.9% | 18.6% | 12.0% | 44 |
+| m | on | 7.9 | 20.2 | 0.00 | 39 | 42.3% | 16.7% | 18.1% | 14.9% | 34 |
+
+## clip_3 (class % after 2:30)
+
+| Model | Tiles | FPS | Students / frame | Duplicates / frame | Class size | Rules | Trees | Logistic | MLP | Range width, rules (pts) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| n | off | 103.9 | 16.4 | 0.01 | 22 | 2.5% | 68.3% | 84.6% | 60.2% | 20 |
+| n | on | 32.8 | 18.7 | 0.01 | 26 | 2.1% | 59.1% | 82.3% | 57.7% | 17 |
+| m | off | 31.5 | 19.8 | 0.00 | 24 | 1.9% | 56.8% | 78.2% | 56.4% | 17 |
+| m | on | 7.9 | 22.0 | 0.00 | 26 | 1.4% | 50.5% | 74.4% | 53.8% | 15 |
+
+## clip_5_720p (class % after 2:30)
+
+| Model | Tiles | FPS | Students / frame | Duplicates / frame | Class size | Rules | Trees | Logistic | MLP | Range width, rules (pts) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| n | off | 131.3 | 10.2 | 0.03 | 16 | 17.8% | 36.8% | 59.6% | 37.8% | 39 |
+| n | on | 32.9 | 10.5 | 0.02 | 16 | 10.6% | 16.5% | 37.9% | 18.7% | 32 |
+| m | off | 31.5 | 10.2 | 0.01 | 14 | 23.6% | 13.7% | 24.8% | 17.6% | 42 |
+| m | on | 7.9 | 10.2 | 0.01 | 13 | 13.6% | 7.1% | 28.9% | 13.3% | 37 |
+
+## clip (class % whole clip)
+
+| Model | Tiles | FPS | Students / frame | Duplicates / frame | Class size | Rules | Trees | Logistic | MLP | Range width, rules (pts) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| n | off | 129.1 | 13.5 | 0.01 | 25 | 8.4% | 26.1% | 34.9% | 27.9% | 24 |
+| n | on | 32.7 | 18.8 | 0.00 | 29 | 14.5% | 10.3% | 17.9% | 10.7% | 26 |
+| m | off | 31.3 | 14.4 | 0.00 | 20 | 25.4% | 11.2% | 15.7% | 7.8% | 37 |
+| m | on | 7.9 | 22.2 | 0.00 | 29 | 21.6% | 9.1% | 17.8% | 5.4% | 31 |
+

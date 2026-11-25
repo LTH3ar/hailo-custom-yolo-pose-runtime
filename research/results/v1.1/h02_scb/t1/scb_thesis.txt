@@ -1,0 +1,17 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+[scb] 6175 same-picture pairs that are not byte-identical; 189 lesson groups -> 188 after joining them
+57972 students (2 pose cache(s)), 180 lesson groups, distracted 24.8%
+
+model                       AUC  within-img AUC  bal. acc  (5-fold, grouped by lesson)
+logistic regression       0.768           0.730    71.0%
+gradient-boosted trees    0.860           0.834    77.8%
+   per behavior, share predicted distracted: read 18%, write 9%, raise_hand 29%, turn_head 77%, bow_head 32%, discuss 78%
+MLP (64-32)               0.858           0.815    77.9%
+
+wrote /home/raven/hcpose_paper/t1/scb_thesis.json
+
+saved out-of-fold predictions to /home/raven/hcpose_paper/t1/scb_thesis.npz and metrics to /home/raven/hcpose_paper/t1/scb_thesis.json
+
+exported /home/raven/hcpose_paper/models/thesis/scb_logistic.json (0.00 MB, 2.3s); NumPy runtime vs sklearn max |diff| = 2.5e-07
+exported /home/raven/hcpose_paper/models/thesis/scb_trees.json (0.64 MB, 42.8s); NumPy runtime vs sklearn max |diff| = 5.6e-16
+exported /home/raven/hcpose_paper/models/thesis/scb_mlp.json (0.11 MB, 7.7s); NumPy runtime vs sklearn max |diff| = 9.0e-07

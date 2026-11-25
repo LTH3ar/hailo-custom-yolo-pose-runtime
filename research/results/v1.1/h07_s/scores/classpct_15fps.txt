@@ -1,0 +1,9 @@
+clip_3_s_auto_none.jsonl                           1.1%  width 14.3  size 27  outside-range frames 0/2849
+clip_3_s_auto_thesis_mlp.jsonl                    57.2%  width 35.4  size 27  outside-range frames 0/2849
+clip_3_s_auto_thesis_trees.jsonl                  52.9%  width 35.6  size 27  outside-range frames 0/2849
+clip_5_720p_s_auto_none.jsonl                     15.5%  width 37.1  size 14  outside-range frames 0/12568
+clip_5_720p_s_auto_thesis_mlp.jsonl               15.0%  width 36.8  size 14  outside-range frames 0/12568
+clip_5_720p_s_auto_thesis_trees.jsonl              8.6%  width 32.1  size 14  outside-range frames 0/12568
+clip_s_auto_none.jsonl                            15.6%  width 27.0  size 32  outside-range frames 0/1030
+clip_s_auto_thesis_mlp.jsonl                       3.2%  width 16.8  size 32  outside-range frames 0/1030
+clip_s_auto_thesis_trees.jsonl                     5.6%  width 19.6  size 32  outside-range frames 0/1030

@@ -1,0 +1,12 @@
+150 labelled, 149 focused/distracted, 1 can't tell; distracted share as labelled 19%, re-weighted 6.8%
+
+| File | Items | Not matched | Precision | Recall | Specificity | Balanced acc. | Flagged share | Precision (re-weighted) | Recall (re-weighted) | Flagged share (re-weighted) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| clip_5_m_tiles_lenient_crop_raw.jsonl | 149 | 2 | 57% | 14% | 98% | 56% | 5% | 9% | 6% | 4% |
+| clip_5_m_tiles_lenient_crop_smooth.jsonl | 149 | 2 | 75% | 11% | 99% | 55% | 3% | 84% | 5% | 0% |
+| clip_5_m_tiles_strict_crop_raw.jsonl | 149 | 2 | 57% | 14% | 98% | 56% | 5% | 9% | 6% | 4% |
+| clip_5_m_tiles_strict_crop_smooth.jsonl | 149 | 2 | 75% | 11% | 99% | 55% | 3% | 84% | 5% | 0% |
+| clip_5_n_tiles_lenient_crop_raw.jsonl | 149 | 4 | 50% | 7% | 98% | 53% | 3% | 6% | 2% | 2% |
+| clip_5_n_tiles_lenient_crop_smooth.jsonl | 149 | 4 | 50% | 4% | 99% | 51% | 1% | 50% | 1% | 0% |
+| clip_5_n_tiles_strict_crop_raw.jsonl | 149 | 4 | 50% | 7% | 98% | 53% | 3% | 6% | 2% | 2% |
+| clip_5_n_tiles_strict_crop_smooth.jsonl | 149 | 4 | 50% | 4% | 99% | 51% | 1% | 50% | 1% | 0% |

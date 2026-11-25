@@ -1,0 +1,11 @@
+fold0: 9165 students (/home/raven/hcpose/crop_cls/runs/fold0/weights/last.pt)
+fold1: 8882 students (/home/raven/hcpose/crop_cls/runs/fold1/weights/last.pt)
+fold2: 8384 students (/home/raven/hcpose/crop_cls/runs/fold2/weights/last.pt)
+fold3: 8994 students (/home/raven/hcpose/crop_cls/runs/fold3/weights/last.pt)
+fold4: 8515 students (/home/raven/hcpose/crop_cls/runs/fold4/weights/last.pt)
+scb_only: 7253 students (/home/raven/hcpose/crop_cls/runs/scb_only/weights/last.pt)
+cla_only: 36687 students (/home/raven/hcpose/crop_cls/runs/cla_only/weights/last.pt)
+
+real	2m6.633s
+user	1m58.798s
+sys	0m3.502s

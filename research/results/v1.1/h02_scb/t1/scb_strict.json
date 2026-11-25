@@ -1,0 +1,44 @@
+{
+ "sources": [
+  [
+   "scb",
+   "/home/raven/hcpose_paper/poses/scb_m.jsonl"
+  ],
+  [
+   "scb",
+   "/home/raven/hcpose_paper/poses/scb_m_tiles.jsonl"
+  ]
+ ],
+ "mapping": "strict",
+ "det_thr": 0.3,
+ "near_dups": true,
+ "students": 54437,
+ "groups": 169,
+ "pooled_cv": {
+  "logistic regression": {
+   "auc": 0.7919388561740572,
+   "within_image_auc": 0.7621758167733244,
+   "balanced_acc": 0.7274844294277977,
+   "pred_distracted": 0.3655969285596194,
+   "true_distracted": 0.19947829601190367,
+   "students": 54437
+  },
+  "gradient-boosted trees": {
+   "auc": 0.8896390449991852,
+   "within_image_auc": 0.8608790838666217,
+   "balanced_acc": 0.8033269674118471,
+   "pred_distracted": 0.2732700185535573,
+   "true_distracted": 0.19947829601190367,
+   "students": 54437
+  },
+  "MLP (64-32)": {
+   "auc": 0.9027153973725796,
+   "within_image_auc": 0.871522398113843,
+   "balanced_acc": 0.8230182895330826,
+   "pred_distracted": 0.2643973767841725,
+   "true_distracted": 0.19947829601190367,
+   "students": 54437
+  }
+ },
+ "cross": {}
+}

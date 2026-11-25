@@ -1,0 +1,32 @@
+[2026-11-25T12:08:23+07:00] start ffmpeg_clip
+[2026-11-25T12:08:45+07:00] end ffmpeg_clip rc=0 22s
+[2026-11-25T12:08:45+07:00] start ffmpeg_clip_3
+[2026-11-25T12:09:37+07:00] end ffmpeg_clip_3 rc=0 52s
+[2026-11-25T12:09:37+07:00] start ffmpeg_clip_5_720p
+[2026-11-25T12:13:09+07:00] end ffmpeg_clip_5_720p rc=0 212s
+[2026-11-25T12:13:09+07:00] start ffmpeg_soak
+[2026-11-25T12:18:52+07:00] end ffmpeg_soak rc=0 343s
+[2026-11-25T12:18:52+07:00] start scb_s
+[2026-11-25T12:23:25+07:00] end scb_s rc=0 273s
+[2026-11-25T12:23:25+07:00] start scb_s_tiles
+[2026-11-25T12:37:18+07:00] end scb_s_tiles rc=0 833s
+[2026-11-25T12:37:18+07:00] start scb_s_nodedup
+[2026-11-25T12:41:44+07:00] end scb_s_nodedup rc=0 266s
+[2026-11-25T12:41:44+07:00] start scb_s_tiles_nodedup
+[2026-11-25T12:55:32+07:00] end scb_s_tiles_nodedup rc=0 828s
+[2026-11-25T12:55:32+07:00] start clips
+[2026-11-25T14:10:35+07:00] end clips rc=0 4503s
+[2026-11-25T14:10:35+07:00] start staged
+[2026-11-25T14:21:44+07:00] end staged rc=0 669s
+[2026-11-25T14:21:44+07:00] OFFLINE_DONE
+[2026-11-25T14:22:14+07:00] start realtime_clip
+[2026-11-25T14:23:26+07:00] end realtime_clip rc=0 72s
+[2026-11-25T14:23:57+07:00] start realtime_clip_3
+[2026-11-25T14:27:15+07:00] end realtime_clip_3 rc=0 198s
+[2026-11-25T14:27:46+07:00] start realtime_clip_5_720p
+[2026-11-25T14:41:48+07:00] end realtime_clip_5_720p rc=0 842s
+[2026-11-25T14:42:19+07:00] start latency
+[2026-11-25T14:43:29+07:00] end latency rc=124 70s
+[2026-11-25T14:44:29+07:00] start soak
+[2026-11-25T14:59:32+07:00] end soak rc=124 903s
+[2026-11-25T14:59:32+07:00] QUEUE_DONE

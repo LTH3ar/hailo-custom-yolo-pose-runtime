@@ -1,0 +1,20 @@
+[2026-11-25T15:00:32+07:00] start coverage
+[2026-11-25T15:00:44+07:00] end coverage rc=0 12s
+[2026-11-25T15:00:44+07:00] start dedup
+[2026-11-25T15:00:51+07:00] end dedup rc=0 7s
+[2026-11-25T15:00:51+07:00] start coverage_nodedup
+[2026-11-25T15:01:04+07:00] end coverage_nodedup rc=0 13s
+[2026-11-25T15:01:04+07:00] start d2_clips
+[2026-11-25T15:50:41+07:00] end d2_clips rc=0 2977s
+[2026-11-25T15:50:41+07:00] start d2_staged
+[2026-11-25T15:52:35+07:00] end d2_staged rc=0 114s
+[2026-11-25T15:52:35+07:00] start d5_none
+[2026-11-25T15:53:00+07:00] end d5_none rc=0 25s
+[2026-11-25T15:53:00+07:00] start d5_auto
+[2026-11-25T15:53:55+07:00] end d5_auto rc=0 55s
+[2026-11-25T15:56:59+07:00] fps15 replays done
+[2026-11-25T16:05:55+07:00] label scores done
+[2026-11-25T16:12:18+07:00] per-clip and clip_4 done
+[2026-11-25T16:12:18+07:00] start sweep
+[2026-11-25T16:26:28+07:00] end sweep rc=0 850s
+[2026-11-25T16:26:28+07:00] CPU_DONE

@@ -1,0 +1,34 @@
+[scbdata] 10138 records -> 8116 unique images (1892 duplicated across subsets); 2891 students with both focused and distracted labels dropped; 189 lesson groups
+[scb] 6175 same-picture pairs that are not byte-identical; 189 lesson groups -> 188 after joining them
+[clabehavior] 400 images, 107 camera groups
+68575 students (4 pose cache(s)), 286 lesson groups, distracted 23.2%; mapping lenient
+  clabehavior: 10603 students, 106 groups, distracted 14.2%
+  scb: 57972 students, 180 groups, distracted 24.8%
+
+model                       AUC  within-img AUC  bal. acc  (5-fold, grouped by lesson)
+logistic regression       0.762           0.726    70.5%
+    on clabehavior        0.742           0.718    68.7%
+    on scb                0.762           0.729    70.4%
+gradient-boosted trees    0.855           0.836    77.8%
+    on clabehavior        0.848           0.842    76.4%
+    on scb                0.855           0.833    77.7%
+   per behavior, share predicted distracted: read 20%, write 11%, raise_hand 30%, lookup 14%, turn_head 78%, bow_head 32%, discuss 79%, stand 43%
+MLP (64-32)               0.865           0.842    78.5%
+    on clabehavior        0.855           0.851    76.7%
+    on scb                0.864           0.838    78.4%
+
+train -> test                model                       AUC  within-img AUC  bal. acc  pred / true distracted
+clabehavior -> scb           logistic regression       0.688           0.665    64.2%         49% / 25%
+clabehavior -> scb           gradient-boosted trees    0.695           0.695    63.8%         34% / 25%
+clabehavior -> scb           MLP (64-32)               0.721           0.701    67.0%         43% / 25%
+scb -> clabehavior           logistic regression       0.694           0.677    63.5%         43% / 14%
+scb -> clabehavior           gradient-boosted trees    0.789           0.785    72.7%         30% / 14%
+scb -> clabehavior           MLP (64-32)               0.810           0.810    73.6%         31% / 14%
+
+wrote /home/raven/hcpose_paper/t1/both_lenient.json
+
+saved out-of-fold predictions to /home/raven/hcpose_paper/t1/both_lenient.npz and metrics to /home/raven/hcpose_paper/t1/both_lenient.json
+
+exported /home/raven/hcpose_paper/models/lenient/scb_logistic.json (0.00 MB, 2.1s); NumPy runtime vs sklearn max |diff| = 2.6e-07
+exported /home/raven/hcpose_paper/models/lenient/scb_trees.json (0.64 MB, 62.8s); NumPy runtime vs sklearn max |diff| = 6.7e-16
+exported /home/raven/hcpose_paper/models/lenient/scb_mlp.json (0.11 MB, 13.5s); NumPy runtime vs sklearn max |diff| = 1.3e-06

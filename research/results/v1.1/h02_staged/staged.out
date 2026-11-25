@@ -1,0 +1,928 @@
+== hcpose: model n, tiles none
+FPS:  101.1  persons: 2
+FPS:  132.5  persons: 2
+FPS:  131.2  persons: 2
+FPS:  131.7  persons: 2
+FPS:  131.4  persons: 2
+FPS:  131.5  persons: 2
+FPS:  131.4  persons: 2
+FPS:  131.2  persons: 2
+FPS:  132.1  persons: 2
+FPS:  131.3  persons: 2
+FPS:  131.6  persons: 2
+FPS:  131.6  persons: 2
+FPS:  131.6  persons: 2
+FPS:  131.4  persons: 2
+FPS:  131.4  persons: 2
+FPS:  131.4  persons: 2
+FPS:  131.6  persons: 2
+FPS:  131.3  persons: 2
+FPS:  131.4  persons: 2
+FPS:  132.0  persons: 2
+FPS:  131.1  persons: 2
+FPS:  131.9  persons: 2
+FPS:  131.3  persons: 2
+FPS:  130.3  persons: 2
+FPS:  132.9  persons: 2
+FPS:  131.2  persons: 2
+FPS:  130.7  persons: 2
+FPS:  132.3  persons: 2
+FPS:  131.8  persons: 2
+FPS:  131.5  persons: 2
+FPS:  131.6  persons: 2
+FPS:  131.2  persons: 2
+[hcpose] 8563 frames in 65.6s (130.5 FPS avg)
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.10490021482110023, 'head_height': 0.13043498247861862, 'torso_ratio': 0.23994953700343968, 'head_offset': -0.03352494351565838}
+[hcpose] seat 3 calibrated: {'yaw': -0.054280759766697884, 'head_height': 0.24721484631299973, 'torso_ratio': 0.1980940084211682, 'head_offset': 0.07033462449908257}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.10490021482110023, 'head_height': 0.13043498247861862, 'torso_ratio': 0.23994953700343968, 'head_offset': -0.03352494351565838}
+[hcpose] seat 3 calibrated: {'yaw': -0.054280759766697884, 'head_height': 0.24721484631299973, 'torso_ratio': 0.1980940084211682, 'head_offset': 0.07033462449908257}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.10490021482110023, 'head_height': 0.13043498247861862, 'torso_ratio': 0.23994953700343968, 'head_offset': -0.03352494351565838}
+[hcpose] seat 3 calibrated: {'yaw': -0.054280759766697884, 'head_height': 0.24721484631299973, 'torso_ratio': 0.1980940084211682, 'head_offset': 0.07033462449908257}
+[hcpose] engagement: rule-based cues
+[hcpose] seat 1 calibrated: {'yaw': -0.10490021482110023, 'head_height': 0.13043498247861862, 'torso_ratio': 0.23994953700343968, 'head_offset': -0.03352494351565838}
+[hcpose] seat 3 calibrated: {'yaw': -0.054280759766697884, 'head_height': 0.24721484631299973, 'torso_ratio': 0.1980940084211682, 'head_offset': 0.07033462449908257}
+== hcpose: model n, tiles auto
+FPS:   28.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.6  persons: 2
+FPS:   33.1  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   33.0  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   33.0  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.7  persons: 2
+FPS:   33.0  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   32.7  persons: 2
+FPS:   33.0  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.8  persons: 2
+FPS:   33.0  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+FPS:   32.9  persons: 2
+[hcpose] 8563 frames in 260.7s (32.8 FPS avg)
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.10490021482110023, 'head_height': 0.13043498247861862, 'torso_ratio': 0.23994953700343968, 'head_offset': -0.03352494351565838}
+[hcpose] seat 3 calibrated: {'yaw': -0.054280759766697884, 'head_height': 0.24721484631299973, 'torso_ratio': 0.1980940084211682, 'head_offset': 0.07033462449908257}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.10490021482110023, 'head_height': 0.13043498247861862, 'torso_ratio': 0.23994953700343968, 'head_offset': -0.03352494351565838}
+[hcpose] seat 3 calibrated: {'yaw': -0.054280759766697884, 'head_height': 0.24721484631299973, 'torso_ratio': 0.1980940084211682, 'head_offset': 0.07033462449908257}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.10490021482110023, 'head_height': 0.13043498247861862, 'torso_ratio': 0.23994953700343968, 'head_offset': -0.03352494351565838}
+[hcpose] seat 3 calibrated: {'yaw': -0.054280759766697884, 'head_height': 0.24721484631299973, 'torso_ratio': 0.1980940084211682, 'head_offset': 0.07033462449908257}
+[hcpose] engagement: rule-based cues
+[hcpose] seat 1 calibrated: {'yaw': -0.10490021482110023, 'head_height': 0.13043498247861862, 'torso_ratio': 0.23994953700343968, 'head_offset': -0.03352494351565838}
+[hcpose] seat 3 calibrated: {'yaw': -0.054280759766697884, 'head_height': 0.24721484631299973, 'torso_ratio': 0.1980940084211682, 'head_offset': 0.07033462449908257}
+== hcpose: model m, tiles none
+FPS:   26.8  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.7  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.4  persons: 2
+FPS:   31.8  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.5  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+FPS:   31.6  persons: 2
+[hcpose] 8563 frames in 271.7s (31.5 FPS avg)
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.13113224506378174, 'head_height': 0.10440803319215775, 'torso_ratio': 0.2758902415372094, 'head_offset': -0.05649822577834129}
+[hcpose] seat 2 calibrated: {'yaw': -0.05022713914513588, 'head_height': 0.23000231385231018, 'torso_ratio': 0.2113247011497826, 'head_offset': 0.060671767219901085}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.13113224506378174, 'head_height': 0.10440803319215775, 'torso_ratio': 0.2758902415372094, 'head_offset': -0.05649822577834129}
+[hcpose] seat 2 calibrated: {'yaw': -0.05022713914513588, 'head_height': 0.23000231385231018, 'torso_ratio': 0.2113247011497826, 'head_offset': 0.060671767219901085}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.13113224506378174, 'head_height': 0.10440803319215775, 'torso_ratio': 0.2758902415372094, 'head_offset': -0.05649822577834129}
+[hcpose] seat 2 calibrated: {'yaw': -0.05022713914513588, 'head_height': 0.23000231385231018, 'torso_ratio': 0.2113247011497826, 'head_offset': 0.060671767219901085}
+[hcpose] engagement: rule-based cues
+[hcpose] seat 1 calibrated: {'yaw': -0.13113224506378174, 'head_height': 0.10440803319215775, 'torso_ratio': 0.2758902415372094, 'head_offset': -0.05649822577834129}
+[hcpose] seat 2 calibrated: {'yaw': -0.05022713914513588, 'head_height': 0.23000231385231018, 'torso_ratio': 0.2113247011497826, 'head_offset': 0.060671767219901085}
+== hcpose: model m, tiles auto
+FPS:    6.6  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 3
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.8  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+FPS:    7.9  persons: 2
+[hcpose] 8563 frames in 1086.0s (7.9 FPS avg)
+[hcpose] engagement: learned classifier trees (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.13113224506378174, 'head_height': 0.10440803319215775, 'torso_ratio': 0.2758902415372094, 'head_offset': -0.05649822577834129}
+[hcpose] seat 2 calibrated: {'yaw': -0.05022713914513588, 'head_height': 0.23000231385231018, 'torso_ratio': 0.2113247011497826, 'head_offset': 0.060671767219901085}
+[hcpose] engagement: learned classifier logistic (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.13113224506378174, 'head_height': 0.10440803319215775, 'torso_ratio': 0.2758902415372094, 'head_offset': -0.05649822577834129}
+[hcpose] seat 2 calibrated: {'yaw': -0.05022713914513588, 'head_height': 0.23000231385231018, 'torso_ratio': 0.2113247011497826, 'head_offset': 0.060671767219901085}
+[hcpose] engagement: learned classifier mlp (scb-m-int8-tiles-v1.1), trained on scb_m.jsonl, scb_m_tiles.jsonl
+[hcpose] seat 1 calibrated: {'yaw': -0.13113224506378174, 'head_height': 0.10440803319215775, 'torso_ratio': 0.2758902415372094, 'head_offset': -0.05649822577834129}
+[hcpose] seat 2 calibrated: {'yaw': -0.05022713914513588, 'head_height': 0.23000231385231018, 'torso_ratio': 0.2113247011497826, 'head_offset': 0.060671767219901085}
+[hcpose] engagement: rule-based cues
+[hcpose] seat 1 calibrated: {'yaw': -0.13113224506378174, 'head_height': 0.10440803319215775, 'torso_ratio': 0.2758902415372094, 'head_offset': -0.05649822577834129}
+[hcpose] seat 2 calibrated: {'yaw': -0.05022713914513588, 'head_height': 0.23000231385231018, 'torso_ratio': 0.2113247011497826, 'head_offset': 0.060671767219901085}
+| File | Coverage | Recall | Precision | False alarms, attentive | False alarms, hard focused | Latency (s) | Events missed | Class error (pts) | Class r | Range hit |
+|---|---|---|---|---|---|---|---|---|---|---|
+| clip_4_720p_m_auto_logistic.jsonl | 100% | 43% | 69% | 44% | 0% | 0.5 | 3 of 7 | 24.1 | 0.71 | 55% |
+| clip_4_720p_m_auto_mlp.jsonl | 100% | 49% | 100% | 0% | 0% | 3.0 | 3 of 7 | 23.6 | 0.67 | 77% |
+| clip_4_720p_m_auto_none.jsonl | 100% | 56% | 100% | 0% | 0% | 3.0 | 2 of 7 | 20.3 | 0.82 | 77% |
+| clip_4_720p_m_auto_trees.jsonl | 100% | 50% | 100% | 0% | 0% | 4.0 | 2 of 7 | 23.3 | 0.72 | 77% |
+| clip_4_720p_m_none_logistic.jsonl | 100% | 43% | 69% | 44% | 0% | 0.5 | 3 of 7 | 24.1 | 0.71 | 55% |
+| clip_4_720p_m_none_mlp.jsonl | 100% | 49% | 100% | 0% | 0% | 3.0 | 3 of 7 | 23.6 | 0.67 | 77% |
+| clip_4_720p_m_none_none.jsonl | 100% | 56% | 100% | 0% | 0% | 3.0 | 2 of 7 | 20.3 | 0.82 | 77% |
+| clip_4_720p_m_none_trees.jsonl | 100% | 50% | 100% | 0% | 0% | 4.0 | 2 of 7 | 23.3 | 0.72 | 77% |
+| clip_4_720p_n_auto_logistic.jsonl | 100% | 9% | 52% | 18% | 0% | 5.5 | 5 of 7 | 50.0 | 0.02 | 54% |
+| clip_4_720p_n_auto_mlp.jsonl | 100% | 37% | 100% | 0% | 0% | 5.0 | 4 of 7 | 35.5 | 0.46 | 64% |
+| clip_4_720p_n_auto_none.jsonl | 100% | 56% | 100% | 0% | 0% | 3.0 | 2 of 7 | 20.7 | 0.83 | 77% |
+| clip_4_720p_n_auto_trees.jsonl | 100% | 35% | 100% | 0% | 0% | 8.0 | 3 of 7 | 34.8 | 0.65 | 63% |
+| clip_4_720p_n_none_logistic.jsonl | 100% | 9% | 52% | 18% | 0% | 5.5 | 5 of 7 | 50.0 | 0.02 | 54% |
+| clip_4_720p_n_none_mlp.jsonl | 100% | 37% | 100% | 0% | 0% | 5.0 | 4 of 7 | 35.5 | 0.46 | 64% |
+| clip_4_720p_n_none_none.jsonl | 100% | 56% | 100% | 0% | 0% | 3.0 | 2 of 7 | 20.7 | 0.83 | 77% |
+| clip_4_720p_n_none_trees.jsonl | 100% | 35% | 100% | 0% | 0% | 8.0 | 3 of 7 | 34.8 | 0.65 | 63% |
+
+Recall per scripted behaviour (share of the event's seconds labelled distracted):
+
+| File | look to the side | phone on the table | phone under the table | talk to each other | turn around |
+|---|---|---|---|---|---|
+| clip_4_720p_m_auto_logistic.jsonl | 100% | 0% | 0% | 50% | 100% |
+| clip_4_720p_m_auto_mlp.jsonl | 50% | 0% | 0% | 100% | 100% |
+| clip_4_720p_m_auto_none.jsonl | 97% | 0% | 0% | 100% | 100% |
+| clip_4_720p_m_auto_trees.jsonl | 56% | 0% | 0% | 100% | 100% |
+| clip_4_720p_m_none_logistic.jsonl | 100% | 0% | 0% | 50% | 100% |
+| clip_4_720p_m_none_mlp.jsonl | 50% | 0% | 0% | 100% | 100% |
+| clip_4_720p_m_none_none.jsonl | 97% | 0% | 0% | 100% | 100% |
+| clip_4_720p_m_none_trees.jsonl | 56% | 0% | 0% | 100% | 100% |
+| clip_4_720p_n_auto_logistic.jsonl | 8% | 0% | 0% | 0% | 67% |
+| clip_4_720p_n_auto_mlp.jsonl | 47% | 0% | 0% | 98% | 0% |
+| clip_4_720p_n_auto_none.jsonl | 97% | 0% | 0% | 100% | 100% |
+| clip_4_720p_n_auto_trees.jsonl | 31% | 0% | 0% | 64% | 100% |
+| clip_4_720p_n_none_logistic.jsonl | 8% | 0% | 0% | 0% | 67% |
+| clip_4_720p_n_none_mlp.jsonl | 47% | 0% | 0% | 98% | 0% |
+| clip_4_720p_n_none_none.jsonl | 97% | 0% | 0% | 100% | 100% |
+| clip_4_720p_n_none_trees.jsonl | 31% | 0% | 0% | 64% | 100% |
+
+Start signal at 0.1 s into the video (first file). Seats found (x, y as a share of the frame): S1 (0.44, 0.37), S2 (0.61, 0.40)
+summary written to /home/raven/hcpose_paper/staged/summary.md

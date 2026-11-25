@@ -1,0 +1,59 @@
+[hcpose] post-process loaded (filter_letterbox), score>=0.3 iou=0.7 kpt>=0.5
+[hcpose] model: 13 keypoints, 1 class(es), reg_max 16, input 640x640
+[hcpose]   stride 8: boxes=upper_body_n_dfc3331_seed2/conv43 scores=upper_body_n_dfc3331_seed2/conv44 kpts=upper_body_n_dfc3331_seed2/conv45
+[hcpose]   stride 16: boxes=upper_body_n_dfc3331_seed2/conv57 scores=upper_body_n_dfc3331_seed2/conv58 kpts=upper_body_n_dfc3331_seed2/conv59
+[hcpose]   stride 32: boxes=upper_body_n_dfc3331_seed2/conv70 scores=upper_body_n_dfc3331_seed2/conv71 kpts=upper_body_n_dfc3331_seed2/conv72
+[hcpose] class scores: already sigmoid in HEF
+[hcpose] keypoint visibility: logits -> sigmoid applied here
+[hcpose] end of stream
+[hcpose] /home/raven/models/upper_body_n.hef: 13 keypoints, 1 class(es), input 640x640
+FPS:   96.7  persons: 11
+FPS:  110.2  persons: 10
+FPS:  108.9  persons: 10
+FPS:  119.9  persons: 8
+FPS:  125.5  persons: 8
+FPS:  118.1  persons: 9
+FPS:  120.8  persons: 8
+FPS:  116.8  persons: 10
+FPS:  125.4  persons: 10
+FPS:  118.7  persons: 10
+FPS:   92.3  persons: 11
+FPS:   97.3  persons: 9
+FPS:  109.2  persons: 10
+FPS:  100.1  persons: 10
+FPS:   98.0  persons: 11
+FPS:   93.9  persons: 10
+FPS:  100.7  persons: 13
+FPS:  105.5  persons: 11
+FPS:   97.1  persons: 9
+FPS:   90.9  persons: 9
+FPS:   92.4  persons: 12
+FPS:  100.2  persons: 12
+FPS:   90.2  persons: 13
+FPS:   88.1  persons: 11
+FPS:  101.6  persons: 12
+FPS:   96.5  persons: 13
+FPS:  101.0  persons: 10
+FPS:  105.0  persons: 12
+FPS:  121.5  persons: 11
+FPS:  115.6  persons: 12
+FPS:  126.8  persons: 10
+FPS:  124.8  persons: 10
+FPS:  118.4  persons: 11
+FPS:  113.9  persons: 10
+FPS:  124.2  persons: 12
+FPS:  131.4  persons: 10
+FPS:  118.8  persons: 10
+FPS:  127.6  persons: 10
+FPS:  115.8  persons: 12
+FPS:  128.4  persons: 11
+FPS:  125.7  persons: 13
+FPS:  126.3  persons: 10
+FPS:  116.1  persons: 11
+FPS:  126.4  persons: 13
+FPS:  124.9  persons: 13
+FPS:  119.5  persons: 12
+FPS:  117.8  persons: 10
+FPS:  124.9  persons: 10
+[hcpose] 10800 frames in 96.5s (111.9 FPS avg)
+[hcpose] skeletons saved to /home/raven/hcpose_paper/clips/clip_2_n_none.skeleton.jsonl

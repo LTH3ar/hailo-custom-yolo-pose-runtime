@@ -1,0 +1,7 @@
+front-view students, det-thr 0.3. 'pred' = share labelled distracted at score 0.5
+
+group                       n   true |    rules AUC  bal  pred |    trees AUC  bal  pred | logistic AUC  bal  pred |      mlp AUC  bal  pred
+both: untiled pose      22191    22% |         0.547  56%   24% |         0.875  79%   32% |         0.777  72%   39% |         0.883  80%   35%
+both: tiled pose        22191    22% |         0.553  56%   27% |         0.883  80%   29% |         0.780  72%   35% |         0.897  82%   34%
+only with tiles         13135    34% |         0.548  55%   15% |         0.816  74%   37% |         0.724  67%   38% |         0.823  75%   43%
+only without tiles        203    34% |         0.693  65%   41% |         0.861  81%   46% |         0.843  76%   50% |         0.840  76%   47%

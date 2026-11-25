@@ -1,0 +1,73 @@
+[hcpose] post-process loaded (filter_letterbox), score>=0.3 iou=0.7 kpt>=0.5
+[hcpose] model: 13 keypoints, 1 class(es), reg_max 16, input 640x640
+[hcpose]   stride 8: boxes=upper_body_s_dfc3331_seed2/conv43 scores=upper_body_s_dfc3331_seed2/conv44 kpts=upper_body_s_dfc3331_seed2/conv45
+[hcpose]   stride 16: boxes=upper_body_s_dfc3331_seed2/conv57 scores=upper_body_s_dfc3331_seed2/conv58 kpts=upper_body_s_dfc3331_seed2/conv59
+[hcpose]   stride 32: boxes=upper_body_s_dfc3331_seed2/conv70 scores=upper_body_s_dfc3331_seed2/conv71 kpts=upper_body_s_dfc3331_seed2/conv72
+[hcpose] class scores: already sigmoid in HEF
+[hcpose] keypoint visibility: logits -> sigmoid applied here
+[hcpose] end of stream
+[hcpose] /home/raven/models/upper_body_s.hef: 13 keypoints, 1 class(es), input 640x640
+[hcpose] tiling: full frame + 3 tile(s) over rows 0%-60% (493x432 px each); 4 inferences per frame
+FPS:   15.3  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 20
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 24
+FPS:   17.4  persons: 24
+FPS:   17.4  persons: 24
+FPS:   17.4  persons: 24
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 22
+FPS:   17.5  persons: 22
+FPS:   17.4  persons: 25
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 20
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 24
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 20
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 24
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 23
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 21
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 19
+FPS:   17.4  persons: 19
+FPS:   17.4  persons: 20
+FPS:   17.4  persons: 22
+FPS:   17.4  persons: 24
+[hcpose] 2150 frames in 123.8s (17.4 FPS avg)
+[hcpose] skeletons saved to /home/raven/hcpose_paper/h07/clips/clip_s_auto.skeleton.jsonl

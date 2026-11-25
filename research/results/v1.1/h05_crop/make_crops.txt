@@ -1,0 +1,17 @@
+  1000/8507 images
+  2000/8507 images
+  3000/8507 images
+  4000/8507 images
+  5000/8507 images
+  6000/8507 images
+  7000/8507 images
+  8000/8507 images
+fold0: 55025 training crops {'read': 20102, 'raise_hand': 11352, 'turn_head': 8335, 'write': 7863, 'discuss': 4369, 'bow_head': 1505, 'lookup': 1473, 'stand': 26}
+fold1: 53359 training crops {'read': 17540, 'raise_hand': 10759, 'turn_head': 9162, 'write': 5518, 'lookup': 4229, 'discuss': 4191, 'bow_head': 1900, 'stand': 60}
+fold2: 55026 training crops {'read': 17581, 'raise_hand': 11265, 'turn_head': 8916, 'write': 6556, 'discuss': 5103, 'lookup': 4110, 'bow_head': 1439, 'stand': 56}
+fold3: 53805 training crops {'read': 18355, 'raise_hand': 10637, 'turn_head': 8874, 'write': 7398, 'lookup': 3683, 'discuss': 2944, 'bow_head': 1855, 'stand': 59}
+fold4: 54153 training crops {'read': 18082, 'raise_hand': 9771, 'turn_head': 8733, 'write': 7025, 'discuss': 4621, 'lookup': 4425, 'bow_head': 1433, 'stand': 63}
+all: 67842 training crops {'read': 22915, 'raise_hand': 13446, 'turn_head': 11005, 'write': 8590, 'discuss': 5307, 'lookup': 4480, 'bow_head': 2033, 'stand': 66}
+scb_only: 59759 training crops {'read': 21894, 'raise_hand': 12762, 'turn_head': 9994, 'write': 8011, 'discuss': 5065, 'bow_head': 2033}
+cla_only: 8083 training crops {'lookup': 4480, 'read': 1021, 'turn_head': 1011, 'raise_hand': 684, 'write': 579, 'discuss': 242, 'stand': 66}
+67842 gt crops (3 boxes too small), 43940 pose-box crops for testing -> /home/raven/hcpose/crop_cls

@@ -1,0 +1,7 @@
+latency s tiles, 15 FPS lecture: 1046 frames, median 72 ms, p95 85 ms, max 148 ms
+  first half median 69, second half median 74 ms
+realtime_clip_s_auto_15fps: 70 samples over 73 s; CPU 23% (hcpose 82% of a core), memory max 496 MB, board 3.26 W, max 59.0 C, clock mean 2257 min 1600 MHz, throttled none
+realtime_clip_3_s_auto_15fps: 192 samples over 199 s; CPU 23% (hcpose 83% of a core), memory max 501 MB, board 3.16 W, max 59.0 C, clock mean 2170 min 1500 MHz, throttled none
+realtime_clip_5_720p_s_auto_15fps: 811 samples over 842 s; CPU 22% (hcpose 77% of a core), memory max 502 MB, board 3.11 W, max 59.0 C, clock mean 2085 min 1500 MHz, throttled none
+soak_s_auto_15fps: 870 samples over 904 s; CPU 23% (hcpose 84% of a core), memory max 502 MB, board 3.14 W, max 60.6 C, clock mean 2170 min 1500 MHz, throttled none
+  temp 10 s 55.6, 5 min 56.8, 10 min 57.9, 15 min 56.2 C
